@@ -37,7 +37,7 @@ INSERT INTO Socios (id_socio, nombre, email, contrasena, fecha_registro, debe_di
 (8, 'Daniel Torres', 'daniel.torres@mail.com', 'hash_daniel', '2025-12-20', 0, '677888999', 'C/ Fuencarral 55, Madrid'),
 (9, 'Paula Romero', 'paula.romero@mail.com', 'hash_paula', '2025-10-28', 0, '688999000', 'C/ Ibiza 14, Madrid'),
 (10, 'Hugo Sánchez', 'hugo.sanchez@mail.com', 'hash_hugo', '2025-09-30', 0, '699000111', 'C/ Ferraz 40, Madrid'),
-(11, 'Nerea Castillo', 'nerea.castillo@mail.com', 'hash_nerea', '2026-01-20', 0, '610123456', 'C/ Donnell 77', 'Madrid'),
+(11, 'Nerea Castillo', 'nerea.castillo@mail.com', 'hash_nerea', '2026-01-20', 0, '610123456', 'C/ Donnell 77, Madrid'),
 (12, 'Alberto Molina', 'alberto.molina@mail.com', 'hash_alberto', '2025-06-18', 0, '620234567', 'C/ Toledo 12, Madrid'),
 (13, 'Claudia Vega', 'claudia.vega@mail.com', 'hash_claudia', '2025-11-02', 0, '630345678', 'C/ Arturo Soria 210, Madrid'),
 (14, 'Iván Ramos', 'ivan.ramos@mail.com', 'hash_ivan', '2025-12-05', 0, '640456789', 'C/ Menéndez Pelayo 60, Madrid'),
