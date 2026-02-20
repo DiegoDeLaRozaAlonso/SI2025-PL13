@@ -105,9 +105,9 @@ CREATE TABLE PeriodosInscripcion (
     id_actividad INTEGER NOT NULL,
     nombre TEXT NOT NULL,
     descripcion TEXT NOT NULL,
-    tipo TEXT NOT NULL CHECK(tipo IN ('socio', 'no_socio')),
+    tipo TEXT NOT NULL CHECK(tipo IN ('socio', 'no_socio')), --quitar esto
     fecha_inicio DATE NOT NULL,
-    fecha_fin DATE NOT NULL,
+    fecha_fin DATE NOT NULL, --añadir fecha de fin para no socios
     FOREIGN KEY (id_actividad) REFERENCES Actividades(id_actividad)
 );
 
