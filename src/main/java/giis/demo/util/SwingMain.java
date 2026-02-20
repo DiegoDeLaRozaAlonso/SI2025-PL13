@@ -80,6 +80,17 @@ public class SwingMain {
 			}
 		});
 		frame.getContentPane().add(btnCargarDatosIniciales);
+		
+		
+		JButton planificarActividad = new JButton("Planificar Actividad (Administración)");
+		planificarActividad.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+			public void actionPerformed(ActionEvent e) {
+				CarrerasController controller=new CarrerasController(new CarrerasModel(), new CarrerasView());
+				controller.initController();
+			}
+		});
+		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+		frame.getContentPane().add(planificarActividad);
 	}
 
 	public JFrame getFrame() { return this.frame; }
