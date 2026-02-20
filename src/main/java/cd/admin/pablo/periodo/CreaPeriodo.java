@@ -57,7 +57,7 @@ public class CreaPeriodo {
 		textField.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Nombre Periodo");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 12));
 		lblNewLabel.setBounds(124, 13, 97, 14);
 		frame.getContentPane().add(lblNewLabel);
 		
@@ -72,12 +72,12 @@ public class CreaPeriodo {
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Fecha Inicio");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_2.setFont(new Font("Arial", Font.PLAIN, 12));
 		lblNewLabel_2.setBounds(101, 104, 69, 14);
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Fecha Fin");
-		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_2_1.setFont(new Font("Arial", Font.PLAIN, 12));
 		lblNewLabel_2_1.setBounds(350, 104, 69, 14);
 		frame.getContentPane().add(lblNewLabel_2_1);
 		
@@ -97,7 +97,7 @@ public class CreaPeriodo {
 		frame.getContentPane().add(separator_1);
 		
 		JLabel lblDescripcionPeriodo = new JLabel("Descripcion Periodo");
-		lblDescripcionPeriodo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblDescripcionPeriodo.setFont(new Font("Arial", Font.PLAIN, 12));
 		lblDescripcionPeriodo.setBounds(121, 42, 114, 14);
 		frame.getContentPane().add(lblDescripcionPeriodo);
 		
@@ -112,7 +112,7 @@ public class CreaPeriodo {
 		frame.getContentPane().add(lblNewLabel_1_1);
 		
 		JLabel lblNewLabel_2_1_1 = new JLabel("Fecha Fin");
-		lblNewLabel_2_1_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_2_1_1.setFont(new Font("Arial", Font.PLAIN, 12));
 		lblNewLabel_2_1_1.setBounds(214, 192, 69, 14);
 		frame.getContentPane().add(lblNewLabel_2_1_1);
 		
