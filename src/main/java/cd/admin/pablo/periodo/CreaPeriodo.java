@@ -13,15 +13,14 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import java.util.Date;
 import java.util.Calendar;
+import com.toedter.calendar.JDayChooser;
+import com.toedter.calendar.JDateChooser;
 
 public class CreaPeriodo {
 
 	private JFrame frame;
 	private JTextField tNombre;
-	private JTextField textField_1;
-	private JTextField textField_2;
 	private JTextField tPeriodo;
-	private JTextField textField_4;
 
 	/**
 	 * Launch the application.
@@ -56,13 +55,13 @@ public class CreaPeriodo {
 		frame.getContentPane().setLayout(null);
 		
 		tNombre = new JTextField();
-		tNombre.setBounds(232, 11, 139, 20);
+		tNombre.setBounds(175, 11, 261, 20);
 		frame.getContentPane().add(tNombre);
 		tNombre.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Nombre Periodo");
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblNewLabel.setBounds(125, 14, 97, 14);
+		lblNewLabel.setBounds(51, 14, 97, 14);
 		frame.getContentPane().add(lblNewLabel);
 		
 		JSeparator separator = new JSeparator();
@@ -85,16 +84,6 @@ public class CreaPeriodo {
 		lblNewLabel_2_1.setBounds(350, 104, 69, 14);
 		frame.getContentPane().add(lblNewLabel_2_1);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(86, 129, 99, 20);
-		frame.getContentPane().add(textField_1);
-		textField_1.setColumns(10);
-		
-		textField_2 = new JTextField();
-		textField_2.setBounds(333, 129, 86, 20);
-		frame.getContentPane().add(textField_2);
-		textField_2.setColumns(10);
-		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setForeground(Color.BLACK);
 		separator_1.setBounds(10, 160, 452, 8);
@@ -102,12 +91,12 @@ public class CreaPeriodo {
 		
 		JLabel lblDescripcionPeriodo = new JLabel("Descripcion Periodo");
 		lblDescripcionPeriodo.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblDescripcionPeriodo.setBounds(107, 45, 114, 14);
+		lblDescripcionPeriodo.setBounds(51, 45, 114, 14);
 		frame.getContentPane().add(lblDescripcionPeriodo);
 		
 		tPeriodo = new JTextField();
 		tPeriodo.setColumns(10);
-		tPeriodo.setBounds(232, 42, 139, 20);
+		tPeriodo.setBounds(175, 42, 261, 20);
 		frame.getContentPane().add(tPeriodo);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Fase 2: Inscripción de no socios");
@@ -120,11 +109,6 @@ public class CreaPeriodo {
 		lblNewLabel_2_1_1.setBounds(216, 192, 69, 14);
 		frame.getContentPane().add(lblNewLabel_2_1_1);
 		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(182, 217, 114, 20);
-		frame.getContentPane().add(textField_4);
-		
 		JButton bCrear = new JButton("Crear Periodo");
 		bCrear.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		bCrear.setBounds(51, 253, 134, 38);
@@ -134,5 +118,17 @@ public class CreaPeriodo {
 		bCancelar.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		bCancelar.setBounds(290, 253, 134, 38);
 		frame.getContentPane().add(bCancelar);
+		
+		JDateChooser dNoSocioFin = new JDateChooser();
+		dNoSocioFin.setBounds(175, 217, 154, 20);
+		frame.getContentPane().add(dNoSocioFin);
+		
+		JDateChooser dSocioInicio = new JDateChooser();
+		dSocioInicio.setBounds(61, 129, 151, 20);
+		frame.getContentPane().add(dSocioInicio);
+		
+		JDateChooser dSocioFin = new JDateChooser();
+		dSocioFin.setBounds(290, 129, 158, 20);
+		frame.getContentPane().add(dSocioFin);
 	}
 }
