@@ -85,7 +85,12 @@ public class SwingMain {
 		JButton planificarActividad = new JButton("Planificar Actividad (Administración)");
 		planificarActividad.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
-				CarrerasController controller=new CarrerasController(new CarrerasModel(), new CarrerasView());
+				// Lanza la HU "Crear/Planificar actividad" del package cd.admin.diego.planact
+				cd.admin.diego.planact.PlanActCrearActividadController controller =
+						new cd.admin.diego.planact.PlanActCrearActividadController(
+								new cd.admin.diego.planact.PlanActCrearActividadModel(),
+								new cd.admin.diego.planact.PlanActCrearActividadView()
+						);
 				controller.initController();
 			}
 		});
