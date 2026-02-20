@@ -9,6 +9,10 @@ import java.awt.event.ActionEvent;
 import giis.demo.tkrun.*;
 import javax.swing.JPanel;
 
+import cd.admin.Alejandro.ResInstalacion.VisualizacionReservasController;
+import cd.admin.Alejandro.ResInstalacion.VisualizacionReservasModel;
+import cd.admin.Alejandro.ResInstalacion.VisualizacionReservasView;
+
 /**
  * Punto de entrada principal que incluye botones para la ejecucion de las pantallas 
  * de las aplicaciones de ejemplo
@@ -84,8 +88,35 @@ public class SwingMain {
 			}
 		});
 		frame.getContentPane().add(btnCargarDatosIniciales);
+		
+		
+		JButton btnVisualizacionReservas = new JButton("Ejecutar Visualizacion de Reservas");
+		btnVisualizacionReservas.setBounds(28, 129, 205, 23);
+		btnVisualizacionReservas.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+		    public void actionPerformed(ActionEvent e) {
+		        VisualizacionReservasController controller = new VisualizacionReservasController(
+		            new VisualizacionReservasModel(), new VisualizacionReservasView());
+		        controller.initController();
+		    }
+		});
+		frame.getContentPane().add(btnVisualizacionReservas);
+
+		//JButton btnReservarActividad = new JButton("Ejecutar Reservar Actividad");
+		//btnReservarActividad.setBounds(28, 163, 205, 23);
+		//btnReservarActividad.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+		  //  public void actionPerformed(ActionEvent e) {
+		    //    ReservarActividadController controller = new ReservarActividadController(
+		      //      new ReservarActividadModel(), new ReservarActividadView());
+		       // controller.initController();
+		    //}
+		//});
+	//	frame.getContentPane().add(btnReservarActividad);
+		
 	}
 
+	
+	
+	
 	public JFrame getFrame() { return this.frame; }
 	
 }
