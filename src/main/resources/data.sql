@@ -101,24 +101,18 @@ INSERT INTO Actividades (id_actividad, nombre, descripcion, id_instalacion, afor
 ------------------------------------------------------------
 -- PERIODOS INSCRIPCION (12)
 ------------------------------------------------------------
-INSERT INTO PeriodosInscripcion (id_periodo, id_actividad, nombre, descripcion, tipo, fecha_inicio, fecha_fin) VALUES
-(1, 1, 'Socios Feb-Mar', 'Inscripción para socios (Aquagym).', 'socio', '2026-01-20', '2026-02-10'),
-(2, 1, 'No socios Feb-Mar', 'Inscripción para no socios (Aquagym).', 'no_socio', '2026-01-25', '2026-02-05'),
+INSERT INTO PeriodosInscripcion (id_periodo, nombre, descripcion, fecha_inicio_socio, fecha_fin_socio, fecha_fin_noSocio) VALUES
+(1, 'Socios Feb-Mar', 'Inscripción para (Aquagym).',  '2026-01-20', '2026-02-10', '2026-02-30'),
 
-(3, 2, 'Socios Primavera', 'Inscripción para socios (Tenis).', 'socio', '2026-02-01', '2026-02-20'),
-(4, 2, 'No socios Primavera', 'Inscripción para no socios (Tenis).', 'no_socio', '2026-02-05', '2026-02-18'),
+(2, 'Socios Primavera Tenis', 'Inscripción para (Tenis).', '2026-02-01', '2026-02-20', '2026-03-10'),
 
-(5, 3, 'Socios Liga', 'Inscripción para socios (Liga Pádel).', 'socio', '2026-02-15', '2026-03-05'),
-(6, 3, 'No socios Liga', 'Inscripción para no socios (Liga Pádel).', 'no_socio', '2026-02-20', '2026-03-03'),
+(3, 'Liga Padel', 'Inscripción para (Liga Pádel).', '2026-02-15', '2026-03-05', '2026-03-25'),
 
-(7, 4, 'Socios Pilates', 'Inscripción socios (Pilates).', 'socio', '2026-01-30', '2026-02-12'),
-(8, 4, 'No socios Pilates', 'Inscripción no socios (Pilates).', 'no_socio', '2026-02-02', '2026-02-10'),
+(4, 'Clase Pilates', 'Inscripción (Pilates).', '2026-01-30', '2026-02-12', '2026-02-25'),
 
-(9, 5, 'Socios Yoga', 'Inscripción socios (Yoga).', 'socio', '2026-01-25', '2026-02-08'),
-(10, 5, 'No socios Yoga', 'Inscripción no socios (Yoga).', 'no_socio', '2026-01-28', '2026-02-06'),
+(5, 'Sesiones Yoga', 'Inscripción (Yoga).', 'socio', '2026-01-25', '2026-02-08', '2026-02-17'),
 
-(11, 6, 'Socios Fútbol', 'Inscripción socios (Tecnificación).', 'socio', '2026-02-01', '2026-02-25'),
-(12, 6, 'No socios Fútbol', 'Inscripción no socios (Tecnificación).', 'no_socio', '2026-02-05', '2026-02-22');
+(6, 'Entreno Fútbol', 'Inscripción para (Tecnificación).', '2026-02-01', '2026-02-25', '2026-03-10');
 
 ------------------------------------------------------------
 -- SESIONES ACTIVIDAD (20)

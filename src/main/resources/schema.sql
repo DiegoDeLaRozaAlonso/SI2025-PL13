@@ -102,13 +102,11 @@ CREATE TABLE Actividades (
 -- Tabla de periodos de inscripción
 CREATE TABLE PeriodosInscripcion (
     id_periodo INTEGER PRIMARY KEY AUTOINCREMENT,
-    id_actividad INTEGER NOT NULL,
     nombre TEXT NOT NULL,
     descripcion TEXT NOT NULL,
-    tipo TEXT NOT NULL CHECK(tipo IN ('socio', 'no_socio')),
-    fecha_inicio DATE NOT NULL,
-    fecha_fin DATE NOT NULL,
-    FOREIGN KEY (id_actividad) REFERENCES Actividades(id_actividad)
+    fecha_inicio_socio DATE NOT NULL,
+    fecha_fin_socio DATE NOT NULL,
+    fecha_fin_noSocio DATE NOT NULL
 );
 
 -- Tabla de sesiones de actividades
