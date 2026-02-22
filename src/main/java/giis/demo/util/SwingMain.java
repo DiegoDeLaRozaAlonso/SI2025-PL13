@@ -49,7 +49,7 @@ public class SwingMain {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Main");
-		frame.setBounds(0, 0, 287, 185);
+		frame.setBounds(0, 0, 287, 299);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		
 		JButton btnEjecutarTkrun = new JButton("Ejecutar giis.demo.tkrun");
@@ -84,6 +84,17 @@ public class SwingMain {
 			}
 		});
 		frame.getContentPane().add(btnCargarDatosIniciales);
+		
+		JButton btnReservasAdmin = new JButton("Abrimos Resercas Admin");
+		btnReservasAdmin.setBounds(28, 129, 205, 23);
+		btnReservasAdmin.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+			public void actionPerformed(ActionEvent e) {
+				Database db=new Database();
+				db.createDatabase(false);
+				db.loadDatabase();
+			}
+		});
+		frame.getContentPane().add(btnReservasAdmin);
 	}
 
 	public JFrame getFrame() { return this.frame; }
