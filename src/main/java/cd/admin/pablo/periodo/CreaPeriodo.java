@@ -21,6 +21,13 @@ public class CreaPeriodo {
 	private JFrame frame;
 	private JTextField tNombre;
 	private JTextField tPeriodo;
+	private JDateChooser dNoSocioFin;
+	private JDateChooser dSocioInicio;
+	private JDateChooser dSocioFin;
+	private JButton bCancelar;
+	private JButton bCrear;
+	
+	
 
 	/**
 	 * Launch the application.
@@ -109,26 +116,34 @@ public class CreaPeriodo {
 		lblNewLabel_2_1_1.setBounds(216, 192, 69, 14);
 		frame.getContentPane().add(lblNewLabel_2_1_1);
 		
-		JButton bCrear = new JButton("Crear Periodo");
+		bCrear = new JButton("Crear Periodo");
 		bCrear.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		bCrear.setBounds(51, 253, 134, 38);
 		frame.getContentPane().add(bCrear);
 		
-		JButton bCancelar = new JButton("Cancelar");
+		bCancelar = new JButton("Cancelar");
 		bCancelar.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		bCancelar.setBounds(290, 253, 134, 38);
 		frame.getContentPane().add(bCancelar);
 		
-		JDateChooser dNoSocioFin = new JDateChooser();
+		dNoSocioFin = new JDateChooser();
 		dNoSocioFin.setBounds(175, 217, 154, 20);
 		frame.getContentPane().add(dNoSocioFin);
 		
-		JDateChooser dSocioInicio = new JDateChooser();
+		dSocioInicio = new JDateChooser();
 		dSocioInicio.setBounds(61, 129, 151, 20);
 		frame.getContentPane().add(dSocioInicio);
 		
-		JDateChooser dSocioFin = new JDateChooser();
+		dSocioFin = new JDateChooser();
 		dSocioFin.setBounds(290, 129, 158, 20);
 		frame.getContentPane().add(dSocioFin);
 	}
+	public JTextField getNombre(){return this.tNombre; }
+	public JTextField getDescripcion(){return this.tPeriodo; }
+	public Date getFechaInicio(){return this.dSocioInicio.getDate(); }
+	public Date getFechaFinSocio(){return this.dSocioFin.getDate(); }
+	public Date getFechaFinNoSocio(){return this.dNoSocioFin.getDate(); }
+	public JButton getBotonCrear(){return this.bCrear; }
+	public JButton getBotonCancelar(){return this.bCancelar; }
+	
 }
