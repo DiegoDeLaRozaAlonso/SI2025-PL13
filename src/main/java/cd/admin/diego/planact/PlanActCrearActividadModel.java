@@ -24,16 +24,20 @@ public class PlanActCrearActividadModel {
 			"select id_instalacion as idInstalacion, nombre, tipo, capacidad " +
 			"from Instalaciones where en_uso=1 order by nombre";
 
-	// Inserts
+	// CAMBIO: cargar periodos existentes (nueva estructura)
+	private static final String SQL_PERIODOS =
+			"select id_periodo as idPeriodo, nombre, descripcion, " +
+			"fecha_inicio_socio as fechaInicioSocio, " +
+			"fecha_fin_socio as fechaFinSocio, " +
+			"fecha_fin_noSocio as fechaFinNoSocio " +
+			"from PeriodosInscripcion order by nombre";
+
+	// CAMBIO: insert actividad guardando el id_periodo (ajusta si tu BD usa otra relación)
 	private static final String SQL_INS_ACTIVIDAD =
-			"insert into Actividades(nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin) " +
-			"values(?,?,?,?,?,?,?,?)";
+			"insert into Actividades(nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo) " +
+			"values(?,?,?,?,?,?,?,?,?)";
 
 	private static final String SQL_LAST_ID = "select last_insert_rowid()";
-
-	private static final String SQL_INS_PERIODO =
-			"insert into PeriodosInscripcion(id_actividad, nombre, descripcion, tipo, fecha_inicio, fecha_fin) " +
-			"values(?,?,?,?,?,?)";
 
 	private static final String SQL_INS_SESION =
 			"insert into SesionesActividad(id_actividad, fecha, hora_inicio, hora_fin, id_instalacion) " +
@@ -43,30 +47,34 @@ public class PlanActCrearActividadModel {
 		return db.executeQueryPojo(InstalacionDTO.class, SQL_INSTALACIONES);
 	}
 
+	public List<PeriodoInscripcionDTO> getPeriodosInscripcion() {
+		return db.executeQueryPojo(PeriodoInscripcionDTO.class, SQL_PERIODOS);
+	}
+
 	/**
-	 * Crea actividad + periodos (socio/no_socio) + sesiones según horario.
+	 * Crea actividad + sesiones según horario.
+	 * (El periodo de inscripción se selecciona, no se crea aquí)
 	 * Devuelve id_actividad creado.
 	 */
 	public int crearActividadCompleta(
 			String nombre,
-			String tipo,
+			String tipoDescripcion,
 			int idInstalacion,
 			int aforo,
 			double precioSocio,
 			double precioNoSocio,
-			LocalDate insInicio,
-			LocalDate insFin,
 			LocalDate fechaInicio,
 			int numSemanas,
-			List<WeeklyScheduleTableModel.Slot> slots) {
+			List<WeeklyScheduleTableModel.Slot> slots,
+			int idPeriodoInscripcion) {
 
 		validate(nombre != null && !nombre.trim().isEmpty(), "El nombre de la actividad es obligatorio");
-		validate(tipo != null && !tipo.trim().isEmpty(), "El tipo de actividad es obligatorio");
+		validate(tipoDescripcion != null && !tipoDescripcion.trim().isEmpty(), "El tipo (descripción) es obligatorio");
 		validate(idInstalacion > 0, "Debes seleccionar una instalación");
 		validate(numSemanas > 0, "El número de semanas debe ser mayor que 0");
 		validate(!slots.isEmpty(), "Debes seleccionar al menos un hueco en el horario semanal");
-		validate(!insFin.isBefore(insInicio), "El fin de inscripción no puede ser anterior al inicio");
 		validate(precioSocio >= 0 && precioNoSocio >= 0, "Los precios no pueden ser negativos");
+		validate(idPeriodoInscripcion > 0, "Debes seleccionar un periodo de inscripción");
 
 		LocalDate fechaFin = fechaInicio.plusWeeks(numSemanas).minusDays(1);
 
@@ -80,13 +88,14 @@ public class PlanActCrearActividadModel {
 			// 1) Actividad
 			qr.update(conn, SQL_INS_ACTIVIDAD,
 					nombre.trim(),
-					tipo.trim(),              // uso "tipo" como descripcion (tu boceto tenía un campo tipo)
+					tipoDescripcion.trim(),   // CAMBIO: tipo -> descripcion
 					idInstalacion,
 					aforo,
 					precioSocio,
 					precioNoSocio,
 					fechaInicio.toString(),
-					fechaFin.toString());
+					fechaFin.toString(),
+					idPeriodoInscripcion);
 
 			// 2) Id generado
 			ArrayListHandler h = new ArrayListHandler();
@@ -94,24 +103,7 @@ public class PlanActCrearActividadModel {
 			List<Object[]> rows = (List<Object[]>) qr.query(conn, SQL_LAST_ID, h);
 			int idActividad = ((Number) rows.get(0)[0]).intValue();
 
-			// 3) Periodos inscripción (2 filas)
-			qr.update(conn, SQL_INS_PERIODO,
-					idActividad,
-					"Socios",
-					"Inscripción socios (" + nombre.trim() + ")",
-					"socio",
-					insInicio.toString(),
-					insFin.toString());
-
-			qr.update(conn, SQL_INS_PERIODO,
-					idActividad,
-					"No socios",
-					"Inscripción no socios (" + nombre.trim() + ")",
-					"no_socio",
-					insInicio.toString(),
-					insFin.toString());
-
-			// 4) Sesiones (según slots)
+			// 3) Sesiones según slots
 			insertSesiones(qr, conn, idActividad, idInstalacion, fechaInicio, fechaFin, slots);
 
 			conn.commit();
@@ -128,7 +120,7 @@ public class PlanActCrearActividadModel {
 	private void insertSesiones(QueryRunner qr, Connection conn, int idActividad, int idInstalacion,
 			LocalDate fechaInicio, LocalDate fechaFin, List<WeeklyScheduleTableModel.Slot> slots) throws SQLException {
 
-		// definimos "semana 0" como la semana que empieza en lunes de la semana de fechaInicio
+		// semana 0: lunes de la semana de fechaInicio
 		LocalDate week0Monday = fechaInicio.minusDays((fechaInicio.getDayOfWeek().getValue() + 6) % 7);
 
 		DateTimeFormatter tf = DateTimeFormatter.ofPattern("HH:mm");
@@ -140,7 +132,6 @@ public class PlanActCrearActividadModel {
 				DayOfWeek dow = DayOfWeek.of(s.dayIndex0Mon + 1); // 1..5
 				LocalDate sessionDate = cursorWeek.plusDays(dow.getValue() - 1);
 
-				// dentro del rango real de la actividad
 				if (sessionDate.isBefore(fechaInicio) || sessionDate.isAfter(fechaFin)) continue;
 
 				LocalTime start = s.start;

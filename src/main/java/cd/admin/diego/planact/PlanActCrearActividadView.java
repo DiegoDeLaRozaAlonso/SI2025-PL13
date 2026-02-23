@@ -8,7 +8,7 @@ import javax.swing.table.TableModel;
 import net.miginfocom.swing.MigLayout;
 
 /**
- * Vista: Pantalla "Crear actividad" (similar al boceto).
+ * Vista: Pantalla "Crear actividad".
  * MVC: No incluye listeners; solo componentes + getters/setters.
  */
 public class PlanActCrearActividadView {
@@ -23,8 +23,8 @@ public class PlanActCrearActividadView {
 	private JSpinner spPrecioSocio;
 	private JSpinner spPrecioNoSocio;
 
-	private JTextField txtInscripcionInicio;
-	private JTextField txtInscripcionFin;
+	// CAMBIO: periodo inscripción ahora es un desplegable
+	private JComboBox<PeriodoInscripcionDTO> cbPeriodoInscripcion;
 
 	private JTextField txtFechaInicio;
 	private JSpinner spNumSemanas;
@@ -44,13 +44,13 @@ public class PlanActCrearActividadView {
 		frame.setName("CrearActividad");
 		frame.setBounds(0, 0, 760, 640);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[][][][][][][][][][grow][][]"));
+		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[][][][][][grow][][]"));
 
 		JLabel lblTitulo = new JLabel("Crear actividad");
 		frame.getContentPane().add(lblTitulo, "cell 0 0");
 
 		// --- Formulario superior ---
-		JPanel pnlForm = new JPanel(new MigLayout("", "[][grow]", "[][][][][][][][]"));
+		JPanel pnlForm = new JPanel(new MigLayout("", "[][grow]", "[][][][][][][]"));
 		frame.getContentPane().add(pnlForm, "cell 0 1,growx");
 
 		pnlForm.add(new JLabel("Nombre de la actividad:"), "cell 0 0,alignx right");
@@ -71,8 +71,7 @@ public class PlanActCrearActividadView {
 		pnlForm.add(new JLabel("Aforo máximo:"), "cell 0 3,alignx right");
 		spAforo = new JSpinner(new SpinnerNumberModel(1, 1, 999, 1));
 		spAforo.setName("spAforo");
-		pnlForm.add(spAforo, "cell 1 3,split 2");
-		pnlForm.add(new JLabel(" "), "cell 1 3");
+		pnlForm.add(spAforo, "cell 1 3");
 
 		pnlForm.add(new JLabel("Precio socio (€):"), "cell 0 4,alignx right");
 		spPrecioSocio = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 9999.0, 0.5));
@@ -86,20 +85,14 @@ public class PlanActCrearActividadView {
 		pnlForm.add(spPrecioNoSocio, "cell 1 5,split 2");
 		pnlForm.add(new JLabel("€"), "cell 1 5");
 
-		pnlForm.add(new JLabel("Periodo de inscripción (ISO):"), "cell 0 6,alignx right");
-		JPanel pnlIns = new JPanel(new MigLayout("", "[][grow][][grow]", "[]"));
-		txtInscripcionInicio = new JTextField();
-		txtInscripcionInicio.setName("txtInscripcionInicio");
-		txtInscripcionFin = new JTextField();
-		txtInscripcionFin.setName("txtInscripcionFin");
-		pnlIns.add(new JLabel("Inicio"), "cell 0 0");
-		pnlIns.add(txtInscripcionInicio, "cell 1 0,growx");
-		pnlIns.add(new JLabel("Fin"), "cell 2 0");
-		pnlIns.add(txtInscripcionFin, "cell 3 0,growx");
-		pnlForm.add(pnlIns, "cell 1 6,growx");
+		// CAMBIO: combo periodo inscripción
+		pnlForm.add(new JLabel("Periodo de inscripción:"), "cell 0 6,alignx right");
+		cbPeriodoInscripcion = new JComboBox<>();
+		cbPeriodoInscripcion.setName("cbPeriodoInscripcion");
+		pnlForm.add(cbPeriodoInscripcion, "cell 1 6,growx");
 
 		pnlForm.add(new JLabel("Fecha inicio (ISO):"), "cell 0 7,alignx right");
-		JPanel pnlInicio = new JPanel(new MigLayout("", "[][grow][]", "[]"));
+		JPanel pnlInicio = new JPanel(new MigLayout("", "[grow][][]", "[]"));
 		txtFechaInicio = new JTextField();
 		txtFechaInicio.setName("txtFechaInicio");
 		spNumSemanas = new JSpinner(new SpinnerNumberModel(1, 1, 52, 1));
@@ -117,9 +110,8 @@ public class PlanActCrearActividadView {
 		tabHorario.setName("tabHorario");
 		tabHorario.setRowSelectionAllowed(false);
 
-		// Scroll para la tabla (como en tkrun)
 		JScrollPane sp = new JScrollPane(tabHorario);
-		sp.setPreferredSize(new Dimension(650, 280));
+		sp.setPreferredSize(new Dimension(650, 320));
 		frame.getContentPane().add(sp, "cell 0 3,grow");
 
 		// --- Botonera inferior ---
@@ -160,11 +152,8 @@ public class PlanActCrearActividadView {
 	public double getPrecioNoSocio() { return ((Number) spPrecioNoSocio.getValue()).doubleValue(); }
 	public void setPrecioNoSocio(double v) { spPrecioNoSocio.setValue(v); }
 
-	public String getInscripcionInicio() { return txtInscripcionInicio.getText(); }
-	public void setInscripcionInicio(String v) { txtInscripcionInicio.setText(v); }
-
-	public String getInscripcionFin() { return txtInscripcionFin.getText(); }
-	public void setInscripcionFin(String v) { txtInscripcionFin.setText(v); }
+	// CAMBIO: getter del combo
+	public JComboBox<PeriodoInscripcionDTO> getCbPeriodoInscripcion() { return cbPeriodoInscripcion; }
 
 	public String getFechaInicio() { return txtFechaInicio.getText(); }
 	public void setFechaInicio(String v) { txtFechaInicio.setText(v); }

@@ -31,8 +31,8 @@ public class WeeklyScheduleTableModel extends AbstractTableModel {
 	}
 
 	public WeeklyScheduleTableModel() {
-		// por defecto 08:00..22:00 (endExclusive)
-		this(LocalTime.of(8, 0), LocalTime.of(22, 0));
+		// CAMBIO: 08:00..23:00 (endExclusive)
+		this(LocalTime.of(8, 0), LocalTime.of(23, 0));
 	}
 
 	@Override public int getRowCount() { return hours.size(); }
@@ -71,7 +71,7 @@ public class WeeklyScheduleTableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * Devuelve una lista de slots seleccionados: (dayIndex 0..4, hh:mm)
+	 * Devuelve una lista de slots seleccionados: (dayIndex 0..4, start time).
 	 */
 	public List<Slot> getSelectedSlots() {
 		List<Slot> out = new ArrayList<>();

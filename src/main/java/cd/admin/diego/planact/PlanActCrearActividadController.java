@@ -5,7 +5,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
@@ -33,20 +33,22 @@ public class PlanActCrearActividadController {
 	}
 
 	private void initView() {
-		// horario por defecto
+		// horario por defecto 08:00..23:00
 		horarioModel = new WeeklyScheduleTableModel();
 		view.setHorarioModel(horarioModel);
 
-		// cargar combo instalaciones
+		// cargar combo instalaciones (mantengo el estilo que tenía antes)
 		List<InstalacionDTO> instalaciones = model.getInstalaciones();
-		ComboBoxModel<Object> cm = SwingUtil.getComboModelFromList(
-				instalaciones.stream().map(i -> new Object[] { i.toString() }).toList()
-		);
+		var cm = SwingUtil.getComboModelFromList(instalaciones.stream().map(i -> new Object[] { i.toString() }).toList());
 		view.getCbInstalacion().setModel(cm);
 
+		// CAMBIO: cargar combo periodos inscripción
+		List<PeriodoInscripcionDTO> periodos = model.getPeriodosInscripcion();
+		view.getCbPeriodoInscripcion().setModel(new DefaultComboBoxModel<>(
+				periodos.toArray(new PeriodoInscripcionDTO[0])
+		));
+
 		// valores iniciales razonables
-		view.setInscripcionInicio("2026-01-01");
-		view.setInscripcionFin("2026-01-15");
 		view.setFechaInicio("2026-02-01");
 		view.setNumSemanas(8);
 
@@ -62,8 +64,11 @@ public class PlanActCrearActividadController {
 		double pSocio = view.getPrecioSocio();
 		double pNoSocio = view.getPrecioNoSocio();
 
-		LocalDate insIni = toLocalDate(Util.isoStringToDate(view.getInscripcionInicio()));
-		LocalDate insFin = toLocalDate(Util.isoStringToDate(view.getInscripcionFin()));
+		// CAMBIO: coger periodo seleccionado
+		PeriodoInscripcionDTO periodo = (PeriodoInscripcionDTO) view.getCbPeriodoInscripcion().getSelectedItem();
+		if (periodo == null)
+			throw new giis.demo.util.ApplicationException("Debes seleccionar un periodo de inscripción.");
+		int idPeriodo = periodo.getIdPeriodo();
 
 		LocalDate fechaInicio = toLocalDate(Util.isoStringToDate(view.getFechaInicio()));
 		int numSemanas = view.getNumSemanas();
@@ -72,11 +77,10 @@ public class PlanActCrearActividadController {
 
 		int id = model.crearActividadCompleta(
 				nombre, tipo, idInstalacion, aforo, pSocio, pNoSocio,
-				insIni, insFin,
 				fechaInicio, numSemanas,
-				slots);
+				slots,
+				idPeriodo);
 
-		// mensaje estándar: lanza ApplicationException si quieres modal info, pero SwingUtil ya muestra.
 		throw new giis.demo.util.ApplicationException("Actividad creada correctamente. id_actividad=" + id);
 	}
 
@@ -86,8 +90,6 @@ public class PlanActCrearActividadController {
 		view.setAforo(1);
 		view.setPrecioSocio(0.0);
 		view.setPrecioNoSocio(0.0);
-		view.setInscripcionInicio("");
-		view.setInscripcionFin("");
 		view.setFechaInicio("");
 		view.setNumSemanas(1);
 		horarioModel.clearAll();
