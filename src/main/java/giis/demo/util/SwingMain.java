@@ -82,20 +82,21 @@ public class SwingMain {
 		frame.getContentPane().add(btnCargarDatosIniciales);
 		
 		
-		JButton planificarActividad = new JButton("Ver disponibilidad instalación (Socio)");
-		planificarActividad.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+		JButton verDisponibilidadInstalacion = new JButton("Ver disponibilidad instalación (Socio)");
+		verDisponibilidadInstalacion.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
-				// Lanza la HU "Crear/Planificar actividad" del package cd.admin.diego.planact
-				cd.admin.diego.planact.PlanActCrearActividadController controller =
-						new cd.admin.diego.planact.PlanActCrearActividadController(
-								new cd.admin.diego.planact.PlanActCrearActividadModel(),
-								new cd.admin.diego.planact.PlanActCrearActividadView()
+				// Lanza la HU "Ver disponibilidad instalación (Socio)" del package cd.socio.diego.verdispoinstalacion
+				cd.socio.diego.verdispoinstalacion.DisponibilidadController controller =
+						new cd.socio.diego.verdispoinstalacion.DisponibilidadController(
+								new cd.socio.diego.verdispoinstalacion.DisponibilidadModel(),
+								new cd.socio.diego.verdispoinstalacion.DisponibilidadView()
 						);
 				controller.initController();
 			}
 		});
+
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-		frame.getContentPane().add(planificarActividad);
+		frame.getContentPane().add(verDisponibilidadInstalacion);
 	}
 
 	public JFrame getFrame() { return this.frame; }
