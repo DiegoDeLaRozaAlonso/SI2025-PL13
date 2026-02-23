@@ -84,6 +84,15 @@ CREATE TABLE Reservas (
     FOREIGN KEY (id_instalacion) REFERENCES Instalaciones(id_instalacion)
 );
 
+-- Tabla de periodos de inscripción
+CREATE TABLE PeriodosInscripcion (
+    id_periodo INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    descripcion TEXT NOT NULL,
+    fecha_inicio_socio DATE NOT NULL,
+    fecha_fin_socio DATE NOT NULL,
+    fecha_fin_noSocio DATE NOT NULL
+);
 
 -- Tabla de actividades
 CREATE TABLE Actividades (
@@ -99,16 +108,6 @@ CREATE TABLE Actividades (
     id_periodo INTEGER NOT NULL,
     FOREIGN KEY (id_instalacion) REFERENCES Instalaciones(id_instalacion),
     FOREIGN KEY (id_periodo) REFERENCES PeriodosInscripcion(id_periodo)
-);
-
--- Tabla de periodos de inscripción
-CREATE TABLE PeriodosInscripcion (
-    id_periodo INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre TEXT NOT NULL,
-    descripcion TEXT NOT NULL,
-    fecha_inicio_socio DATE NOT NULL,
-    fecha_fin_socio DATE NOT NULL,
-    fecha_fin_noSocio DATE NOT NULL
 );
 
 -- Tabla de sesiones de actividades

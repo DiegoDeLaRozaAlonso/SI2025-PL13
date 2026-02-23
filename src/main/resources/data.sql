@@ -90,28 +90,23 @@ INSERT INTO HorariosInstalacion (id_horario, id_instalacion, tipo_horario, hora_
 ------------------------------------------------------------
 -- ACTIVIDADES (6)
 ------------------------------------------------------------
-INSERT INTO Actividades (id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin) VALUES
-(1, 'Aquagym', 'Clase dirigida en piscina (nivel básico).', 1, 20, 15.00, 25.00, '2026-02-01', '2026-03-31'),
-(2, 'Escuela de Tenis', 'Iniciación y técnica para adultos.', 2, 8, 20.00, 35.00, '2026-02-15', '2026-05-15'),
-(3, 'Liga de Pádel', 'Partidos semanales por parejas.', 6, 16, 10.00, 18.00, '2026-03-01', '2026-04-30'),
-(4, 'Pilates', 'Fortalecimiento y movilidad (nivel intermedio).', 7, 18, 12.00, 20.00, '2026-02-10', '2026-04-10'),
-(5, 'Yoga', 'Yoga suave para todos los niveles.', 7, 22, 10.00, 18.00, '2026-02-05', '2026-04-05'),
-(6, 'Tecnificación Fútbol', 'Entrenamiento técnico por estaciones.', 4, 14, 18.00, 30.00, '2026-02-20', '2026-05-20');
+INSERT INTO Actividades (id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo) VALUES
+(1, 'Aquagym',              'Clase dirigida en piscina (nivel básico).',  1, 20, 15.00, 25.00, '2026-02-01', '2026-03-31', 1),
+(2, 'Escuela de Tenis',     'Iniciación y técnica para adultos.',         2,  8, 20.00, 35.00, '2026-02-15', '2026-05-15', 2),
+(3, 'Liga de Pádel',        'Partidos semanales por parejas.',            6, 16, 10.00, 18.00, '2026-03-01', '2026-04-30', 3),
+(4, 'Pilates',              'Fortalecimiento y movilidad (nivel intermedio).', 7, 18, 12.00, 20.00, '2026-02-10', '2026-04-10', 4),
+(5, 'Yoga',                 'Yoga suave para todos los niveles.',         7, 22, 10.00, 18.00, '2026-02-05', '2026-04-05', 5),
+(6, 'Tecnificación Fútbol', 'Entrenamiento técnico por estaciones.',      4, 14, 18.00, 30.00, '2026-02-20', '2026-05-20', 6);
 
 ------------------------------------------------------------
 -- PERIODOS INSCRIPCION (12)
 ------------------------------------------------------------
 INSERT INTO PeriodosInscripcion (id_periodo, nombre, descripcion, fecha_inicio_socio, fecha_fin_socio, fecha_fin_noSocio) VALUES
-(1, 'Socios Feb-Mar', 'Inscripción para (Aquagym).',  '2026-01-20', '2026-02-10', '2026-02-30'),
-
+(1, 'Socios Feb-Mar', 'Inscripción para (Aquagym).',        '2026-01-20', '2026-02-10', '2026-02-28'),
 (2, 'Socios Primavera Tenis', 'Inscripción para (Tenis).', '2026-02-01', '2026-02-20', '2026-03-10'),
-
-(3, 'Liga Padel', 'Inscripción para (Liga Pádel).', '2026-02-15', '2026-03-05', '2026-03-25'),
-
-(4, 'Clase Pilates', 'Inscripción (Pilates).', '2026-01-30', '2026-02-12', '2026-02-25'),
-
-(5, 'Sesiones Yoga', 'Inscripción (Yoga).', 'socio', '2026-01-25', '2026-02-08', '2026-02-17'),
-
+(3, 'Liga Padel', 'Inscripción para (Liga Pádel).',        '2026-02-15', '2026-03-05', '2026-03-25'),
+(4, 'Clase Pilates', 'Inscripción (Pilates).',             '2026-01-30', '2026-02-12', '2026-02-25'),
+(5, 'Sesiones Yoga', 'Inscripción (Yoga).',                '2026-01-25', '2026-02-08', '2026-02-17'),
 (6, 'Entreno Fútbol', 'Inscripción para (Tecnificación).', '2026-02-01', '2026-02-25', '2026-03-10');
 
 ------------------------------------------------------------
