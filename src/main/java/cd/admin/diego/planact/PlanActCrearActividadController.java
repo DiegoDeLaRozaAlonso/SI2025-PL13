@@ -27,6 +27,9 @@ public class PlanActCrearActividadController {
 		view.getBtnCrear().addActionListener(e -> SwingUtil.exceptionWrapper(() -> crearActividad()));
 		view.getBtnBorrarTodo().addActionListener(e -> SwingUtil.exceptionWrapper(() -> limpiarFormulario()));
 		view.getBtnCerrar().addActionListener(e -> SwingUtil.exceptionWrapper(() -> cerrar()));
+
+		// NUEVO: info periodo
+		view.getBtnInfoPeriodo().addActionListener(e -> SwingUtil.exceptionWrapper(() -> mostrarInfoPeriodo()));
 	}
 
 	private void initView() {
@@ -42,11 +45,18 @@ public class PlanActCrearActividadController {
 				periodos.toArray(new PeriodoInscripcionDTO[0])
 		));
 
-		// defaults
 		view.setFechaInicio("2026-02-01");
 		view.setFechaFin("2026-03-31");
 
 		view.getFrame().setVisible(true);
+	}
+
+	private void mostrarInfoPeriodo() {
+		PeriodoInscripcionDTO p = (PeriodoInscripcionDTO) view.getCbPeriodoInscripcion().getSelectedItem();
+		if (p == null) throw new giis.demo.util.ApplicationException("Debes seleccionar un periodo de inscripción.");
+
+		PlanActPeriodoInfoDialog dlg = new PlanActPeriodoInfoDialog(view.getFrame(), p);
+		dlg.setVisible(true);
 	}
 
 	private void crearActividad() {

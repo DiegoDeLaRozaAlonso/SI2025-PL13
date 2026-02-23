@@ -21,14 +21,16 @@ public class PlanActCrearActividadView {
 
 	private JComboBox<PeriodoInscripcionDTO> cbPeriodoInscripcion;
 
-	// CAMBIO: ahora pedimos fecha inicio y fecha fin (no semanas)
+	// NUEVO: botón info periodo
+	private JButton btnInfoPeriodo;
+
 	private JTextField txtFechaInicio;
 	private JTextField txtFechaFin;
 
 	private JTable tabHorario;
 	private JButton btnCrear;
 	private JButton btnBorrarTodo;
-	private JButton btnCerrar; // CAMBIO: antes btnAtras
+	private JButton btnCerrar;
 
 	public PlanActCrearActividadView() {
 		initialize();
@@ -45,7 +47,7 @@ public class PlanActCrearActividadView {
 		JLabel lblTitulo = new JLabel("Crear actividad");
 		frame.getContentPane().add(lblTitulo, "cell 0 0");
 
-		JPanel pnlForm = new JPanel(new MigLayout("", "[][grow]", "[][][][][][][]"));
+		JPanel pnlForm = new JPanel(new MigLayout("", "[][grow]", "[][][][][][][][]"));
 		frame.getContentPane().add(pnlForm, "cell 0 1,growx");
 
 		pnlForm.add(new JLabel("Nombre de la actividad:"), "cell 0 0,alignx right");
@@ -85,8 +87,16 @@ public class PlanActCrearActividadView {
 		cbPeriodoInscripcion.setName("cbPeriodoInscripcion");
 		pnlForm.add(cbPeriodoInscripcion, "cell 1 6,growx");
 
-		// CAMBIO: fecha inicio + fecha fin (ISO)
-		pnlForm.add(new JLabel("Fecha inicio (ISO):"), "cell 0 7,alignx right");
+		// NUEVO: botón debajo del combo, alineado a la derecha
+		btnInfoPeriodo = new JButton("Info Periodo");
+		btnInfoPeriodo.setName("btnInfoPeriodo");
+		JPanel pnlInfoPeriodo = new JPanel(new MigLayout("", "[grow][]", "[]"));
+		pnlInfoPeriodo.add(new JLabel(""), "cell 0 0,growx");
+		pnlInfoPeriodo.add(btnInfoPeriodo, "cell 1 0,alignx right");
+		pnlForm.add(pnlInfoPeriodo, "cell 1 7,growx");
+
+		// Fechas (ISO)
+		pnlForm.add(new JLabel("Fecha inicio (ISO):"), "cell 0 8,alignx right");
 		JPanel pnlFechas = new JPanel(new MigLayout("", "[grow][][][grow]", "[]"));
 		txtFechaInicio = new JTextField();
 		txtFechaInicio.setName("txtFechaInicio");
@@ -95,7 +105,7 @@ public class PlanActCrearActividadView {
 		pnlFechas.add(txtFechaInicio, "cell 0 0,growx");
 		pnlFechas.add(new JLabel("Fecha fin (ISO):"), "cell 1 0");
 		pnlFechas.add(txtFechaFin, "cell 3 0,growx");
-		pnlForm.add(pnlFechas, "cell 1 7,growx");
+		pnlForm.add(pnlFechas, "cell 1 8,growx");
 
 		JLabel lblHorario = new JLabel("Horario semanal de la actividad:");
 		frame.getContentPane().add(lblHorario, "cell 0 2");
@@ -113,8 +123,6 @@ public class PlanActCrearActividadView {
 		btnCrear.setName("btnCrearActividad");
 		btnBorrarTodo = new JButton("Borrar todo");
 		btnBorrarTodo.setName("btnBorrarTodo");
-
-		// CAMBIO: “Cerrar”
 		btnCerrar = new JButton("Cerrar");
 		btnCerrar.setName("btnCerrar");
 
@@ -147,6 +155,9 @@ public class PlanActCrearActividadView {
 	public void setPrecioNoSocio(double v) { spPrecioNoSocio.setValue(v); }
 
 	public JComboBox<PeriodoInscripcionDTO> getCbPeriodoInscripcion() { return cbPeriodoInscripcion; }
+
+	// NUEVO: getter botón
+	public JButton getBtnInfoPeriodo() { return btnInfoPeriodo; }
 
 	public String getFechaInicio() { return txtFechaInicio.getText(); }
 	public void setFechaInicio(String v) { txtFechaInicio.setText(v); }
