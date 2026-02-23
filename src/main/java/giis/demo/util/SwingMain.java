@@ -42,7 +42,7 @@ public class SwingMain {
 	public SwingMain() {
 		initialize();
 	}
-
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
