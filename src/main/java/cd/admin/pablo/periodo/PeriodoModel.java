@@ -19,7 +19,7 @@ public class PeriodoModel {
 				periodo.getFechaFinNoSocio()
 		);
 		
-		String sql = "INSERT INTO PeriodosInscripcion "
+		String sql = "INSERT INTO PeriodosInscripcion"
 				+ "(nombre, descripcion, fecha_inicio_socio, fecha_fin_socio, fecha_fin_noSocio) "
 				+ "VALUES (?,?,?,?,?);";
 		
