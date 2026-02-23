@@ -96,7 +96,9 @@ CREATE TABLE Actividades (
     costo_no_socio DECIMAL(10,2) NOT NULL,
     fecha_inicio DATE NOT NULL,
     fecha_fin DATE NOT NULL,
-    FOREIGN KEY (id_instalacion) REFERENCES Instalaciones(id_instalacion)
+    id_periodo INTEGER NOT NULL,
+    FOREIGN KEY (id_instalacion) REFERENCES Instalaciones(id_instalacion),
+    FOREIGN KEY (id_periodo) REFERENCES PeriodosInscripcion(id_periodo)
 );
 
 -- Tabla de periodos de inscripción
