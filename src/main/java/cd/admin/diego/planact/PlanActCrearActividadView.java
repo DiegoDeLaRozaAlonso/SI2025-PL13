@@ -7,10 +7,6 @@ import javax.swing.table.TableModel;
 
 import net.miginfocom.swing.MigLayout;
 
-/**
- * Vista: Pantalla "Crear actividad".
- * MVC: No incluye listeners; solo componentes + getters/setters.
- */
 public class PlanActCrearActividadView {
 
 	private JFrame frame;
@@ -23,16 +19,16 @@ public class PlanActCrearActividadView {
 	private JSpinner spPrecioSocio;
 	private JSpinner spPrecioNoSocio;
 
-	// CAMBIO: periodo inscripción ahora es un desplegable
 	private JComboBox<PeriodoInscripcionDTO> cbPeriodoInscripcion;
 
+	// CAMBIO: ahora pedimos fecha inicio y fecha fin (no semanas)
 	private JTextField txtFechaInicio;
-	private JSpinner spNumSemanas;
+	private JTextField txtFechaFin;
 
 	private JTable tabHorario;
 	private JButton btnCrear;
 	private JButton btnBorrarTodo;
-	private JButton btnAtras;
+	private JButton btnCerrar; // CAMBIO: antes btnAtras
 
 	public PlanActCrearActividadView() {
 		initialize();
@@ -49,7 +45,6 @@ public class PlanActCrearActividadView {
 		JLabel lblTitulo = new JLabel("Crear actividad");
 		frame.getContentPane().add(lblTitulo, "cell 0 0");
 
-		// --- Formulario superior ---
 		JPanel pnlForm = new JPanel(new MigLayout("", "[][grow]", "[][][][][][][]"));
 		frame.getContentPane().add(pnlForm, "cell 0 1,growx");
 
@@ -85,24 +80,23 @@ public class PlanActCrearActividadView {
 		pnlForm.add(spPrecioNoSocio, "cell 1 5,split 2");
 		pnlForm.add(new JLabel("€"), "cell 1 5");
 
-		// CAMBIO: combo periodo inscripción
 		pnlForm.add(new JLabel("Periodo de inscripción:"), "cell 0 6,alignx right");
 		cbPeriodoInscripcion = new JComboBox<>();
 		cbPeriodoInscripcion.setName("cbPeriodoInscripcion");
 		pnlForm.add(cbPeriodoInscripcion, "cell 1 6,growx");
 
+		// CAMBIO: fecha inicio + fecha fin (ISO)
 		pnlForm.add(new JLabel("Fecha inicio (ISO):"), "cell 0 7,alignx right");
-		JPanel pnlInicio = new JPanel(new MigLayout("", "[grow][][]", "[]"));
+		JPanel pnlFechas = new JPanel(new MigLayout("", "[grow][][][grow]", "[]"));
 		txtFechaInicio = new JTextField();
 		txtFechaInicio.setName("txtFechaInicio");
-		spNumSemanas = new JSpinner(new SpinnerNumberModel(1, 1, 52, 1));
-		spNumSemanas.setName("spNumSemanas");
-		pnlInicio.add(txtFechaInicio, "cell 0 0,growx");
-		pnlInicio.add(new JLabel("Nº semanas duración:"), "cell 1 0");
-		pnlInicio.add(spNumSemanas, "cell 2 0");
-		pnlForm.add(pnlInicio, "cell 1 7,growx");
+		txtFechaFin = new JTextField();
+		txtFechaFin.setName("txtFechaFin");
+		pnlFechas.add(txtFechaInicio, "cell 0 0,growx");
+		pnlFechas.add(new JLabel("Fecha fin (ISO):"), "cell 1 0");
+		pnlFechas.add(txtFechaFin, "cell 3 0,growx");
+		pnlForm.add(pnlFechas, "cell 1 7,growx");
 
-		// --- Horario semanal ---
 		JLabel lblHorario = new JLabel("Horario semanal de la actividad:");
 		frame.getContentPane().add(lblHorario, "cell 0 2");
 
@@ -114,25 +108,25 @@ public class PlanActCrearActividadView {
 		sp.setPreferredSize(new Dimension(650, 320));
 		frame.getContentPane().add(sp, "cell 0 3,grow");
 
-		// --- Botonera inferior ---
 		JPanel pnlBtns = new JPanel(new MigLayout("", "[][grow][][grow][]", "[]"));
 		btnCrear = new JButton("Crear actividad");
 		btnCrear.setName("btnCrearActividad");
 		btnBorrarTodo = new JButton("Borrar todo");
 		btnBorrarTodo.setName("btnBorrarTodo");
-		btnAtras = new JButton("Atrás");
-		btnAtras.setName("btnAtras");
+
+		// CAMBIO: “Cerrar”
+		btnCerrar = new JButton("Cerrar");
+		btnCerrar.setName("btnCerrar");
 
 		pnlBtns.add(btnCrear, "cell 0 0");
 		pnlBtns.add(new JLabel(""), "cell 1 0,growx");
 		pnlBtns.add(btnBorrarTodo, "cell 2 0");
 		pnlBtns.add(new JLabel(""), "cell 3 0,growx");
-		pnlBtns.add(btnAtras, "cell 4 0");
+		pnlBtns.add(btnCerrar, "cell 4 0");
 
 		frame.getContentPane().add(pnlBtns, "cell 0 4,growx");
 	}
 
-	// --- Accesores para el Controller ---
 	public JFrame getFrame() { return frame; }
 
 	public String getNombreActividad() { return txtNombreActividad.getText(); }
@@ -152,19 +146,18 @@ public class PlanActCrearActividadView {
 	public double getPrecioNoSocio() { return ((Number) spPrecioNoSocio.getValue()).doubleValue(); }
 	public void setPrecioNoSocio(double v) { spPrecioNoSocio.setValue(v); }
 
-	// CAMBIO: getter del combo
 	public JComboBox<PeriodoInscripcionDTO> getCbPeriodoInscripcion() { return cbPeriodoInscripcion; }
 
 	public String getFechaInicio() { return txtFechaInicio.getText(); }
 	public void setFechaInicio(String v) { txtFechaInicio.setText(v); }
 
-	public int getNumSemanas() { return (Integer) spNumSemanas.getValue(); }
-	public void setNumSemanas(int v) { spNumSemanas.setValue(v); }
+	public String getFechaFin() { return txtFechaFin.getText(); }
+	public void setFechaFin(String v) { txtFechaFin.setText(v); }
 
 	public JTable getTablaHorario() { return tabHorario; }
 	public void setHorarioModel(TableModel model) { tabHorario.setModel(model); }
 
 	public JButton getBtnCrear() { return btnCrear; }
 	public JButton getBtnBorrarTodo() { return btnBorrarTodo; }
-	public JButton getBtnAtras() { return btnAtras; }
+	public JButton getBtnCerrar() { return btnCerrar; }
 }

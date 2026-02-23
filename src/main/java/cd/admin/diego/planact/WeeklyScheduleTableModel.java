@@ -10,16 +10,18 @@ import javax.swing.table.AbstractTableModel;
 /**
  * TableModel para seleccionar horario semanal con checkboxes por hora.
  *  - Col 0: Hora (String)
- *  - Col 1..5: L..V (Boolean)
+ *  - Col 1..7: L..D (Boolean)
  */
 public class WeeklyScheduleTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 
-	private static final String[] COLS = { "Hora", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes" };
+	private static final String[] COLS = {
+			"Hora", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"
+	};
 	private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("HH:mm");
 
 	private final List<LocalTime> hours = new ArrayList<>();
-	private final boolean[][] selected; // [row][dayIndex 0..4]
+	private final boolean[][] selected; // [row][dayIndex 0..6]
 
 	public WeeklyScheduleTableModel(LocalTime start, LocalTime endExclusive) {
 		LocalTime t = start;
@@ -27,11 +29,11 @@ public class WeeklyScheduleTableModel extends AbstractTableModel {
 			hours.add(t);
 			t = t.plusHours(1);
 		}
-		selected = new boolean[hours.size()][5];
+		selected = new boolean[hours.size()][7];
 	}
 
 	public WeeklyScheduleTableModel() {
-		// CAMBIO: 08:00..23:00 (endExclusive)
+		// 08:00..23:00 (endExclusive)
 		this(LocalTime.of(8, 0), LocalTime.of(23, 0));
 	}
 
@@ -65,18 +67,19 @@ public class WeeklyScheduleTableModel extends AbstractTableModel {
 
 	public void clearAll() {
 		for (int r = 0; r < selected.length; r++)
-			for (int d = 0; d < 5; d++)
+			for (int d = 0; d < 7; d++)
 				selected[r][d] = false;
 		fireTableDataChanged();
 	}
 
 	/**
-	 * Devuelve una lista de slots seleccionados: (dayIndex 0..4, start time).
+	 * Devuelve una lista de slots seleccionados: (dayIndex 0..6, start time).
+	 * dayIndex0Mon: 0=Lunes ... 5=Sábado ... 6=Domingo
 	 */
 	public List<Slot> getSelectedSlots() {
 		List<Slot> out = new ArrayList<>();
 		for (int r = 0; r < hours.size(); r++) {
-			for (int d = 0; d < 5; d++) {
+			for (int d = 0; d < 7; d++) {
 				if (selected[r][d]) out.add(new Slot(d, hours.get(r)));
 			}
 		}
@@ -84,7 +87,7 @@ public class WeeklyScheduleTableModel extends AbstractTableModel {
 	}
 
 	public static class Slot {
-		public final int dayIndex0Mon; // 0..4
+		public final int dayIndex0Mon; // 0..6 (Mon..Sun)
 		public final LocalTime start;
 
 		public Slot(int dayIndex0Mon, LocalTime start) {

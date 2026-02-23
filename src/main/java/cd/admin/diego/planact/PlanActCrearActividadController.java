@@ -10,9 +10,6 @@ import javax.swing.DefaultComboBoxModel;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
 
-/**
- * Controlador MVC: instala listeners y coordina View <-> Model.
- */
 public class PlanActCrearActividadController {
 
 	private final PlanActCrearActividadModel model;
@@ -29,28 +26,25 @@ public class PlanActCrearActividadController {
 	public void initController() {
 		view.getBtnCrear().addActionListener(e -> SwingUtil.exceptionWrapper(() -> crearActividad()));
 		view.getBtnBorrarTodo().addActionListener(e -> SwingUtil.exceptionWrapper(() -> limpiarFormulario()));
-		view.getBtnAtras().addActionListener(e -> SwingUtil.exceptionWrapper(() -> cerrar()));
+		view.getBtnCerrar().addActionListener(e -> SwingUtil.exceptionWrapper(() -> cerrar()));
 	}
 
 	private void initView() {
-		// horario por defecto 08:00..23:00
 		horarioModel = new WeeklyScheduleTableModel();
 		view.setHorarioModel(horarioModel);
 
-		// cargar combo instalaciones (mantengo el estilo que tenía antes)
-		List<InstalacionDTO> instalaciones = model.getInstalaciones();
+		var instalaciones = model.getInstalaciones();
 		var cm = SwingUtil.getComboModelFromList(instalaciones.stream().map(i -> new Object[] { i.toString() }).toList());
 		view.getCbInstalacion().setModel(cm);
 
-		// CAMBIO: cargar combo periodos inscripción
-		List<PeriodoInscripcionDTO> periodos = model.getPeriodosInscripcion();
+		var periodos = model.getPeriodosInscripcion();
 		view.getCbPeriodoInscripcion().setModel(new DefaultComboBoxModel<>(
 				periodos.toArray(new PeriodoInscripcionDTO[0])
 		));
 
-		// valores iniciales razonables
+		// defaults
 		view.setFechaInicio("2026-02-01");
-		view.setNumSemanas(8);
+		view.setFechaFin("2026-03-31");
 
 		view.getFrame().setVisible(true);
 	}
@@ -64,20 +58,18 @@ public class PlanActCrearActividadController {
 		double pSocio = view.getPrecioSocio();
 		double pNoSocio = view.getPrecioNoSocio();
 
-		// CAMBIO: coger periodo seleccionado
 		PeriodoInscripcionDTO periodo = (PeriodoInscripcionDTO) view.getCbPeriodoInscripcion().getSelectedItem();
-		if (periodo == null)
-			throw new giis.demo.util.ApplicationException("Debes seleccionar un periodo de inscripción.");
+		if (periodo == null) throw new giis.demo.util.ApplicationException("Debes seleccionar un periodo de inscripción.");
 		int idPeriodo = periodo.getIdPeriodo();
 
 		LocalDate fechaInicio = toLocalDate(Util.isoStringToDate(view.getFechaInicio()));
-		int numSemanas = view.getNumSemanas();
+		LocalDate fechaFin = toLocalDate(Util.isoStringToDate(view.getFechaFin()));
 
 		List<WeeklyScheduleTableModel.Slot> slots = horarioModel.getSelectedSlots();
 
 		int id = model.crearActividadCompleta(
 				nombre, tipo, idInstalacion, aforo, pSocio, pNoSocio,
-				fechaInicio, numSemanas,
+				fechaInicio, fechaFin,
 				slots,
 				idPeriodo);
 
@@ -91,7 +83,7 @@ public class PlanActCrearActividadController {
 		view.setPrecioSocio(0.0);
 		view.setPrecioNoSocio(0.0);
 		view.setFechaInicio("");
-		view.setNumSemanas(1);
+		view.setFechaFin("");
 		horarioModel.clearAll();
 	}
 
@@ -102,7 +94,6 @@ public class PlanActCrearActividadController {
 	private int parseIdInstalacionSeleccionada() {
 		Object item = view.getCbInstalacion().getSelectedItem();
 		if (item == null) return -1;
-		// formato: "id - nombre (tipo) ..."
 		String s = item.toString().trim();
 		int idx = s.indexOf(" - ");
 		if (idx <= 0) return -1;

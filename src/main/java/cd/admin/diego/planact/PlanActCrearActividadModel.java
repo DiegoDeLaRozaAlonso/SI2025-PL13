@@ -19,12 +19,10 @@ public class PlanActCrearActividadModel {
 
 	private final Database db = new Database();
 
-	// --- Queries ---
 	private static final String SQL_INSTALACIONES =
 			"select id_instalacion as idInstalacion, nombre, tipo, capacidad " +
 			"from Instalaciones where en_uso=1 order by nombre";
 
-	// CAMBIO: cargar periodos existentes (nueva estructura)
 	private static final String SQL_PERIODOS =
 			"select id_periodo as idPeriodo, nombre, descripcion, " +
 			"fecha_inicio_socio as fechaInicioSocio, " +
@@ -32,7 +30,6 @@ public class PlanActCrearActividadModel {
 			"fecha_fin_noSocio as fechaFinNoSocio " +
 			"from PeriodosInscripcion order by nombre";
 
-	// CAMBIO: insert actividad guardando el id_periodo (ajusta si tu BD usa otra relación)
 	private static final String SQL_INS_ACTIVIDAD =
 			"insert into Actividades(nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo) " +
 			"values(?,?,?,?,?,?,?,?,?)";
@@ -51,32 +48,25 @@ public class PlanActCrearActividadModel {
 		return db.executeQueryPojo(PeriodoInscripcionDTO.class, SQL_PERIODOS);
 	}
 
-	/**
-	 * Crea actividad + sesiones según horario.
-	 * (El periodo de inscripción se selecciona, no se crea aquí)
-	 * Devuelve id_actividad creado.
-	 */
 	public int crearActividadCompleta(
 			String nombre,
-			String tipoDescripcion,
+			String descripcionTipo,
 			int idInstalacion,
 			int aforo,
 			double precioSocio,
 			double precioNoSocio,
 			LocalDate fechaInicio,
-			int numSemanas,
+			LocalDate fechaFin,
 			List<WeeklyScheduleTableModel.Slot> slots,
 			int idPeriodoInscripcion) {
 
 		validate(nombre != null && !nombre.trim().isEmpty(), "El nombre de la actividad es obligatorio");
-		validate(tipoDescripcion != null && !tipoDescripcion.trim().isEmpty(), "El tipo (descripción) es obligatorio");
+		validate(descripcionTipo != null && !descripcionTipo.trim().isEmpty(), "El tipo (descripción) es obligatorio");
 		validate(idInstalacion > 0, "Debes seleccionar una instalación");
-		validate(numSemanas > 0, "El número de semanas debe ser mayor que 0");
 		validate(!slots.isEmpty(), "Debes seleccionar al menos un hueco en el horario semanal");
 		validate(precioSocio >= 0 && precioNoSocio >= 0, "Los precios no pueden ser negativos");
 		validate(idPeriodoInscripcion > 0, "Debes seleccionar un periodo de inscripción");
-
-		LocalDate fechaFin = fechaInicio.plusWeeks(numSemanas).minusDays(1);
+		validate(fechaFin != null && !fechaFin.isBefore(fechaInicio), "La fecha fin no puede ser anterior a la fecha inicio");
 
 		Connection conn = null;
 		try {
@@ -85,10 +75,9 @@ public class PlanActCrearActividadModel {
 
 			QueryRunner qr = new QueryRunner();
 
-			// 1) Actividad
 			qr.update(conn, SQL_INS_ACTIVIDAD,
 					nombre.trim(),
-					tipoDescripcion.trim(),   // CAMBIO: tipo -> descripcion
+					descripcionTipo.trim(),
 					idInstalacion,
 					aforo,
 					precioSocio,
@@ -97,13 +86,11 @@ public class PlanActCrearActividadModel {
 					fechaFin.toString(),
 					idPeriodoInscripcion);
 
-			// 2) Id generado
 			ArrayListHandler h = new ArrayListHandler();
 			@SuppressWarnings("unchecked")
 			List<Object[]> rows = (List<Object[]>) qr.query(conn, SQL_LAST_ID, h);
 			int idActividad = ((Number) rows.get(0)[0]).intValue();
 
-			// 3) Sesiones según slots
 			insertSesiones(qr, conn, idActividad, idInstalacion, fechaInicio, fechaFin, slots);
 
 			conn.commit();
@@ -129,7 +116,7 @@ public class PlanActCrearActividadModel {
 		while (!cursorWeek.isAfter(fechaFin)) {
 
 			for (WeeklyScheduleTableModel.Slot s : slots) {
-				DayOfWeek dow = DayOfWeek.of(s.dayIndex0Mon + 1); // 1..5
+				DayOfWeek dow = DayOfWeek.of(s.dayIndex0Mon + 1); // 1..7
 				LocalDate sessionDate = cursorWeek.plusDays(dow.getValue() - 1);
 
 				if (sessionDate.isBefore(fechaInicio) || sessionDate.isAfter(fechaFin)) continue;
