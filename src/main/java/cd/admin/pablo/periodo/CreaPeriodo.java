@@ -81,7 +81,7 @@ public class CreaPeriodo {
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Fecha Fin");
 		lblNewLabel_2_1.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblNewLabel_2_1.setBounds(350, 104, 69, 14);
+		lblNewLabel_2_1.setBounds(335, 104, 69, 14);
 		frame.getContentPane().add(lblNewLabel_2_1);
 		
 		JSeparator separator_1 = new JSeparator();
