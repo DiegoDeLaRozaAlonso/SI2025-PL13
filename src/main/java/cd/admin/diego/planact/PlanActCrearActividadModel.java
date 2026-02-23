@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ArrayListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
@@ -40,12 +41,51 @@ public class PlanActCrearActividadModel {
 			"insert into SesionesActividad(id_actividad, fecha, hora_inicio, hora_fin, id_instalacion) " +
 			"values(?,?,?,?,?)";
 
+	// NUEVO: comprobar nombre duplicado
+	private static final String SQL_COUNT_ACTIVIDAD_NOMBRE =
+			"select count(*) from Actividades where lower(trim(nombre)) = lower(trim(?))";
+
+	// NUEVO: capacidad de instalación
+	private static final String SQL_CAPACIDAD_INSTALACION =
+			"select capacidad from Instalaciones where id_instalacion=?";
+
 	public List<InstalacionDTO> getInstalaciones() {
 		return db.executeQueryPojo(InstalacionDTO.class, SQL_INSTALACIONES);
 	}
 
 	public List<PeriodoInscripcionDTO> getPeriodosInscripcion() {
 		return db.executeQueryPojo(PeriodoInscripcionDTO.class, SQL_PERIODOS);
+	}
+
+	/** NUEVO */
+	public boolean existeActividadConNombre(String nombre) {
+		Connection conn = null;
+		try {
+			conn = db.getConnection();
+			QueryRunner qr = new QueryRunner();
+			Number n = qr.query(conn, SQL_COUNT_ACTIVIDAD_NOMBRE, new ScalarHandler<>(), nombre);
+			return n != null && n.intValue() > 0;
+		} catch (SQLException e) {
+			throw new ApplicationException(e);
+		} finally {
+			DbUtils.closeQuietly(conn);
+		}
+	}
+
+	/** NUEVO */
+	public int getCapacidadInstalacion(int idInstalacion) {
+		Connection conn = null;
+		try {
+			conn = db.getConnection();
+			QueryRunner qr = new QueryRunner();
+			Number cap = qr.query(conn, SQL_CAPACIDAD_INSTALACION, new ScalarHandler<>(), idInstalacion);
+			// Si está NULL, tratamos como 0 para que el controller bloquee (puedes cambiar a MAX_VALUE si prefieres)
+			return cap == null ? 0 : cap.intValue();
+		} catch (SQLException e) {
+			throw new ApplicationException(e);
+		} finally {
+			DbUtils.closeQuietly(conn);
+		}
 	}
 
 	public int crearActividadCompleta(
@@ -66,7 +106,8 @@ public class PlanActCrearActividadModel {
 		validate(!slots.isEmpty(), "Debes seleccionar al menos un hueco en el horario semanal");
 		validate(precioSocio >= 0 && precioNoSocio >= 0, "Los precios no pueden ser negativos");
 		validate(idPeriodoInscripcion > 0, "Debes seleccionar un periodo de inscripción");
-		validate(fechaFin != null && !fechaFin.isBefore(fechaInicio), "La fecha fin no puede ser anterior a la fecha inicio");
+		validate(fechaFin != null && !fechaFin.isBefore(fechaInicio),
+				"La fecha fin no puede ser anterior a la fecha inicio");
 
 		Connection conn = null;
 		try {
@@ -116,7 +157,7 @@ public class PlanActCrearActividadModel {
 		while (!cursorWeek.isAfter(fechaFin)) {
 
 			for (WeeklyScheduleTableModel.Slot s : slots) {
-				DayOfWeek dow = DayOfWeek.of(s.dayIndex0Mon + 1); // 1..7
+				DayOfWeek dow = DayOfWeek.of(s.dayIndex0Mon + 1); // 1..7 (Mon..Sun)
 				LocalDate sessionDate = cursorWeek.plusDays(dow.getValue() - 1);
 
 				if (sessionDate.isBefore(fechaInicio) || sessionDate.isAfter(fechaFin)) continue;

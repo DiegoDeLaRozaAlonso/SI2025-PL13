@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
@@ -27,8 +28,6 @@ public class PlanActCrearActividadController {
 		view.getBtnCrear().addActionListener(e -> SwingUtil.exceptionWrapper(() -> crearActividad()));
 		view.getBtnBorrarTodo().addActionListener(e -> SwingUtil.exceptionWrapper(() -> limpiarFormulario()));
 		view.getBtnCerrar().addActionListener(e -> SwingUtil.exceptionWrapper(() -> cerrar()));
-
-		// NUEVO: info periodo
 		view.getBtnInfoPeriodo().addActionListener(e -> SwingUtil.exceptionWrapper(() -> mostrarInfoPeriodo()));
 	}
 
@@ -54,7 +53,6 @@ public class PlanActCrearActividadController {
 	private void mostrarInfoPeriodo() {
 		PeriodoInscripcionDTO p = (PeriodoInscripcionDTO) view.getCbPeriodoInscripcion().getSelectedItem();
 		if (p == null) throw new giis.demo.util.ApplicationException("Debes seleccionar un periodo de inscripción.");
-
 		PlanActPeriodoInfoDialog dlg = new PlanActPeriodoInfoDialog(view.getFrame(), p);
 		dlg.setVisible(true);
 	}
@@ -68,12 +66,49 @@ public class PlanActCrearActividadController {
 		double pSocio = view.getPrecioSocio();
 		double pNoSocio = view.getPrecioNoSocio();
 
+		// 1) Restricción: precios > 0 y noSocio > socio
+		if (pSocio <= 0 || pNoSocio <= 0) {
+			throw new giis.demo.util.ApplicationException("Los precios no pueden ser 0 (ni negativos).");
+		}
+		if (pNoSocio <= pSocio) {
+			throw new giis.demo.util.ApplicationException("El precio de no socio debe ser mayor que el precio de socio.");
+		}
+
+		// 2) Restricción: aforo <= capacidad instalación
+		int capacidad = model.getCapacidadInstalacion(idInstalacion);
+		if (capacidad > 0 && aforo > capacidad) {
+			throw new giis.demo.util.ApplicationException(
+					"El aforo máximo (" + aforo + ") no puede ser mayor que la capacidad de la instalación (" + capacidad + ")."
+			);
+		}
+
+		// 3) Aviso si nombre duplicado
+		if (nombre != null && !nombre.trim().isEmpty() && model.existeActividadConNombre(nombre)) {
+			int opt = JOptionPane.showConfirmDialog(
+					view.getFrame(),
+					"Ya existe una actividad con el mismo nombre.\n"
+					+ "No es recomendable porque puede generar confusión.\n\n"
+					+ "¿Quieres continuar igualmente?",
+					"Nombre duplicado",
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE
+			);
+			if (opt != JOptionPane.YES_OPTION) {
+				return; // cancelar creación
+			}
+		}
+
 		PeriodoInscripcionDTO periodo = (PeriodoInscripcionDTO) view.getCbPeriodoInscripcion().getSelectedItem();
 		if (periodo == null) throw new giis.demo.util.ApplicationException("Debes seleccionar un periodo de inscripción.");
 		int idPeriodo = periodo.getIdPeriodo();
 
 		LocalDate fechaInicio = toLocalDate(Util.isoStringToDate(view.getFechaInicio()));
 		LocalDate fechaFin = toLocalDate(Util.isoStringToDate(view.getFechaFin()));
+
+		// 4) Restricción: inicio <= fin (ya se valida en Model, pero lo dejamos también aquí)
+		if (fechaFin.isBefore(fechaInicio)) {
+			throw new giis.demo.util.ApplicationException("La fecha inicio no puede ser posterior a la fecha fin.");
+		}
 
 		List<WeeklyScheduleTableModel.Slot> slots = horarioModel.getSelectedSlots();
 
