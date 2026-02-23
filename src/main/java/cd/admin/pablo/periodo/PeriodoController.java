@@ -6,10 +6,12 @@ public class PeriodoController {
 	
 	private PeriodoModel modelo;
 	private PeriodoView vista;
+	private PeriodoDTO periodo;
 	
 	public PeriodoController(PeriodoModel modelo, PeriodoView vista) {
 		this.modelo = modelo;
 		this.vista = vista;
+		this.iniciarControlador();
 		this.iniciarVista();
 	}
 	
@@ -19,16 +21,24 @@ public class PeriodoController {
 	
 	private void iniciarControlador() {
 		vista.getBotonCrear().addActionListener(e -> SwingUtil.exceptionWrapper(() -> crearPeriodo()));
-		restablecer();
+		vista.getBotonCancelar().addActionListener(e -> SwingUtil.exceptionWrapper(() -> cerrar()));
 	}
 	
-	private void restablecer() {
-		vista.getNombre().setText("");
-		vista.getDescripcion().setText("");
-	}
-	
-	private crearPeriodo() {
+	private void crearPeriodo() {
+		periodo = new PeriodoDTO(
+				vista.getNombre().getText(), vista.getDescripcion().getText(), 
+				vista.getFechaInicio(), vista.getFechaFinSocio(), vista.getFechaFinNoSocio());
 		
+		modelo.insertarPeriodo(periodo);
+		
+		javax.swing.JOptionPane.showMessageDialog(
+				vista.getFrame(), "Periodo " + vista.getNombre().getText() + " creado con exito");
+		
+		vista.reinicio();
+	}
+	
+	private void cerrar() {
+		this.vista.getFrame().dispose();
 	}
 	
 	

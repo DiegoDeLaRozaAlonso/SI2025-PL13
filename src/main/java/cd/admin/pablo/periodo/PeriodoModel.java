@@ -10,17 +10,36 @@ public class PeriodoModel {
 	private Database db = new Database();
 	
 	public void insertarPeriodo(PeriodoDTO periodo) {
-		String sql = "INSERT INTO PeriodosInscripcion "
-				+ "(id_periodo, id_actividad, nombre, descripcion, tipo, fecha_inicio, fecha_fin) "
-				+ "VALUES (?,?,?,?,?,?,?,?,?)";
-	}
-	
-	private void validaNotEmpty() {
 		
+		validaParametros(
+				periodo.getNombre(), 
+				periodo.getDescripcion(),
+				periodo.getFechaInicio(), 
+				periodo.getFechaFinSocio(), 
+				periodo.getFechaFinNoSocio()
+		);
+		
+		String sql = "INSERT INTO PeriodosInscripcion "
+				+ "(nombre, descripcion, fecha_inicio_socio, fecha_fin_socio, fecha_fin_noSocio) "
+				+ "VALUES (?,?,?,?,?);";
+		
+		db.executeUpdate(sql, 
+				periodo.getNombre(), 
+				periodo.getDescripcion(),
+				new java.sql.Date(periodo.getFechaInicio().getTime()),
+				new java.sql.Date(periodo.getFechaFinSocio().getTime()),
+				new java.sql.Date(periodo.getFechaFinNoSocio().getTime())
+		);
 	}
 	
-	
-	private void validaFechaPeriodo(Date inicio, Date finSocio, Date finNoSocio) {
+	private void validaParametros(String nombre, String desc, Date inicio, Date finSocio, Date finNoSocio) {
+		
+		if (nombre == null || nombre.trim().isEmpty()) 
+			throw new ApplicationException("El campo nombre no puede estar vacio");
+
+		if (desc == null || desc.trim().isEmpty()) 
+			throw new ApplicationException("El campo descripcion no puede estar vacio");
+		
 		validaNotNull(inicio, "La fecha de inicio del periodo no puede ser nula");
 		validaNotNull(finSocio, "La fecha de fin del periodo de SOCIOS no puede ser nula");
 		validaNotNull(finNoSocio, "La fecha de fin del periodo de NO SOCIOS no puede ser nula");

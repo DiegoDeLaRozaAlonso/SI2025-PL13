@@ -143,4 +143,12 @@ public class PeriodoView {
 	public JButton getBotonCrear(){return this.bCrear; }
 	public JButton getBotonCancelar(){return this.bCancelar; }
 	
+	public void reinicio() {
+		this.tNombre.setText(null);
+		this.tPeriodo.setText(null);
+		this.dSocioInicio.setDate(null);
+		this.dNoSocioFin.setDate(null);
+		this.dSocioFin.setDate(null);
+	}
+	
 }
