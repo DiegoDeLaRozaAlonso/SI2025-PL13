@@ -9,6 +9,11 @@ public class PeriodoModel {
 	
 	private Database db = new Database();
 	
+	public void insertarPeriodo(PeriodoDTO periodo) {
+		String sql = "INSERT INTO PeriodosInscripcion "
+				+ "(id_periodo, id_actividad, nombre, descripcion, tipo, fecha_inicio, fecha_fin) "
+				+ "VALUES (?,?,?,?,?,?,?,?,?)";
+	}
 	
 	private void validaNotEmpty() {
 		
