@@ -9,14 +9,10 @@ import javax.swing.JSeparator;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JButton;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerDateModel;
 import java.util.Date;
-import java.util.Calendar;
-import com.toedter.calendar.JDayChooser;
 import com.toedter.calendar.JDateChooser;
 
-public class CreaPeriodo {
+public class PeriodoView {
 
 	private JFrame frame;
 	private JTextField tNombre;
@@ -36,7 +32,7 @@ public class CreaPeriodo {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CreaPeriodo window = new CreaPeriodo();
+					PeriodoView window = new PeriodoView();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,7 +44,7 @@ public class CreaPeriodo {
 	/**
 	 * Create the application.
 	 */
-	public CreaPeriodo() {
+	public PeriodoView() {
 		initialize();
 	}
 
@@ -138,6 +134,7 @@ public class CreaPeriodo {
 		dSocioFin.setBounds(290, 129, 158, 20);
 		frame.getContentPane().add(dSocioFin);
 	}
+	public JFrame getFrame() {return this.frame; }
 	public JTextField getNombre(){return this.tNombre; }
 	public JTextField getDescripcion(){return this.tPeriodo; }
 	public Date getFechaInicio(){return this.dSocioInicio.getDate(); }

@@ -1,22 +1,15 @@
 package cd.admin.pablo.periodo;
 
-import java.util.Date;
+import java.sql.Date;
 
-public class PeriodoDTO {
-	
+public class PeriodoEntity {
+
 	private String nombre;
 	private String descripcion;
 	private Date fechaInicio;
 	private Date fechaFinSocio;
 	private Date fechaFinNoSocio;
-	
-	public PeriodoDTO(String nombre, String desc, Date fechaInicio, Date fechaFinSocio, Date fechaFinNoSocio) {
-		this.nombre = nombre;
-		this.descripcion = desc;
-		this.fechaInicio = fechaInicio;
-		this.fechaFinSocio = fechaFinSocio;
-		this.fechaFinNoSocio = fechaFinNoSocio;
-	}
+
 
 	public String getNombre() {
 		return nombre;
@@ -57,6 +50,4 @@ public class PeriodoDTO {
 	public void setFechaFinNoSocio(Date fechaFinNoSocio) {
 		this.fechaFinNoSocio = fechaFinNoSocio;
 	}
-	
-
 }
