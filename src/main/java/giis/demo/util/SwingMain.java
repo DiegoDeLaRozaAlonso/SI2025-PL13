@@ -84,6 +84,20 @@ public class SwingMain {
 			}
 		});
 		frame.getContentPane().add(btnCargarDatosIniciales);
+		
+		JButton planificarActividad = new JButton("Ver disponibilidad instalación (Socio)");
+		planificarActividad.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+			public void actionPerformed(ActionEvent e) {
+				// Lanza la HU "Crear/Planificar actividad" del package cd.admin.diego.planact
+				cd.admin.diego.planact.PlanActCrearActividadController controller =
+						new cd.admin.diego.planact.PlanActCrearActividadController(
+								new cd.admin.diego.planact.PlanActCrearActividadModel(),
+								new cd.admin.diego.planact.PlanActCrearActividadView()
+						);
+				controller.initController();
+			}
+		});
+		
 	}
 
 	public JFrame getFrame() { return this.frame; }
