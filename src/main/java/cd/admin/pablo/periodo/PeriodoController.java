@@ -11,7 +11,6 @@ public class PeriodoController {
 	public PeriodoController(PeriodoModel modelo, PeriodoView vista) {
 		this.modelo = modelo;
 		this.vista = vista;
-		this.iniciarControlador();
 		this.iniciarVista();
 	}
 	
@@ -19,7 +18,7 @@ public class PeriodoController {
 		vista.getFrame().setVisible(true);
 	}
 	
-	private void iniciarControlador() {
+	public void iniciarControlador() {
 		vista.getBotonCrear().addActionListener(e -> SwingUtil.exceptionWrapper(() -> crearPeriodo()));
 		vista.getBotonCancelar().addActionListener(e -> SwingUtil.exceptionWrapper(() -> cerrar()));
 	}
