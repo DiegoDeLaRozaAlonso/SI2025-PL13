@@ -9,6 +9,10 @@ import java.awt.event.ActionEvent;
 import giis.demo.tkrun.*;
 import javax.swing.JPanel;
 
+import cd.admin.pablo.periodo.PeriodoController;
+import cd.admin.pablo.periodo.PeriodoModel;
+import cd.admin.pablo.periodo.PeriodoView;
+
 /**
  * Punto de entrada principal que incluye botones para la ejecucion de las pantallas 
  * de las aplicaciones de ejemplo
@@ -52,16 +56,18 @@ public class SwingMain {
 		frame.setBounds(0, 0, 287, 185);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		
-		JButton btnEjecutarTkrun = new JButton("Ejecutar giis.demo.tkrun");
-		btnEjecutarTkrun.setBounds(51, 27, 149, 23);
-		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+		
+		//Botón para la ejecución de creación de un nuevo periodo
+		JButton btnEjecutarPeriodo = new JButton("Ejecutar Periodos");
+		btnEjecutarPeriodo.setBounds(28, 27, 200, 23);
+		btnEjecutarPeriodo.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
-				CarrerasController controller=new CarrerasController(new CarrerasModel(), new CarrerasView());
-				controller.initController();
+				PeriodoController controller=new PeriodoController(new PeriodoModel(), new PeriodoView());
+				controller.iniciarControlador();
 			}
 		});
 		frame.getContentPane().setLayout(null);
-		frame.getContentPane().add(btnEjecutarTkrun);
+		frame.getContentPane().add(btnEjecutarPeriodo);
 		
 			
 		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos en Blanco");

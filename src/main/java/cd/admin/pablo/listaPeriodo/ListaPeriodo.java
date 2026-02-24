@@ -3,15 +3,16 @@ package cd.admin.pablo.listaPeriodo;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
+import javax.swing.JTable;
 
 public class ListaPeriodo {
 
 	private JFrame frame;
+	private JTable tablaPeriodo;
 
 	/**
 	 * Launch the application.
@@ -45,10 +46,6 @@ public class ListaPeriodo {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JList listPeriodo = new JList();
-		listPeriodo.setBounds(10, 116, 771, 345);
-		frame.getContentPane().add(listPeriodo);
-		
 		JLabel lblNewLabel = new JLabel("Periodo");
 		lblNewLabel.setFont(new Font("Calibri", Font.PLAIN, 22));
 		lblNewLabel.setBounds(60, 40, 88, 30);
@@ -62,5 +59,9 @@ public class ListaPeriodo {
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnNewButton.setBounds(292, 472, 140, 37);
 		frame.getContentPane().add(btnNewButton);
+		
+		tablaPeriodo = new JTable();
+		tablaPeriodo.setBounds(10, 97, 773, 364);
+		frame.getContentPane().add(tablaPeriodo);
 	}
 }

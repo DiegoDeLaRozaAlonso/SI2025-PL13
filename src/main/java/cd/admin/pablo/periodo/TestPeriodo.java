@@ -45,16 +45,16 @@ public class TestPeriodo {
 		frame.setBounds(0, 0, 436, 185);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		
-		JButton btnEjecutarTkrun = new JButton("Ejecutar Periodos");
-		btnEjecutarTkrun.setBounds(93, 27, 200, 23);
-		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+		JButton btnEjecutarPeriodo = new JButton("Ejecutar Periodos");
+		btnEjecutarPeriodo.setBounds(93, 27, 200, 23);
+		btnEjecutarPeriodo.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
 				PeriodoController controller=new PeriodoController(new PeriodoModel(), new PeriodoView());
 				controller.iniciarControlador();
 			}
 		});
 		frame.getContentPane().setLayout(null);
-		frame.getContentPane().add(btnEjecutarTkrun);
+		frame.getContentPane().add(btnEjecutarPeriodo);
 		
 			
 		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos en Blanco");
