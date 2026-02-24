@@ -64,7 +64,7 @@ public class PeriodoModel {
 		validaFecha(finSocio.compareTo(finNoSocio) <= 0, "La fecha de fin SOCIO no puede ser posterior a la fin de NO SOCIO");
 	}
 	
-	/* De uso general para validacion de objetos */
+	// De uso general para validacion de objetos 
 	private void validaNotNull(Object obj, String message) {
 		if (obj == null)
 			throw new ApplicationException(message);

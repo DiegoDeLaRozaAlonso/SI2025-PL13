@@ -9,7 +9,7 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JTable;
 
-public class ListaPeriodo {
+public class ListaPeriodoView {
 
 	private JFrame frame;
 	private JTable tablaPeriodo;
@@ -21,7 +21,7 @@ public class ListaPeriodo {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ListaPeriodo window = new ListaPeriodo();
+					ListaPeriodoView window = new ListaPeriodoView();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -33,7 +33,7 @@ public class ListaPeriodo {
 	/**
 	 * Create the application.
 	 */
-	public ListaPeriodo() {
+	public ListaPeriodoView() {
 		initialize();
 	}
 
