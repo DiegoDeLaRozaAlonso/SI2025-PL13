@@ -105,22 +105,6 @@ CREATE TABLE Actividades (
     costo_no_socio DECIMAL(10,2) NOT NULL,
     fecha_inicio DATE NOT NULL,
     fecha_fin DATE NOT NULL,
-    FOREIGN KEY (id_instalacion) REFERENCES Instalaciones(id_instalacion)
-);
-
--- Tabla de periodos de inscripción
-CREATE TABLE PeriodosInscripcion (
-    id_periodo INTEGER PRIMARY KEY AUTOINCREMENT,
-    id_actividad INTEGER NOT NULL,
-    nombre TEXT NOT NULL,
-    descripcion TEXT NOT NULL,
-    tipo TEXT NOT NULL CHECK(tipo IN ('socio', 'no_socio')), --quitar esto
-    fecha_inicio DATE NOT NULL,
-    fecha_fin DATE NOT NULL, --añadir fecha de fin para no socios
-    FOREIGN KEY (id_actividad) REFERENCES Actividades(id_actividad)
-    id_periodo INTEGER NOT NULL,
-    FOREIGN KEY (id_instalacion) REFERENCES Instalaciones(id_instalacion),
-    FOREIGN KEY (id_periodo) REFERENCES PeriodosInscripcion(id_periodo)
     id_periodo INTEGER NOT NULL,
     FOREIGN KEY (id_instalacion) REFERENCES Instalaciones(id_instalacion),
     FOREIGN KEY (id_periodo) REFERENCES PeriodosInscripcion(id_periodo)
@@ -201,6 +185,3 @@ CREATE TABLE Reduccion (
     descripcion TEXT,
     FOREIGN KEY (id_socio) REFERENCES Socios(id_socio)
 );
-
-
-
