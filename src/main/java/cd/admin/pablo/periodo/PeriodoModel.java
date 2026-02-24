@@ -1,5 +1,6 @@
 package cd.admin.pablo.periodo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import giis.demo.util.ApplicationException;
@@ -9,9 +10,9 @@ public class PeriodoModel {
 	
 	private Database db = new Database();
 	
-	private java.sql.Date fechaSocio;
-	private java.sql.Date fechaFinSocio;
-	private java.sql.Date fechaNoSocio;
+	private String fechaSocio;
+	private String fechaFinSocio;
+	private String fechaNoSocio;
 	
 	public void insertarPeriodo(PeriodoDTO periodo) {
 		
@@ -35,16 +36,16 @@ public class PeriodoModel {
 				fechaSocio,
 				fechaFinSocio,
 				fechaNoSocio
-				/*new java.sql.Date(periodo.getFechaInicio().getYear(), periodo.getFechaInicio().getMonth(), periodo.getFechaInicio().getDay()),
-				new java.sql.Date(periodo.getFechaFinSocio()),
-				new java.sql.Date(periodo.getFechaFinNoSocio())*/
+				
 		);
 	}
 	
 	private void convierteFecha(PeriodoDTO periodo){
-		fechaSocio = new java.sql.Date(periodo.getFechaInicio().getYear(), periodo.getFechaInicio().getMonth(), periodo.getFechaInicio().getDay());
-		fechaNoSocio = new java.sql.Date(periodo.getFechaFinNoSocio().getYear(), periodo.getFechaFinNoSocio().getMonth(), periodo.getFechaFinNoSocio().getDay());
-		fechaFinSocio = new java.sql.Date(periodo.getFechaFinSocio().getYear(), periodo.getFechaFinSocio().getMonth(), periodo.getFechaFinSocio().getDay());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		this.fechaSocio = sdf.format(periodo.getFechaInicio());
+		this.fechaFinSocio = sdf.format(periodo.getFechaFinSocio());
+		this.fechaNoSocio = sdf.format(periodo.getFechaFinNoSocio());
 		
 	}
 	
