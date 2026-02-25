@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -18,11 +20,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import cd.admin.Alejandro.VisualizacionReservas.InstalacionEntity;
 
 /**
  * Vista de la pantalla de reserva de instalacion para actividades (administracion).
@@ -53,7 +58,7 @@ public class ReservarActividadView {
 	// ── Formulario ──────────────────────────────────────────────────────────
 	private JComboBox<String> cmbActividad;
 	private JComboBox<String> cmbInstalacion;
-	private JTextField        txtFecha;
+	private JSpinner          spnFecha;
 	private JComboBox<String> cmbHoraInicio;
 	private JComboBox<String> cmbHoraFin;
 	private JButton           btnConfirmar;
@@ -159,14 +164,24 @@ public class ReservarActividadView {
 		panel.add(cmbInstalacion);
 		panel.add(Box.createVerticalStrut(14));
 
-		// Fecha
-		panel.add(buildLabel("Fecha * (formato ISO: yyyy-MM-dd)", null));
+		// Fecha - selector tipo calendario con JSpinner
+		panel.add(buildLabel("Fecha *", null));
 		panel.add(Box.createVerticalStrut(4));
-		txtFecha = new JTextField();
-		txtFecha.setName("txtFecha");
-		txtFecha.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
-		txtFecha.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panel.add(txtFecha);
+		SpinnerDateModel dateModel = new SpinnerDateModel(
+				new Date(),   // valor inicial: hoy
+				new Date(),   // minimo: hoy (no fechas pasadas)
+				null,         // sin maximo
+				java.util.Calendar.DAY_OF_MONTH); // campo que incrementa con las flechas
+		spnFecha = new JSpinner(dateModel);
+		spnFecha.setName("spnFecha");
+		// Formato visual: lunes 25 febrero 2026
+		JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(spnFecha, "EEEE dd MMMM yyyy");
+		dateEditor.getFormat().setTimeZone(java.util.TimeZone.getDefault());
+		spnFecha.setEditor(dateEditor);
+		spnFecha.setFont(new Font("SansSerif", Font.PLAIN, 13));
+		spnFecha.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
+		spnFecha.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panel.add(spnFecha);
 		panel.add(Box.createVerticalStrut(14));
 
 		// Hora inicio / Hora fin en la misma fila
@@ -419,7 +434,7 @@ public class ReservarActividadView {
 	public JFrame          getFrame()          { return this.frame; }
 	public JComboBox<String> getCmbActividad()   { return this.cmbActividad; }
 	public JComboBox<String> getCmbInstalacion() { return this.cmbInstalacion; }
-	public JTextField      getTxtFecha()        { return this.txtFecha; }
+	public JSpinner        getSpnFecha()        { return this.spnFecha; }
 	public JComboBox<String> getCmbHoraInicio()  { return this.cmbHoraInicio; }
 	public JComboBox<String> getCmbHoraFin()     { return this.cmbHoraFin; }
 	public JButton         getBtnConfirmar()    { return this.btnConfirmar; }
@@ -430,7 +445,11 @@ public class ReservarActividadView {
 	public String getInstalacionSeleccionada() {
 		Object s = cmbInstalacion.getSelectedItem(); return s != null ? s.toString() : "";
 	}
-	public String getFecha()       { return txtFecha.getText().trim(); }
+	/** Devuelve la fecha seleccionada en formato ISO yyyy-MM-dd */
+	public String getFecha() {
+		Date d = (Date) spnFecha.getValue();
+		return new SimpleDateFormat("yyyy-MM-dd").format(d);
+	}
 	public String getHoraInicio()  {
 		Object s = cmbHoraInicio.getSelectedItem(); return s != null ? s.toString() : "";
 	}
@@ -467,12 +486,12 @@ public class ReservarActividadView {
 
 	/** Actualiza el panel de resumen lateral con los valores actuales del formulario */
 	public void actualizarResumen(String actividad, String instalacion,
-			String fecha, String horaInicio, String horaFin, double duracion) {
+			String fecha, String horaInicio, String horaFin, int duracion) {
 		lblResumenActividad.setText("<html><b>" + actividad + "</b></html>");
 		lblResumenInstalacion.setText(instalacion);
 		lblResumenFecha.setText(fecha.isEmpty() ? "-" : fecha);
 		lblResumenHorario.setText(horaInicio + " - " + horaFin);
-		lblResumenDuracion.setText(duracion > 0 ? String.format("%.1f hora(s)", duracion) : "-");
+		lblResumenDuracion.setText(duracion > 0 ? duracion + " hora(s)" : "-");
 	}
 
 	/**
@@ -494,7 +513,6 @@ public class ReservarActividadView {
 		// Tabla de conflictos
 		if (hayConflictos) {
 			lblNumConflictos.setText("Ya existen " + conflictos.size() + " reserva(s) en este horario:");
-			@SuppressWarnings("serial")
 			DefaultTableModel tm = new DefaultTableModel(
 					new String[]{"Tipo", "Nombre", "Inicio", "Fin"}, 0) {
 				@Override public boolean isCellEditable(int r, int c) { return false; }

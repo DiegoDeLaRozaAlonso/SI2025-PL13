@@ -41,12 +41,9 @@ public class ReservarActividadController {
 		view.getCmbInstalacion().addActionListener(
 				e -> SwingUtil.exceptionWrapper(() -> actualizarEstado()));
 
-		// Para el campo de texto de fecha usamos un DocumentListener simplificado via keyReleased
-		view.getTxtFecha().addKeyListener(new java.awt.event.KeyAdapter() {
-			@Override public void keyReleased(java.awt.event.KeyEvent e) {
-				SwingUtil.exceptionWrapper(() -> actualizarEstado());
-			}
-		});
+		// Al cambiar la fecha en el spinner, recalcula conflictos
+		view.getSpnFecha().addChangeListener(
+				e -> SwingUtil.exceptionWrapper(() -> actualizarEstado()));
 
 		view.getCmbHoraInicio().addActionListener(
 				e -> SwingUtil.exceptionWrapper(() -> actualizarEstado()));
@@ -71,10 +68,6 @@ public class ReservarActividadController {
 		view.setInstalaciones(instalaciones);
 		view.setOpcionesHora(ReservarActividadModel.OPCIONES_HORA);
 
-		// Fecha de hoy como valor inicial
-		String hoy = giis.demo.util.Util.dateToIsoString(new java.util.Date());
-		view.getTxtFecha().setText(hoy);
-
 		actualizarEstado();
 		view.getFrame().setVisible(true);
 	}
@@ -93,7 +86,7 @@ public class ReservarActividadController {
 		String horaFin      = view.getHoraFin();
 
 		// Actualizar resumen lateral con los valores actuales
-		double duracion = calcularDuracion(horaInicio, horaFin);
+		int duracion = calcularDuracion(horaInicio, horaFin);
 		view.actualizarResumen(actividad, instalacion, fecha, horaInicio, horaFin, duracion);
 
 		// Comprobar si los campos minimos estan cubiertos para poder detectar conflictos
@@ -160,12 +153,12 @@ public class ReservarActividadController {
 		throw new giis.demo.util.ApplicationException("Instalacion no encontrada: " + nombre);
 	}
 
-	/** Calcula la duracion en horas entre dos cadenas HH:mm; devuelve 0 si el horario es invalido */
-	private double calcularDuracion(String horaInicio, String horaFin) {
+	/** Calcula la duracion en horas enteras entre dos cadenas HH:mm; devuelve 0 si el horario es invalido */
+	private int calcularDuracion(String horaInicio, String horaFin) {
 		try {
 			return ReservarActividadModel.calcularDuracionHoras(horaInicio, horaFin);
 		} catch (Exception e) {
-			return 0.0;
+			return 0;
 		}
 	}
 }

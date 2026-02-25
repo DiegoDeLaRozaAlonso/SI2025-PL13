@@ -9,6 +9,9 @@ import java.awt.event.ActionEvent;
 import giis.demo.tkrun.*;
 import javax.swing.JPanel;
 
+import cd.admi.Alejandro.ReservaInstalacion.ReservarActividadController;
+import cd.admi.Alejandro.ReservaInstalacion.ReservarActividadModel;
+import cd.admi.Alejandro.ReservaInstalacion.ReservarActividadView;
 import cd.admin.Alejandro.VisualizacionReservas.VisualizacionReservasController;
 import cd.admin.Alejandro.VisualizacionReservas.VisualizacionReservasModel;
 import cd.admin.Alejandro.VisualizacionReservas.VisualizacionReservasView;
@@ -101,16 +104,16 @@ public class SwingMain {
 		});
 		frame.getContentPane().add(btnVisualizacionReservas);
 
-		//JButton btnReservarActividad = new JButton("Ejecutar Reservar Actividad");
-		//btnReservarActividad.setBounds(28, 163, 205, 23);
-		//btnReservarActividad.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
-		  //  public void actionPerformed(ActionEvent e) {
-		    //    ReservarActividadController controller = new ReservarActividadController(
-		      //      new ReservarActividadModel(), new ReservarActividadView());
-		       // controller.initController();
-		    //}
-		//});
-	//	frame.getContentPane().add(btnReservarActividad);
+		JButton btnReservarActividad = new JButton("Ejecutar Reservar Actividad");
+		btnReservarActividad.setBounds(28, 163, 205, 23);
+		btnReservarActividad.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+		    public void actionPerformed(ActionEvent e) {
+		        ReservarActividadController controller = new ReservarActividadController(
+		            new ReservarActividadModel(), new ReservarActividadView());
+		        controller.initController();
+		    }
+		});
+		frame.getContentPane().add(btnReservarActividad);
 		
 	}
 

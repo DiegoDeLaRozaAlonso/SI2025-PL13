@@ -155,15 +155,12 @@ public class ReservarActividadModel {
 	// ── Utilidades ──────────────────────────────────────────────────────────
 
 	/**
-	 * Genera las opciones de hora de 08:00 a 22:00 en pasos de 30 minutos.
+	 * Genera las opciones de hora de 08:00 a 22:00 en pasos de 1 hora.
 	 */
 	private static String[] generarOpcionesHora() {
 		List<String> opciones = new ArrayList<>();
-		for (int h = 8; h <= 22; h++) {
+		for (int h = 8; h <= 22; h++)
 			opciones.add(String.format("%02d:00", h));
-			if (h < 22)
-				opciones.add(String.format("%02d:30", h));
-		}
 		return opciones.toArray(new String[0]);
 	}
 
@@ -176,11 +173,12 @@ public class ReservarActividadModel {
 	}
 
 	/**
-	 * Calcula la duracion en horas (puede ser decimal) entre dos horas HH:mm.
+	 * Calcula la duracion en horas enteras entre dos horas HH:mm.
+	 * Devuelve 0 si el horario es invalido (fin <= inicio).
 	 */
-	public static double calcularDuracionHoras(String horaInicio, String horaFin) {
+	public static int calcularDuracionHoras(String horaInicio, String horaFin) {
 		int diff = horaAMinutos(horaFin) - horaAMinutos(horaInicio);
-		return diff > 0 ? diff / 60.0 : 0.0;
+		return diff > 0 ? diff / 60 : 0;
 	}
 
 	private void validateHorario(String horaInicio, String horaFin) {
