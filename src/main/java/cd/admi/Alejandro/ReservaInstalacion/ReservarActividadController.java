@@ -1,8 +1,8 @@
-package cd.admi.Alejandro.Visualizacion;
+package cd.admi.Alejandro.ReservaInstalacion;
 
 import java.util.List;
 
-import cd.admin.Alejandro.ResInstalacion.InstalacionEntity;
+import cd.admin.Alejandro.VisualizacionReservas.InstalacionEntity;
 import giis.demo.util.SwingUtil;
 
 /**

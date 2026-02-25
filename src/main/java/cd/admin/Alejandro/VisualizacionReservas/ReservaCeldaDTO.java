@@ -1,4 +1,4 @@
-package cd.admin.Alejandro.ResInstalacion;
+package cd.admin.Alejandro.VisualizacionReservas;
 
 /**
  * Datos de cada celda del calendario de visualizacion de reservas.

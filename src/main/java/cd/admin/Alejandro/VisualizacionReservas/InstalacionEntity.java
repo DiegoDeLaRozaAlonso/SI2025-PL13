@@ -1,9 +1,10 @@
-package cd.admin.Alejandro.ResInstalacion;
+package cd.admin.Alejandro.VisualizacionReservas;
 
 /**
- * Datos del modelo de dominio de cada una de las instalaciones del centro.
- * IMPORTANTE: Cuando se usan los componentes de Apache Commons DbUtils debe
- * mantenerse de forma estricta el convenio de capitalizacion de Java.
+ * Datos del modelo de dominio de cada instalacion del centro.
+ * IMPORTANTE: todos los campos son String aunque en la BD sean INTEGER,
+ * porque Apache Commons DbUtils requiere que el tipo Java coincida con
+ * lo que devuelve SQLite (se usa CAST a TEXT en las queries).
  */
 public class InstalacionEntity {
 	private String id;

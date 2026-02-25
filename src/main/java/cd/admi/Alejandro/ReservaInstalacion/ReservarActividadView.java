@@ -1,4 +1,4 @@
-package cd.admi.Alejandro.Visualizacion;
+package cd.admi.Alejandro.ReservaInstalacion;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

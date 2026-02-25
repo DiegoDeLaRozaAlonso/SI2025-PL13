@@ -9,9 +9,9 @@ import java.awt.event.ActionEvent;
 import giis.demo.tkrun.*;
 import javax.swing.JPanel;
 
-import cd.admin.Alejandro.ResInstalacion.VisualizacionReservasController;
-import cd.admin.Alejandro.ResInstalacion.VisualizacionReservasModel;
-import cd.admin.Alejandro.ResInstalacion.VisualizacionReservasView;
+import cd.admin.Alejandro.VisualizacionReservas.VisualizacionReservasController;
+import cd.admin.Alejandro.VisualizacionReservas.VisualizacionReservasModel;
+import cd.admin.Alejandro.VisualizacionReservas.VisualizacionReservasView;
 
 /**
  * Punto de entrada principal que incluye botones para la ejecucion de las pantallas 

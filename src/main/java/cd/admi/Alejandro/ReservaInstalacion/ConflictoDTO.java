@@ -1,4 +1,4 @@
-package cd.admi.Alejandro.Visualizacion;
+package cd.admi.Alejandro.ReservaInstalacion;
 
 /**
  * Datos de cada conflicto detectado al intentar reservar una instalacion para una actividad.

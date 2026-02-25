@@ -1,4 +1,4 @@
-package cd.admi.Alejandro.Visualizacion;
+package cd.admi.Alejandro.ReservaInstalacion;
 
 /**
  * Datos del modelo de dominio de cada una de las actividades del centro.
