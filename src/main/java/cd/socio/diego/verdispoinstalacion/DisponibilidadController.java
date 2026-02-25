@@ -27,7 +27,6 @@ public class DisponibilidadController {
 		view.getCmbInstalacion().addActionListener(
 				e -> SwingUtil.exceptionWrapper(this::refrescarTabla));
 
-		// JDateChooser dispara propertyChange sobre "date"
 		view.getDateChooser().addPropertyChangeListener("date",
 				evt -> SwingUtil.exceptionWrapper(this::refrescarTabla));
 
@@ -37,11 +36,9 @@ public class DisponibilidadController {
 	private void initView() {
 		cargarInstalaciones();
 
-		// Fecha por defecto: hoy
 		Date hoy = new Date();
 		view.getDateChooser().setDate(hoy);
 
-		// Limitar selección: hoy -> hoy + 30 días
 		LocalDate ldHoy = LocalDate.now();
 		LocalDate ldMax = ldHoy.plusDays(30);
 
@@ -86,6 +83,7 @@ public class DisponibilidadController {
 		TableModel tm = model.getDisponibilidadTableModel(inst.getIdInstalacion(), fecha);
 		view.getTabla().setModel(tm);
 
-		SwingUtil.autoAdjustColumns(view.getTabla());
+		// ✅ NO llamar a autoAdjustColumns aquí (te rompe el ancho "hasta la derecha")
+		// SwingUtil.autoAdjustColumns(view.getTabla());
 	}
 }
