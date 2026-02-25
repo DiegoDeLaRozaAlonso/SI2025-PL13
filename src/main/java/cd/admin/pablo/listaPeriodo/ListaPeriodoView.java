@@ -46,7 +46,7 @@ public class ListaPeriodoView {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 807, 559);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frame.getContentPane().setLayout(null); 
 		
 		JLabel lblNewLabel = new JLabel("Periodo");
 		lblNewLabel.setFont(new Font("Calibri", Font.PLAIN, 22));
