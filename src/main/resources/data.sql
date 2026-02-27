@@ -26,22 +26,23 @@ INSERT INTO Configuracion (id_config, clave, valor, descripcion) VALUES
 ------------------------------------------------------------
 -- SOCIOS (15)
 ------------------------------------------------------------
-INSERT INTO Socios (id_socio, nombre, email, contrasena, fecha_registro, debe_dinero, telefono, direccion) VALUES
-(1, 'Laura Martín', 'laura.martin@mail.com', 'hash_laura', '2025-09-10', 0, '600111222', 'C/ Alcalá 120, Madrid'),
-(2, 'Carlos Pérez', 'carlos.perez@mail.com', 'hash_carlos', '2025-10-02', 0, '611222333', 'Av. América 45, Madrid'),
-(3, 'Ana Gómez', 'ana.gomez@mail.com', 'hash_ana', '2025-11-15', 1, '622333444', 'C/ Goya 17, Madrid'),
-(4, 'Miguel Ruiz', 'miguel.ruiz@mail.com', 'hash_miguel', '2026-01-05', 0, '633444555', 'C/ Serrano 200, Madrid'),
-(5, 'Sofía López', 'sofia.lopez@mail.com', 'hash_sofia', '2026-02-01', 0, '644555666', 'C/ Princesa 8, Madrid'),
-(6, 'Javier Ortega', 'javier.ortega@mail.com', 'hash_javier', '2025-08-21', 0, '655666777', 'C/ Atocha 30, Madrid'),
-(7, 'Elena Navarro', 'elena.navarro@mail.com', 'hash_elena', '2025-07-13', 0, '666777888', 'C/ Bravo Murillo 91, Madrid'),
-(8, 'Daniel Torres', 'daniel.torres@mail.com', 'hash_daniel', '2025-12-20', 0, '677888999', 'C/ Fuencarral 55, Madrid'),
-(9, 'Paula Romero', 'paula.romero@mail.com', 'hash_paula', '2025-10-28', 0, '688999000', 'C/ Ibiza 14, Madrid'),
-(10, 'Hugo Sánchez', 'hugo.sanchez@mail.com', 'hash_hugo', '2025-09-30', 0, '699000111', 'C/ Ferraz 40, Madrid'),
-(11, 'Nerea Castillo', 'nerea.castillo@mail.com', 'hash_nerea', '2026-01-20', 0, '610123456', 'C/ Donnell 77, Madrid'),
-(12, 'Alberto Molina', 'alberto.molina@mail.com', 'hash_alberto', '2025-06-18', 0, '620234567', 'C/ Toledo 12, Madrid'),
-(13, 'Claudia Vega', 'claudia.vega@mail.com', 'hash_claudia', '2025-11-02', 0, '630345678', 'C/ Arturo Soria 210, Madrid'),
-(14, 'Iván Ramos', 'ivan.ramos@mail.com', 'hash_ivan', '2025-12-05', 0, '640456789', 'C/ Menéndez Pelayo 60, Madrid'),
-(15, 'Marina Gil', 'marina.gil@mail.com', 'hash_marina', '2026-02-10', 0, '650567890', 'C/ Velázquez 25, Madrid');
+INSERT INTO Socios (id_socio, nombre, email, contrasena, fecha_registro, debe_dinero, telefono, direccion, es_admin) VALUES
+(1, 'Laura Martín', 'laura.martin@mail.com', 'hash_laura', '2025-09-10', 0, '600111222', 'C/ Alcalá 120, Madrid', 0),
+(2, 'Carlos Pérez', 'carlos.perez@mail.com', 'hash_carlos', '2025-10-02', 0, '611222333', 'Av. América 45, Madrid', 0),
+(3, 'Ana Gómez', 'ana.gomez@mail.com', 'hash_ana', '2025-11-15', 1, '622333444', 'C/ Goya 17, Madrid', 0),
+(4, 'Miguel Ruiz', 'miguel.ruiz@mail.com', 'hash_miguel', '2026-01-05', 0, '633444555', 'C/ Serrano 200, Madrid', 0),
+(5, 'Sofía López', 'sofia.lopez@mail.com', 'hash_sofia', '2026-02-01', 0, '644555666', 'C/ Princesa 8, Madrid', 0),
+(6, 'Javier Ortega', 'javier.ortega@mail.com', 'hash_javier', '2025-08-21', 0, '655666777', 'C/ Atocha 30, Madrid', 0),
+(7, 'Elena Navarro', 'elena.navarro@mail.com', 'hash_elena', '2025-07-13', 0, '666777888', 'C/ Bravo Murillo 91, Madrid', 0),
+(8, 'Daniel Torres', 'daniel.torres@mail.com', 'hash_daniel', '2025-12-20', 0, '677888999', 'C/ Fuencarral 55, Madrid', 0),
+(9, 'Paula Romero', 'paula.romero@mail.com', 'hash_paula', '2025-10-28', 0, '688999000', 'C/ Ibiza 14, Madrid', 0),
+(10, 'Hugo Sánchez', 'hugo.sanchez@mail.com', 'hash_hugo', '2025-09-30', 0, '699000111', 'C/ Ferraz 40, Madrid', 0),
+(11, 'Nerea Castillo', 'nerea.castillo@mail.com', 'hash_nerea', '2026-01-20', 0, '610123456', 'C/ Donnell 77, Madrid', 0),
+(12, 'Alberto Molina', 'alberto.molina@mail.com', 'hash_alberto', '2025-06-18', 0, '620234567', 'C/ Toledo 12, Madrid', 0),
+(13, 'Claudia Vega', 'claudia.vega@mail.com', 'hash_claudia', '2025-11-02', 0, '630345678', 'C/ Arturo Soria 210, Madrid', 0),
+(14, 'Iván Ramos', 'ivan.ramos@mail.com', 'hash_ivan', '2025-12-05', 0, '640456789', 'C/ Menéndez Pelayo 60, Madrid', 0),
+(15, 'Marina Gil', 'marina.gil@mail.com', 'hash_marina', '2026-02-10', 0, '650567890', 'C/ Velázquez 25, Madrid', 0);
+(16, 'admin', 'admin@mail.com', '123', '2026-02-27', 0, NULL, NULL, 1);
 
 ------------------------------------------------------------
 -- INSTALACIONES (8)

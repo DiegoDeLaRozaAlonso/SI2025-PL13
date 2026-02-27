@@ -46,7 +46,8 @@ CREATE TABLE Socios (
     fecha_registro DATE NOT NULL,
     debe_dinero BOOLEAN DEFAULT 0,
     telefono TEXT,
-    direccion TEXT
+    direccion TEXT,
+    es_admin BOOLEAN DEFAULT 0
 );
 
 -- Tabla de Instalaciones
@@ -186,4 +187,3 @@ CREATE TABLE Reduccion (
     FOREIGN KEY (id_socio) REFERENCES Socios(id_socio)
 );
 
->>>>>>> refs/heads/feature/diego-33728
