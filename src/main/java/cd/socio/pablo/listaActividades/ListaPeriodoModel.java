@@ -24,7 +24,7 @@ public class ListaPeriodoModel {
 	/**
 	 * Obtiene la lista de carreras activas en forma objetos para una fecha de inscripcion dada
 	 */
-	public List<ActividadDTO> getListaCarreras(PeriodoDTO periodoInicio, PeriodoDTO periodoFin) {
+	public List<ActividadDTO> getListaCarreras(PeriodoDTO periodo, PeriodoDTO periodoFin) {
 		validateNotNull(periodoInicio, "");
 		validateNotNull(periodoFin, "");
 		String sql = "SELECT id,descr," 
