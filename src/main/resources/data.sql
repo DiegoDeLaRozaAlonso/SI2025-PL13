@@ -43,6 +43,8 @@ INSERT INTO Socios (id_socio, nombre, email, contrasena, fecha_registro, debe_di
 (14, 'Iván Ramos', 'ivan.ramos@mail.com', 'hash_ivan', '2025-12-05', 0, '640456789', 'C/ Menéndez Pelayo 60, Madrid', 0),
 (15, 'Marina Gil', 'marina.gil@mail.com', 'hash_marina', '2026-02-10', 0, '650567890', 'C/ Velázquez 25, Madrid', 0);
 (16, 'admin', 'admin@mail.com', '123', '2026-02-27', 0, NULL, NULL, 1);
+(17, 'socio', 'socio1@mail.com', 'socio', '2026-02-28', 0, NULL, NULL, 0);
+
 
 ------------------------------------------------------------
 -- INSTALACIONES (8)
