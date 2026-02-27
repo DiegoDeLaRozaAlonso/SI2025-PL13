@@ -7,7 +7,6 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import giis.demo.tkrun.*;
-import javax.swing.JPanel;
 
 /**
  * Punto de entrada principal que incluye botones para la ejecucion de las pantallas 
@@ -42,7 +41,7 @@ public class SwingMain {
 	public SwingMain() {
 		initialize();
 	}
-	
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -53,19 +52,17 @@ public class SwingMain {
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		
 		JButton btnEjecutarTkrun = new JButton("Ejecutar giis.demo.tkrun");
-		btnEjecutarTkrun.setBounds(51, 27, 149, 23);
 		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
 				CarrerasController controller=new CarrerasController(new CarrerasModel(), new CarrerasView());
 				controller.initController();
 			}
 		});
-		frame.getContentPane().setLayout(null);
+		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 		frame.getContentPane().add(btnEjecutarTkrun);
 		
 			
 		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos en Blanco");
-		btnInicializarBaseDeDatos.setBounds(28, 61, 197, 23);
 		btnInicializarBaseDeDatos.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
 				Database db=new Database();
@@ -75,7 +72,6 @@ public class SwingMain {
 		frame.getContentPane().add(btnInicializarBaseDeDatos);
 			
 		JButton btnCargarDatosIniciales = new JButton("Cargar Datos Iniciales para Pruebas");
-		btnCargarDatosIniciales.setBounds(28, 95, 205, 23);
 		btnCargarDatosIniciales.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
 				Database db=new Database();
@@ -84,8 +80,10 @@ public class SwingMain {
 			}
 		});
 		frame.getContentPane().add(btnCargarDatosIniciales);
+		
 	}
 
 	public JFrame getFrame() { return this.frame; }
 	
 }
+
