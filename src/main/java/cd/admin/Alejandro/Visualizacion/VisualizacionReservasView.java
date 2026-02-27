@@ -197,6 +197,7 @@ public class VisualizacionReservasView {
 
 	private void styleBotonNav(JButton btn) {
 		btn.setBackground(COLOR_CABECERA);
+		
 		btn.setForeground(Color.WHITE);
 		btn.setFont(new Font("SansSerif", Font.BOLD, 12));
 		btn.setFocusPainted(false);

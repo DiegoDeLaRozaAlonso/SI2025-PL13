@@ -3,6 +3,7 @@ package cd.admin.Alejandro.Reserva;
 import java.util.ArrayList;
 import java.util.List;
 
+import cd.admin.Alejandro.Visualizacion.InstalacionEntity;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
 

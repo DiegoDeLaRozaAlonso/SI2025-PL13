@@ -2,6 +2,7 @@ package cd.admin.Alejandro.Reserva;
 
 import java.util.List;
 
+import cd.admin.Alejandro.Visualizacion.InstalacionEntity;
 import giis.demo.util.SwingUtil;
 
 /**

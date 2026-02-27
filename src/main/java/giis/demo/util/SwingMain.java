@@ -2,12 +2,13 @@ package giis.demo.util;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import giis.demo.tkrun.*;
-import javax.swing.JPanel;
+import cd.admin.Alejandro.Reserva.ReservarActividadView;
+import cd.admin.Alejandro.Visualizacion.*;
 
 /**
  * Punto de entrada principal que incluye botones para la ejecucion de las pantallas 
@@ -49,43 +50,67 @@ public class SwingMain {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Main");
-		frame.setBounds(0, 0, 287, 185);
+		frame.setBounds(0, 0, 300, 260); // Aumentado tamaño
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		
+		frame.getContentPane().setLayout(null);
+
+		// BOTÓN TKRUN
 		JButton btnEjecutarTkrun = new JButton("Ejecutar giis.demo.tkrun");
-		btnEjecutarTkrun.setBounds(51, 27, 149, 23);
-		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+		btnEjecutarTkrun.setBounds(50, 20, 200, 23);
+		btnEjecutarTkrun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CarrerasController controller=new CarrerasController(new CarrerasModel(), new CarrerasView());
+				CarrerasController controller =
+						new CarrerasController(new CarrerasModel(), new CarrerasView());
 				controller.initController();
 			}
 		});
-		frame.getContentPane().setLayout(null);
 		frame.getContentPane().add(btnEjecutarTkrun);
-		
-			
-		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos en Blanco");
-		btnInicializarBaseDeDatos.setBounds(28, 61, 197, 23);
-		btnInicializarBaseDeDatos.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+
+		// BOTÓN INICIALIZAR BD
+		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos");
+		btnInicializarBaseDeDatos.setBounds(50, 55, 200, 23);
+		btnInicializarBaseDeDatos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database db=new Database();
+				Database db = new Database();
 				db.createDatabase(false);
 			}
 		});
 		frame.getContentPane().add(btnInicializarBaseDeDatos);
-			
-		JButton btnCargarDatosIniciales = new JButton("Cargar Datos Iniciales para Pruebas");
-		btnCargarDatosIniciales.setBounds(28, 95, 205, 23);
-		btnCargarDatosIniciales.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+
+		// BOTÓN CARGAR DATOS
+		JButton btnCargarDatosIniciales = new JButton("Cargar Datos Iniciales");
+		btnCargarDatosIniciales.setBounds(50, 90, 200, 23);
+		btnCargarDatosIniciales.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database db=new Database();
+				Database db = new Database();
 				db.createDatabase(false);
 				db.loadDatabase();
 			}
 		});
 		frame.getContentPane().add(btnCargarDatosIniciales);
+
+		// BOTÓN RESERVAR ACTIVIDAD
+		JButton btnReservarActividad = new JButton("Reservar Actividad");
+		btnReservarActividad.setBounds(50, 125, 200, 23);
+		btnReservarActividad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ReservarActividadView();
+			}
+		});
+		frame.getContentPane().add(btnReservarActividad);
+
+		// BOTÓN VISUALIZAR RESERVAS
+		JButton btnVisualizarReservas = new JButton("Visualizar Reservas");
+		btnVisualizarReservas.setBounds(50, 160, 200, 23);
+		btnVisualizarReservas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new VisualizacionReservasView();
+			}
+		});
+		frame.getContentPane().add(btnVisualizarReservas);
 	}
 
-	public JFrame getFrame() { return this.frame; }
-	
+	public JFrame getFrame() {
+		return this.frame;
+	}
 }

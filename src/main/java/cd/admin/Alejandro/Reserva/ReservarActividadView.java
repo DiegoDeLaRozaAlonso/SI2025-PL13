@@ -27,6 +27,8 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import cd.admin.Alejandro.Visualizacion.InstalacionEntity;
+
 /**
  * Vista de la pantalla de reserva de instalacion para actividades (administracion).
  * Contiene un formulario con selectores de actividad, instalacion, fecha y horario,
