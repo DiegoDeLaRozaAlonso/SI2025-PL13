@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import giis.demo.tkrun.*;
+import cd.admin.Alejandro.Reserva.ReservarActividadController;
+import cd.admin.Alejandro.Reserva.ReservarActividadModel;
 import cd.admin.Alejandro.Reserva.ReservarActividadView;
 import cd.admin.Alejandro.Visualizacion.*;
 
@@ -91,23 +93,27 @@ public class SwingMain {
 
 		// BOTÓN RESERVAR ACTIVIDAD
 		JButton btnReservarActividad = new JButton("Reservar Actividad");
-		btnReservarActividad.setBounds(50, 125, 200, 23);
-		btnReservarActividad.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new ReservarActividadView();
-			}
+		btnReservarActividad.setBounds(28, 129, 205, 23);
+		btnReservarActividad.addActionListener(new ActionListener() { //NOSONAR __codigo__ __autogenerado__
+		    public void actionPerformed(ActionEvent e) {
+		        ReservarActividadController controller = new ReservarActividadController(
+		            new ReservarActividadModel(), new ReservarActividadView());
+		        controller.initController();
+		    }
 		});
 		frame.getContentPane().add(btnReservarActividad);
 
 		// BOTÓN VISUALIZAR RESERVAS
-		JButton btnVisualizarReservas = new JButton("Visualizar Reservas");
-		btnVisualizarReservas.setBounds(50, 160, 200, 23);
-		btnVisualizarReservas.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new VisualizacionReservasView();
-			}
+		JButton btnVisualizacionReservas = new JButton("Visualización Reservas");
+		btnVisualizacionReservas.setBounds(28, 163, 205, 23);
+		btnVisualizacionReservas.addActionListener(new ActionListener() { //NOSONAR __codigo__ __autogenerado__
+		    public void actionPerformed(ActionEvent e) {
+		        VisualizacionReservasController controller = new VisualizacionReservasController(
+		            new VisualizacionReservasModel(), new VisualizacionReservasView());
+		        controller.initController();
+		    }
 		});
-		frame.getContentPane().add(btnVisualizarReservas);
+		frame.getContentPane().add(btnVisualizacionReservas);
 	}
 
 	public JFrame getFrame() {
