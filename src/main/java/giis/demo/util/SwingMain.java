@@ -40,7 +40,7 @@ public class SwingMain {
 		});
 	}
 
-	/**
+	/** 
 	 * Create the application.
 	 */
 	public SwingMain() {
