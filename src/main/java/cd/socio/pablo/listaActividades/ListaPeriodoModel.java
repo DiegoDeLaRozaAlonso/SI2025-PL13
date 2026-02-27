@@ -2,7 +2,6 @@ package cd.socio.pablo.listaActividades;
 
 import java.util.Date;
 import java.util.List;
-
 import giis.demo.tkrun.CarreraDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
@@ -24,10 +23,17 @@ public class ListaPeriodoModel {
 	/**
 	 * Obtiene la lista de carreras activas en forma objetos para una fecha de inscripcion dada
 	 */
-	public List<ActividadDTO> getListaCarreras(PeriodoDTO periodo, PeriodoDTO periodoFin) {
-		validateNotNull(periodoInicio, "");
-		validateNotNull(periodoFin, "");
-		String sql = "SELECT id,descr," 
+	public List<ActividadDTO> getListaActividades(PeriodoDTO periodo) {
+		validateNotNull(periodo.fecha_inicio, " ");
+		validateNotNull(periodo.fecha_fin, " ");
+		String sql = "SELECT nombre, \r\n"
+				+ "    descripcion, \r\n"
+				+ "    duracion, \r\n"
+				+ "    fecha_inicio, \r\n"
+				+ "    fecha_fin, \r\n"
+				+ "    aforo, \r\n"
+				+ "    costo_socio, \r\n"
+				+ "    costo_no_socio," 
 				+ " case when ?<inicio then ''" // antes de inscripcion
 				+ "   when ?<=fin then '(Abierta)'" // fase 1
 				+ "   when ?<fecha then '(Abierta)'" // fase 2
@@ -35,8 +41,7 @@ public class ListaPeriodoModel {
 				+ "   else '' " // despues de fin carrera
 				+ " end as abierta" 
 				+ " from carreras  where fecha>=? order by id";
-		String d = Util.dateToIsoString(periodoInicio);
-		String d2 = Util.dateToIsoString(periodoFin);
+		String d = Util.dateToIsoString(periodo);
 		return db.executeQueryPojo(ActividadDTO.class, sql, d, d, d, d, d);
 	}
 	
