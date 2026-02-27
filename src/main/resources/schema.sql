@@ -186,5 +186,4 @@ CREATE TABLE Reduccion (
     FOREIGN KEY (id_socio) REFERENCES Socios(id_socio)
 );
 
-
-
+>>>>>>> refs/heads/feature/diego-33728
