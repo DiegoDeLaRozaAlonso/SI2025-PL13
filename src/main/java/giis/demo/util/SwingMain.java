@@ -34,7 +34,7 @@ public class SwingMain {
 			}
 		});
 	}
-
+ 
 	/**
 	 * Create the application.
 	 */
@@ -80,7 +80,6 @@ public class SwingMain {
 			}
 		});
 		frame.getContentPane().add(btnCargarDatosIniciales);
-		
 
 		
 		JButton planificarActividad = new JButton("Planificar Actividad (Administración)");
@@ -98,6 +97,22 @@ public class SwingMain {
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 		frame.getContentPane().add(planificarActividad);
 
+		
+		JButton verDisponibilidadInstalacion = new JButton("Ver disponibilidad instalación (Socio)");
+		verDisponibilidadInstalacion.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+			public void actionPerformed(ActionEvent e) {
+				// Lanza la HU "Ver disponibilidad instalación (Socio)" del package cd.socio.diego.verdispoinstalacion
+				cd.socio.diego.verdispoinstalacion.DisponibilidadController controller =
+						new cd.socio.diego.verdispoinstalacion.DisponibilidadController(
+								new cd.socio.diego.verdispoinstalacion.DisponibilidadModel(),
+								new cd.socio.diego.verdispoinstalacion.DisponibilidadView()
+						);
+				controller.initController();
+			}
+		});
+
+		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+		frame.getContentPane().add(verDisponibilidadInstalacion);
 	}
 
 	public JFrame getFrame() { return this.frame; }
