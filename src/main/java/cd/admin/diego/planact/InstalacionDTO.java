@@ -24,8 +24,6 @@ public class InstalacionDTO {
 
 	@Override
 	public String toString() {
-		// para que en el combo se vea bonito
-		String cap = (capacidad == null) ? "" : (" - cap. " + capacidad);
-		return idInstalacion + " - " + nombre + " (" + tipo + ")" + cap;
+		return nombre + " (" + tipo + ") - cap. " + capacidad;
 	}
 }

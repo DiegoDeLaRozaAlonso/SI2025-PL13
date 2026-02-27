@@ -28,6 +28,6 @@ public class PeriodoInscripcionDTO {
 
 	@Override
 	public String toString() {
-		return idPeriodo + " - " + nombre;
+		return nombre;
 	}
 }
