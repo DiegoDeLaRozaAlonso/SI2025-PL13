@@ -8,13 +8,14 @@ import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.JScrollPane;
 
 public class ListaPeriodoView {
 
 	private JFrame frame;
-	private JTable tablaActividades;
 	private JButton bVolver;
 	private JComboBox comboBox;
+	private JTable tablaActividades;
 
 	/**
 	 * Launch the application.
@@ -62,14 +63,16 @@ public class ListaPeriodoView {
 		bVolver.setBounds(292, 472, 140, 37);
 		frame.getContentPane().add(bVolver);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 81, 793, 380);
+		frame.getContentPane().add(scrollPane);
+		
 		tablaActividades = new JTable();
-		tablaActividades.setBounds(10, 97, 773, 364);
-		frame.getContentPane().add(tablaActividades);
+		scrollPane.setViewportView(tablaActividades);
 	}
 	
 	public JFrame getFrame() {return this.frame;}
 	public JTable getTable() {return this.tablaActividades;}
 	public JComboBox getComboBox() {return this.comboBox;}
 	public JButton getBotonVolver() {return this.bVolver ;}
-	
 }
