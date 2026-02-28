@@ -49,15 +49,15 @@ INSERT INTO Socios (id_socio, nombre, email, contrasena, fecha_registro, debe_di
 ------------------------------------------------------------
 -- INSTALACIONES (8)
 ------------------------------------------------------------
-INSERT INTO Instalaciones (id_instalacion, nombre, tipo, capacidad, en_uso, detalles) VALUES
-(1, 'Piscina Cubierta', 'piscina', 60, 1, 'Piscina climatizada 25m, calles disponibles'),
-(2, 'Pista de Tenis 1', 'tenis', 4, 1, 'Pista rápida, iluminación nocturna'),
-(3, 'Pista de Pádel 1', 'padel', 4, 1, 'Césped artificial, muro de vidrio'),
-(4, 'Campo Fútbol 7', 'futbol', 14, 1, 'Césped artificial, vestuarios cercanos'),
-(5, 'Pista de Tenis 2', 'tenis', 4, 1, 'Pista de tierra batida'),
-(6, 'Pista de Pádel 2', 'padel', 4, 1, 'Iluminación LED, zona de gradas'),
-(7, 'Zona Multiusos', 'otro', 30, 1, 'Sala para clases dirigidas (yoga, pilates)'),
-(8, 'Piscina Exterior', 'piscina', 80, 0, 'Cerrada por temporada (invierno)');
+INSERT INTO Instalaciones (id_instalacion, nombre, tipo, capacidad, en_uso, precioInstalacion, detalles) VALUES
+(1, 'Piscina Cubierta', 'piscina', 60, 1, 8.00,  'Piscina climatizada 25m, calles disponibles'),
+(2, 'Pista de Tenis 1', 'tenis', 4, 1, 12.00, 'Pista rápida, iluminación nocturna'),
+(3, 'Pista de Pádel 1', 'padel', 4, 1, 16.00, 'Césped artificial, muro de vidrio'),
+(4, 'Campo Fútbol 7', 'futbol', 14, 1, 35.00, 'Césped artificial, vestuarios cercanos'),
+(5, 'Pista de Tenis 2', 'tenis', 4, 1, 12.00, 'Pista de tierra batida'),
+(6, 'Pista de Pádel 2', 'padel', 4, 1, 16.00, 'Iluminación LED, zona de gradas'),
+(7, 'Zona Multiusos', 'otro', 30, 1, 10.00, 'Sala para clases dirigidas (yoga, pilates)'),
+(8, 'Piscina Exterior', 'piscina', 80, 0, 8.00, 'Cerrada por temporada (invierno)');
 
 ------------------------------------------------------------
 -- HORARIOS INSTALACION (invierno/verano/otoño)

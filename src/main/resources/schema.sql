@@ -57,6 +57,7 @@ CREATE TABLE Instalaciones (
     tipo TEXT NOT NULL CHECK(tipo IN ('piscina', 'tenis', 'padel', 'futbol', 'otro')),
     capacidad INTEGER,
     en_uso BOOLEAN DEFAULT 1,
+    precioInstalacion DECIMAL(10,2) NOT NULL,
     detalles TEXT
 );
 
