@@ -1,121 +1,135 @@
 package giis.demo.util;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import giis.demo.tkrun.*;
+import javax.swing.*;
 
-/**
- * Punto de entrada principal que incluye botones para la ejecucion de las pantallas 
- * de las aplicaciones de ejemplo
- * y acciones de inicializacion de la base de datos.
- * No sigue MVC pues es solamente temporal para que durante el desarrollo se tenga posibilidad
- * de realizar acciones de inicializacion
- */
+import cd.login.diego.*;
+
 public class SwingMain {
 
 	private JFrame frame;
+	private UsuarioSesion sesion;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() { //NOSONAR codigo autogenerado
-			public void run() {
-				try {
-					SwingMain window = new SwingMain();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace(); //NOSONAR codigo autogenerado
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				SwingMain window = new SwingMain();
+				window.frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}
- 
-	/**
-	 * Create the application.
-	 */
+
 	public SwingMain() {
-		initialize();
-	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
 		frame = new JFrame();
-		frame.setTitle("Main");
-		frame.setBounds(0, 0, 287, 185);
-		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		
-		JButton btnEjecutarTkrun = new JButton("Ejecutar giis.demo.tkrun");
-		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
-			public void actionPerformed(ActionEvent e) {
-				CarrerasController controller=new CarrerasController(new CarrerasModel(), new CarrerasView());
-				controller.initController();
-			}
-		});
-		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-		frame.getContentPane().add(btnEjecutarTkrun);
-		
-			
-		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos en Blanco");
-		btnInicializarBaseDeDatos.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
-			public void actionPerformed(ActionEvent e) {
-				Database db=new Database();
-				db.createDatabase(false);
-			}
-		});
-		frame.getContentPane().add(btnInicializarBaseDeDatos);
-			
-		JButton btnCargarDatosIniciales = new JButton("Cargar Datos Iniciales para Pruebas");
-		btnCargarDatosIniciales.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
-			public void actionPerformed(ActionEvent e) {
-				Database db=new Database();
-				db.createDatabase(false);
-				db.loadDatabase();
-			}
-		});
-		frame.getContentPane().add(btnCargarDatosIniciales);
+		frame.setBounds(0, 0, 500, 400);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(new BorderLayout());
 
-		
-		JButton planificarActividad = new JButton("Planificar Actividad (Administración)");
-		planificarActividad.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
-			public void actionPerformed(ActionEvent e) {
-				// Lanza la HU "Crear/Planificar actividad" del package cd.admin.diego.planact
-				cd.admin.diego.planact.PlanActCrearActividadController controller =
-						new cd.admin.diego.planact.PlanActCrearActividadController(
-								new cd.admin.diego.planact.PlanActCrearActividadModel(),
-								new cd.admin.diego.planact.PlanActCrearActividadView()
-						);
-				controller.initController();
-			}
-		});
-		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-		frame.getContentPane().add(planificarActividad);
-
-		
-		JButton verDisponibilidadInstalacion = new JButton("Ver disponibilidad instalación (Socio)");
-		verDisponibilidadInstalacion.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
-			public void actionPerformed(ActionEvent e) {
-				// Lanza la HU "Ver disponibilidad instalación (Socio)" del package cd.socio.diego.verdispoinstalacion
-				cd.socio.diego.verdispoinstalacion.DisponibilidadController controller =
-						new cd.socio.diego.verdispoinstalacion.DisponibilidadController(
-								new cd.socio.diego.verdispoinstalacion.DisponibilidadModel(),
-								new cd.socio.diego.verdispoinstalacion.DisponibilidadView()
-						);
-				controller.initController();
-			}
-		});
-
-		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-		frame.getContentPane().add(verDisponibilidadInstalacion);
+		login();
 	}
 
-	public JFrame getFrame() { return this.frame; }
-	
-}
+	// ================= LOGIN =================
+	private void login() {
 
+		LoginController login = new LoginController(
+				new LoginModel(),
+				new LoginView(frame)
+		);
+
+		sesion = login.mostrarLogin();
+
+		if (sesion == null) {
+			System.exit(0);
+		}
+
+		frame.setTitle("Bienvenido " + sesion.getNombre() +
+				(sesion.isAdmin() ? " (ADMIN)" : " (SOCIO)"));
+
+		inicializarContenido();
+	}
+
+	// ================= CONTENIDO =================
+	private void inicializarContenido() {
+
+		JPanel panelCentro = new JPanel();
+		panelCentro.setLayout(new BoxLayout(panelCentro, BoxLayout.Y_AXIS));
+
+		// Botón BD
+		JButton btnInit = new JButton("Inicializar Base de Datos");
+		btnInit.addActionListener(e -> {
+			Database db = new Database();
+			db.createDatabase(false);
+		});
+		panelCentro.add(btnInit);
+
+		JButton btnCargar = new JButton("Cargar Datos Iniciales");
+		btnCargar.addActionListener(e -> {
+			Database db = new Database();
+			db.createDatabase(false);
+			db.loadDatabase();
+		});
+		panelCentro.add(btnCargar);
+
+		// Botón Admin
+		JButton btnAdmin = new JButton("Crear Actividad (Administracion)");
+		btnAdmin.addActionListener(e -> {
+
+			if (!sesion.isAdmin()) {
+				JOptionPane.showMessageDialog(
+						frame,
+						"No tienes permisos para acceder a esta funcionalidad.\n"
+						+ "Solo un administrador puede acceder.",
+						"Acceso denegado",
+						JOptionPane.WARNING_MESSAGE
+				);
+				return;
+			}
+
+			cd.admin.diego.planact.PlanActCrearActividadController controller =
+					new cd.admin.diego.planact.PlanActCrearActividadController(
+							new cd.admin.diego.planact.PlanActCrearActividadModel(),
+							new cd.admin.diego.planact.PlanActCrearActividadView()
+					);
+
+			controller.initController();
+		});
+		panelCentro.add(btnAdmin);
+
+		// Botón Socio
+		JButton btnSocio = new JButton("Ver Disponibilidad Instalación (Socio)");
+		btnSocio.addActionListener(e -> {
+
+			cd.socio.diego.verdispoinstalacion.DisponibilidadController controller =
+					new cd.socio.diego.verdispoinstalacion.DisponibilidadController(
+							new cd.socio.diego.verdispoinstalacion.DisponibilidadModel(),
+							new cd.socio.diego.verdispoinstalacion.DisponibilidadView()
+					);
+
+			controller.initController();
+		});
+		panelCentro.add(btnSocio);
+
+		frame.getContentPane().removeAll();
+		frame.add(panelCentro, BorderLayout.CENTER);
+
+		// ================= BOTÓN CAMBIAR USUARIO =================
+		JPanel panelInferior = new JPanel(new BorderLayout());
+		JButton btnCambiar = new JButton("Cambiar de usuario");
+
+		btnCambiar.addActionListener(e -> {
+			frame.getContentPane().removeAll();
+			frame.repaint();
+			login();  // vuelve al login
+		});
+
+		panelInferior.add(btnCambiar, BorderLayout.EAST);
+		frame.add(panelInferior, BorderLayout.SOUTH);
+
+		frame.revalidate();
+		frame.repaint();
+	}
+}
