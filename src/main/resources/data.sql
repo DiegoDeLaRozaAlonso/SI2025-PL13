@@ -15,6 +15,14 @@ INSERT INTO Configuracion (id_config, clave, valor, descripcion) VALUES
 (7, 'limite_lista_espera', '10', 'Máximo de personas en lista de espera por actividad');
 
 ------------------------------------------------------------
+-- PERIODOS GLOBALES (3) - no solapados y coherentes con los datos
+------------------------------------------------------------
+INSERT INTO PeriodosGlobales (id_periodo_global, nombre, fecha_inicio, fecha_fin) VALUES
+(1, 'Enero',      '2026-01-01', '2026-05-31'),
+(2, 'Junio',      '2026-06-01', '2026-08-31'),
+(3, 'Septiembre', '2026-09-01', '2026-12-31');
+
+------------------------------------------------------------
 -- SOCIOS (17)
 ------------------------------------------------------------
 INSERT INTO Socios (id_socio, nombre, email, contrasena, fecha_registro, debe_dinero, telefono, direccion, es_admin) VALUES
@@ -34,7 +42,7 @@ INSERT INTO Socios (id_socio, nombre, email, contrasena, fecha_registro, debe_di
 (14, 'Iván Ramos', 'ivan.ramos@mail.com', 'hash_ivan', '2025-12-05', 0, '640456789', 'C/ Menéndez Pelayo 60, Madrid', 0),
 (15, 'Marina Gil', 'marina.gil@mail.com', 'hash_marina', '2026-02-10', 0, '650567890', 'C/ Velázquez 25, Madrid', 0),
 (16, 'admin', 'admin@mail.com', '123', '2026-02-27', 0, NULL, NULL, 1),
-(17, 'socio', 'socio1@mail.com', 'socio', '2026-02-28', 0, NULL, NULL, 0);
+(17, 'socio1', 'socio1@mail.com', 'socio', '2026-02-28', 0, NULL, NULL, 0);
 
 ------------------------------------------------------------
 -- INSTALACIONES (8)  (incluye precioInstalacion)

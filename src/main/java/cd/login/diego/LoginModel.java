@@ -1,7 +1,6 @@
 package cd.login.diego;
 
 import java.util.List;
-
 import giis.demo.util.Database;
 
 public class LoginModel {

@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS HorariosInstalacion;
 DROP TABLE IF EXISTS Instalaciones;
 DROP TABLE IF EXISTS Recibos;
 DROP TABLE IF EXISTS Socios;
+DROP TABLE IF EXISTS PeriodosGlobales;
 DROP TABLE IF EXISTS Configuracion;
 
 PRAGMA foreign_keys = ON;
@@ -35,6 +36,15 @@ CREATE TABLE Configuracion (
     clave TEXT UNIQUE NOT NULL,
     valor TEXT NOT NULL,
     descripcion TEXT
+);
+
+-- Tabla de periodos globales (trimestrales, no solapados)
+CREATE TABLE PeriodosGlobales (
+    id_periodo_global INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL UNIQUE,
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE NOT NULL,
+    CHECK (fecha_inicio <= fecha_fin)
 );
 
 -- Tabla de socios

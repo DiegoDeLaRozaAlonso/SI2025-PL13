@@ -2,9 +2,17 @@ package giis.demo.util;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import javax.swing.*;
 
-import cd.login.diego.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import cd.login.diego.LoginController;
+import cd.login.diego.LoginModel;
+import cd.login.diego.LoginView;
+import cd.login.diego.UsuarioSesion;
 
 public class SwingMain {
 
@@ -17,7 +25,7 @@ public class SwingMain {
 				SwingMain window = new SwingMain();
 				window.frame.setVisible(true);
 			} catch (Exception e) {
-				e.printStackTrace();
+				e.printStackTrace(); //NOSONAR
 			}
 		});
 	}
@@ -25,11 +33,21 @@ public class SwingMain {
 	public SwingMain() {
 
 		frame = new JFrame();
-		frame.setBounds(0, 0, 500, 400);
+		frame.setBounds(0, 0, 520, 420);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 
+		// ✅ SIEMPRE inicializa y carga datos al arrancar (para que el login funcione)
+		inicializarBaseDeDatos();
+
+		// ✅ Login
 		login();
+	}
+
+	private void inicializarBaseDeDatos() {
+		Database db = new Database();
+		db.createDatabase(true); // borra y recrea schema
+		db.loadDatabase();       // carga data.sql
 	}
 
 	// ================= LOGIN =================
@@ -46,8 +64,8 @@ public class SwingMain {
 			System.exit(0);
 		}
 
-		frame.setTitle("Bienvenido " + sesion.getNombre() +
-				(sesion.isAdmin() ? " (ADMIN)" : " (SOCIO)"));
+		frame.setTitle("Bienvenido " + sesion.getNombre()
+				+ (sesion.isAdmin() ? " (ADMIN)" : " (SOCIO)"));
 
 		inicializarContenido();
 	}
@@ -58,25 +76,60 @@ public class SwingMain {
 		JPanel panelCentro = new JPanel();
 		panelCentro.setLayout(new BoxLayout(panelCentro, BoxLayout.Y_AXIS));
 
-		// Botón BD
-		JButton btnInit = new JButton("Inicializar Base de Datos");
-		btnInit.addActionListener(e -> {
+		// =========================
+		// Inicializar BD (botón original)
+		// =========================
+		JButton btnInicializarBD = new JButton("Inicializar Base de Datos en Blanco");
+		btnInicializarBD.addActionListener(e -> {
 			Database db = new Database();
 			db.createDatabase(false);
 		});
-		panelCentro.add(btnInit);
+		panelCentro.add(btnInicializarBD);
 
-		JButton btnCargar = new JButton("Cargar Datos Iniciales");
-		btnCargar.addActionListener(e -> {
+		// =========================
+		// Cargar datos (botón original)
+		// =========================
+		JButton btnCargarDatos = new JButton("Cargar Datos Iniciales para Pruebas");
+		btnCargarDatos.addActionListener(e -> {
 			Database db = new Database();
 			db.createDatabase(false);
 			db.loadDatabase();
 		});
-		panelCentro.add(btnCargar);
+		panelCentro.add(btnCargarDatos);
 
-		// Botón Admin
-		JButton btnAdmin = new JButton("Crear Actividad (Administracion)");
-		btnAdmin.addActionListener(e -> {
+		// =========================
+		// Ejecutar tkrun (botón original)
+		// =========================
+		JButton btnEjecutarTkrun = new JButton("Ejecutar giis.demo.tkrun");
+		btnEjecutarTkrun.addActionListener(e -> {
+			giis.demo.tkrun.CarrerasController controller =
+					new giis.demo.tkrun.CarrerasController(
+							new giis.demo.tkrun.CarrerasModel(),
+							new giis.demo.tkrun.CarrerasView()
+					);
+			controller.initController();
+		});
+		panelCentro.add(btnEjecutarTkrun);
+
+		// =========================
+		// Ver disponibilidad (Socio) (botón original)
+		// =========================
+		JButton verDisponibilidad = new JButton("Ver disponibilidad instalación (Socio)");
+		verDisponibilidad.addActionListener(e -> {
+			cd.socio.diego.verdispoinstalacion.DisponibilidadController controller =
+					new cd.socio.diego.verdispoinstalacion.DisponibilidadController(
+							new cd.socio.diego.verdispoinstalacion.DisponibilidadModel(),
+							new cd.socio.diego.verdispoinstalacion.DisponibilidadView()
+					);
+			controller.initController();
+		});
+		panelCentro.add(verDisponibilidad);
+
+		// =========================
+		// Crear/Planificar actividad (Administracion) (botón original + bloqueo)
+		// =========================
+		JButton planificarActividad = new JButton("Crear/Planificar actividad (Administracion)");
+		planificarActividad.addActionListener(e -> {
 
 			if (!sesion.isAdmin()) {
 				JOptionPane.showMessageDialog(
@@ -94,39 +147,25 @@ public class SwingMain {
 							new cd.admin.diego.planact.PlanActCrearActividadModel(),
 							new cd.admin.diego.planact.PlanActCrearActividadView()
 					);
-
 			controller.initController();
 		});
-		panelCentro.add(btnAdmin);
+		panelCentro.add(planificarActividad);
 
-		// Botón Socio
-		JButton btnSocio = new JButton("Ver Disponibilidad Instalación (Socio)");
-		btnSocio.addActionListener(e -> {
-
-			cd.socio.diego.verdispoinstalacion.DisponibilidadController controller =
-					new cd.socio.diego.verdispoinstalacion.DisponibilidadController(
-							new cd.socio.diego.verdispoinstalacion.DisponibilidadModel(),
-							new cd.socio.diego.verdispoinstalacion.DisponibilidadView()
-					);
-
-			controller.initController();
-		});
-		panelCentro.add(btnSocio);
-
-		frame.getContentPane().removeAll();
-		frame.add(panelCentro, BorderLayout.CENTER);
-
-		// ================= BOTÓN CAMBIAR USUARIO =================
+		// =========================
+		// Panel inferior: Cambiar de usuario (abajo derecha)
+		// =========================
 		JPanel panelInferior = new JPanel(new BorderLayout());
-		JButton btnCambiar = new JButton("Cambiar de usuario");
-
-		btnCambiar.addActionListener(e -> {
+		JButton btnCambiarUsuario = new JButton("Cambiar de usuario");
+		btnCambiarUsuario.addActionListener(e -> {
 			frame.getContentPane().removeAll();
 			frame.repaint();
-			login();  // vuelve al login
+			login();
 		});
+		panelInferior.add(btnCambiarUsuario, BorderLayout.EAST);
 
-		panelInferior.add(btnCambiar, BorderLayout.EAST);
+		// Pintar
+		frame.getContentPane().removeAll();
+		frame.add(panelCentro, BorderLayout.CENTER);
 		frame.add(panelInferior, BorderLayout.SOUTH);
 
 		frame.revalidate();
