@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS HorariosInstalacion;
 DROP TABLE IF EXISTS Instalaciones;
 DROP TABLE IF EXISTS Recibos;
 DROP TABLE IF EXISTS Socios;
+DROP TABLE IF EXISTS PeriodosGlobales;
 DROP TABLE IF EXISTS Configuracion;
 
 PRAGMA foreign_keys = ON;
@@ -37,6 +38,15 @@ CREATE TABLE Configuracion (
     descripcion TEXT
 );
 
+-- Tabla de periodos globales (trimestrales, no solapados)
+CREATE TABLE PeriodosGlobales (
+    id_periodo_global INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL UNIQUE,
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE NOT NULL,
+    CHECK (fecha_inicio <= fecha_fin)
+);
+
 -- Tabla de socios
 CREATE TABLE Socios (
     id_socio INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,7 +56,8 @@ CREATE TABLE Socios (
     fecha_registro DATE NOT NULL,
     debe_dinero BOOLEAN DEFAULT 0,
     telefono TEXT,
-    direccion TEXT
+    direccion TEXT,
+    es_admin BOOLEAN DEFAULT 0
 );
 
 -- Tabla de Instalaciones
@@ -56,6 +67,7 @@ CREATE TABLE Instalaciones (
     tipo TEXT NOT NULL CHECK(tipo IN ('piscina', 'tenis', 'padel', 'futbol', 'otro')),
     capacidad INTEGER,
     en_uso BOOLEAN DEFAULT 1,
+    precioInstalacion DECIMAL(10,2) NOT NULL,
     detalles TEXT
 );
 
@@ -84,6 +96,15 @@ CREATE TABLE Reservas (
     FOREIGN KEY (id_instalacion) REFERENCES Instalaciones(id_instalacion)
 );
 
+-- Tabla de periodos de inscripción
+CREATE TABLE PeriodosInscripcion (
+    id_periodo INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    descripcion TEXT NOT NULL,
+    fecha_inicio_socio DATE NOT NULL,
+    fecha_fin_socio DATE NOT NULL,
+    fecha_fin_noSocio DATE NOT NULL
+);
 
 -- Tabla de actividades
 CREATE TABLE Actividades (
@@ -96,17 +117,9 @@ CREATE TABLE Actividades (
     costo_no_socio DECIMAL(10,2) NOT NULL,
     fecha_inicio DATE NOT NULL,
     fecha_fin DATE NOT NULL,
-    FOREIGN KEY (id_instalacion) REFERENCES Instalaciones(id_instalacion)
-);
-
--- Tabla de periodos de inscripción
-CREATE TABLE PeriodosInscripcion (
-    id_periodo INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre TEXT NOT NULL,
-    descripcion TEXT NOT NULL,
-    fecha_inicio_socio DATE NOT NULL,
-    fecha_fin_socio DATE NOT NULL,
-    fecha_fin_noSocio DATE NOT NULL
+    id_periodo INTEGER NOT NULL,
+    FOREIGN KEY (id_instalacion) REFERENCES Instalaciones(id_instalacion),
+    FOREIGN KEY (id_periodo) REFERENCES PeriodosInscripcion(id_periodo)
 );
 
 -- Tabla de sesiones de actividades
@@ -184,6 +197,4 @@ CREATE TABLE Reduccion (
     descripcion TEXT,
     FOREIGN KEY (id_socio) REFERENCES Socios(id_socio)
 );
-
-
 
