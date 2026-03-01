@@ -2,6 +2,10 @@ package administracion;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
@@ -61,7 +65,8 @@ public class ReservaAdminControlador {
                 return;
             }
 
-            double precio = modelo.calcularPrecio(horas);
+            String nombreInstalacion = vista.getTextFInstalaciones().getText();
+            double precio = modelo.calcularPrecio(nombreInstalacion, horas);
             vista.setPrecio(precio);
 
         } catch (NumberFormatException e) {
@@ -70,22 +75,50 @@ public class ReservaAdminControlador {
     }
 
     private void realizarReserva() {
+
         try {
-            int horas = Integer.parseInt(vista.getTextFNumHoras().getText());
+
+            String usuario = vista.getTextFUsuarios().getText().trim();
+            String instalacion = vista.getTextFInstalaciones().getText().trim();
+            String fechaTexto = vista.getTextFFecha().getText().trim();
+            String horaTexto = vista.getTextFHora().getText().trim();
+
+            int horas = Integer.parseInt(
+                    vista.getTextFNumHoras().getText().trim());
 
             if (horas <= 0) {
-                JOptionPane.showMessageDialog(null, 
+                JOptionPane.showMessageDialog(null,
                         "El número de horas debe ser mayor que 0");
                 return;
             }
 
-            // Aquí podrías llamar a modelo.guardarReserva(...)
-            JOptionPane.showMessageDialog(null, 
-                    "Reserva realizada correctamente");
+            // 🔥 VALIDAMOS AQUÍ
+            LocalDate.parse(fechaTexto,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, 
-                    "Introduce un número entero válido en horas");
+            LocalTime.parse(horaTexto,
+                    DateTimeFormatter.ofPattern("HH:mm"));
+
+            boolean exito = modelo.guardarReserva(
+                    usuario, instalacion, fechaTexto, horaTexto, horas);
+
+            if (exito) {
+                JOptionPane.showMessageDialog(null,
+                        "Reserva realizada correctamente");
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "No se pudo realizar la reserva (usuario, instalación o solapamiento)");
+            }
+
+        } catch (DateTimeParseException e) {
+
+            JOptionPane.showMessageDialog(null,
+                    "Revisa fecha (yyyy-MM-dd) y hora (HH:mm)");
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(null,
+                    "Error inesperado: " + e.getMessage());
         }
     }
     

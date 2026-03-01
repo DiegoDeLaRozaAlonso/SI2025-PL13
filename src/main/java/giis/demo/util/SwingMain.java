@@ -2,6 +2,7 @@ package giis.demo.util;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.lang.ModuleLayer.Controller;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -150,6 +151,40 @@ public class SwingMain {
 			controller.initController();
 		});
 		panelCentro.add(planificarActividad);
+		
+		//Crear reserva admin
+		JButton crearReservaAdmin = new JButton("Crear Reserva Admin");
+		crearReservaAdmin.addActionListener(e -> {
+
+		    if (!sesion.isAdmin()) {
+		        JOptionPane.showMessageDialog(
+		                frame,
+		                "No tienes permisos para acceder a esta funcionalidad.\n"
+		                + "Solo un administrador puede acceder.",
+		                "Acceso denegado",
+		                JOptionPane.WARNING_MESSAGE
+		        );
+		        return;
+		    }
+
+		    // Crea vista y modelo
+		    administracion.ReservaAdminVista vista = new administracion.ReservaAdminVista();
+		    administracion.ReservaAdminModelo modelo = new administracion.ReservaAdminModelo();
+
+		    // Crea el controlador (vista, modelo)
+		    administracion.ReservaAdminControlador controller =
+		            new administracion.ReservaAdminControlador(vista, modelo);
+
+		    // Muestra la ventana (centrada respecto al frame principal)
+		    JFrame reservaFrame = vista.getFrame();
+		    reservaFrame.setLocationRelativeTo(frame);
+		    // Importante: evita cerrar TODA la app al cerrar esta ventana
+		    reservaFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		    reservaFrame.setVisible(true);
+		});
+
+		// ¡Asegúrate de añadir el botón correcto!
+		panelCentro.add(crearReservaAdmin);
 
 		// =========================
 		// Panel inferior: Cambiar de usuario (abajo derecha)

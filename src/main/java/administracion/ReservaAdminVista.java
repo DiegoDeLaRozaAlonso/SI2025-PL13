@@ -246,7 +246,7 @@ public class ReservaAdminVista {
 	    );
 	}
 	
-	private void limitarFecha(JTextField campo) { //Y por ultimo en esta limitamos los caracters que se pueden poner en hora a [0-9] y "/"
+	private void limitarFecha(JTextField campo) { //Y por ultimo en esta limitamos los caracters que se pueden poner en hora a [0-9] y "-"
 
 	    ((AbstractDocument) campo.getDocument()).setDocumentFilter(
 	        new DocumentFilter() {
@@ -255,7 +255,7 @@ public class ReservaAdminVista {
 	            public void replace(FilterBypass fb, int offset, int length,
 	                                String text, AttributeSet attrs) throws BadLocationException {
 
-	                if (text.matches("[0-9/]+")) {
+	                if (text.matches("[0-9-]+")) {
 	                    super.replace(fb, offset, length, text, attrs);
 	                }
 	            }
@@ -264,7 +264,7 @@ public class ReservaAdminVista {
 	            public void insertString(FilterBypass fb, int offset, String text,
 	                                     AttributeSet attr) throws BadLocationException {
 
-	                if (text.matches("[0-9/]+")) {
+	                if (text.matches("[0-9-]+")) {
 	                    super.insertString(fb, offset, text, attr);
 	                }
 	            }
