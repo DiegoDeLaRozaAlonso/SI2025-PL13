@@ -10,28 +10,39 @@ import giis.demo.util.Util;
 public class ListaPeriodoModel {
 
 	private Database db = new Database();
-	//private String idPeriodo;
 	
 	
-	public void listarActividades(ActividadDTO a) {
-		String sqlActividades = "SELECT "
-				+ "nombre, fecha_inicio, fecha_fin, aforo, costo_socio, costo_no_socio "
-				+ "from Actividades where fecha_inicio <= ? OR fecha_fin >= ?;";
+	public String getFechaInicio() {
+		String sql = "SELECT fecha_inicio FROM Periodos WHERE nombre = ";
 		
+		return sql;
+	}
+	
+	public String getFechaFin() {
+		String sql = "SELECT fecha_fin FROM Periodos WHERE nombre = ";
+		
+		return sql;
+	}
+	
+	public List<PeriodoGlobalDTO> getPeriodoGlobal(){
+		
+		String sql = "SELECT nombre, fecha_inicio, fecha_fin from PeriodosGlobales";
+		
+		return db.executeQueryPojo(PeriodoGlobalDTO.class, sql);
 	}
 	
 	/**
 	 * Obtiene la lista de carreras activas en forma objetos para una fecha de inscripcion dada
 	 */
-	public List<ActividadDTO> getListaActividades() {
-		/*validateNotNull(periodo.fecha_inicio, " ");
-		validateNotNull(periodo.fecha_fin, " ");*/
+	public List<ActividadDTO> getListaActividades(String fechaInicio, String fechaFin) {
+		validateNotNull(fechaInicio, "La fecha de Inicio no puede ser nula");
+		validateNotNull(fechaFin, "La fecha de Fin no puede ser nula");
 		String sql = "SELECT nombre, descripcion AS desc, aforo, "
 	               + "fecha_inicio AS fechaInicio, fecha_fin AS fechaFin, "
 	               + "costo_socio AS precioSocio, costo_no_socio AS precioNoSocio "
-	               + "FROM Actividades";
+	               + "FROM Actividades WHERE fecha_inicio <= ? AND fecha_fin >= ?";
 		//String d = Util.dateToIsoString(periodo);
-		return db.executeQueryPojo(ActividadDTO.class, sql);
+		return db.executeQueryPojo(ActividadDTO.class, sql, fechaFin, fechaInicio);
 		//return db.executeQueryPojo(ActividadDTO.class, sql, d, d, d, d, d);
 	}
 	
