@@ -104,24 +104,6 @@ public class SwingMain {
 			db.loadDatabase();
 		});
 		panelCentro.add(btnCargarDatos);
-
-	/*	
-		
-		// =========================
-		// Ejecutar tkrun (botón original)
-		// =========================
-		JButton btnEjecutarTkrun = new JButton("Ejecutar giis.demo.tkrun");
-		btnEjecutarTkrun.addActionListener(e -> {
-			giis.demo.tkrun.CarrerasController controller =
-					new giis.demo.tkrun.CarrerasController(
-							new giis.demo.tkrun.CarrerasModel(),
-							new giis.demo.tkrun.CarrerasView()
-					);
-			controller.initController();
-		});
-		panelCentro.add(btnEjecutarTkrun);
-
-		*/
 		
 		
 		// =========================
@@ -164,13 +146,25 @@ public class SwingMain {
 		});
 		panelCentro.add(planificarActividad);
 		
+		
 		/*
 		 * Ejecuta la lista de actividades	
 		 */
-			
 		JButton btnListaActividades = new JButton("Ejecutar ListaActividades");
 		btnListaActividades.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
+				
+				if (!sesion.isAdmin()) {
+					JOptionPane.showMessageDialog(
+							frame,
+							"No tienes permisos para acceder a esta funcionalidad.\n"
+							+ "Solo un administrador puede acceder.",
+							"Acceso denegado",
+							JOptionPane.WARNING_MESSAGE
+					);
+					return;
+				}
+				
 				ListaPeriodoController controller=new ListaPeriodoController(new ListaPeriodoModel(), new ListaPeriodoView());
 				controller.initController();
 			}
