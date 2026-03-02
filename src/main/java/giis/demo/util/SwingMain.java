@@ -2,24 +2,25 @@ package giis.demo.util;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import giis.demo.tkrun.*; 
 import javax.swing.JPanel;
-
-import cd.login.diego.LoginController;
-import cd.login.diego.LoginModel;
-import cd.login.diego.LoginView;
-import cd.login.diego.UsuarioSesion;
 
 import cd.admin.pablo.periodo.PeriodoController;
 import cd.admin.pablo.periodo.PeriodoModel;
 import cd.admin.pablo.periodo.PeriodoView;
+import cd.login.diego.LoginController;
+import cd.login.diego.LoginModel;
+import cd.login.diego.LoginView;
+import cd.login.diego.UsuarioSesion;
+import cd.socio.pablo.listaActividades.ListaPeriodoController;
+import cd.socio.pablo.listaActividades.ListaPeriodoModel;
+import cd.socio.pablo.listaActividades.ListaPeriodoView;
 
 public class SwingMain {
 
@@ -147,17 +148,8 @@ public class SwingMain {
 						JOptionPane.WARNING_MESSAGE
 				);
 				return;
-		JButton btnListaActividades = new JButton("Ejecutar ListaActividades");
-		btnListaActividades.setBounds(51, 27, 149, 23);
-		btnListaActividades.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
-			public void actionPerformed(ActionEvent e) {
-				ListaPeriodoController controller=new ListaPeriodoController(new ListaPeriodoModel(), new ListaPeriodoView());
-				controller.initController();
 			}
-		});
-		frame.getContentPane().setLayout(null);
-		frame.getContentPane().add(btnListaActividades);
-
+			
 			cd.admin.diego.planact.PlanActCrearActividadController controller =
 					new cd.admin.diego.planact.PlanActCrearActividadController(
 							new cd.admin.diego.planact.PlanActCrearActividadModel(),
@@ -166,6 +158,22 @@ public class SwingMain {
 			controller.initController();
 		});
 		panelCentro.add(planificarActividad);
+		
+		/*
+		 * Ejecuta la lista de actividades	
+		 */
+			
+		JButton btnListaActividades = new JButton("Ejecutar ListaActividades");
+		//btnListaActividades.setBounds(51, 27, 149, 23);
+		btnListaActividades.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+			public void actionPerformed(ActionEvent e) {
+				ListaPeriodoController controller=new ListaPeriodoController(new ListaPeriodoModel(), new ListaPeriodoView());
+				controller.initController();
+			}
+		});
+		//frame.getContentPane().setLayout(null);
+		//frame.getContentPane().add(btnListaActividades);
+		panelCentro.add(btnListaActividades);
 
 		// =========================
 		// Gestionar Periodos (Administracion) (NUEVO botón + bloqueo)
