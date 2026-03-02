@@ -7,21 +7,28 @@ public class ActividadDTO {
 	private String nombre;
 	private String desc;
 	private int aforo;
-	private Date fechaInicio;
-	private Date fechaFin;
+	private String fecha_inicio;
+	private String fecha_fin;
 	private double precioSocio;
 	private double precioNoSocio;
 	
-	public ActividadDTO(String nombre, String desc, int aforo, Date fechaInicio, Date fechaFin, double precioSocio,
+	public ActividadDTO(String nombre, String desc, int aforo, String fechaInicio, String fechaFin, double precioSocio,
 			double precioNoSocio) {
 		this.nombre = nombre;
 		this.desc = desc;
 		this.aforo = aforo;
-		this.fechaInicio = fechaInicio;
-		this.fechaFin = fechaFin;
+		this.fecha_inicio = fechaInicio;
+		this.fecha_fin = fechaFin;
 		this.precioSocio = precioSocio;
 		this.precioNoSocio = precioNoSocio;
 	}
+	
+	//Necesario parque el DButil funcione
+	public ActividadDTO() {
+		
+	}
+	
+	/*Getters y setters de la clase ActividadDTO*/
 
 	public String getNombre() {return nombre;}
 
@@ -39,20 +46,20 @@ public class ActividadDTO {
 		this.aforo = aforo;
 	}
 
-	public Date getFechaInicio() {
-		return fechaInicio;
+	public String getFecha_inicio() {
+		return fecha_inicio;
 	}
 
-	public void setFechaInicio(Date fechaInicio) {
-		this.fechaInicio = fechaInicio;
+	public void setFecha_inicio(String fecha_inicio) {
+		this.fecha_inicio = fecha_inicio;
 	}
 
-	public Date getFechaFin() {
-		return fechaFin;
+	public String getFecha_fin() {
+		return fecha_fin;
 	}
 
-	public void setFechaFin(Date fechaFin) {
-		this.fechaFin = fechaFin;
+	public void setFecha_fin(String fecha_fin) {
+		this.fecha_fin = fecha_fin;
 	}
 
 	public double getPrecioSocio() {

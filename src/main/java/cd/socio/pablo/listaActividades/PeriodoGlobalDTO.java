@@ -7,8 +7,12 @@ public class PeriodoGlobalDTO {
 	private String fecha_fin;
 
 	
-	/*Constructor de la clase PeriodoGlobalDTO*/
+	/*COnstructor vació necesario para la clase DataBase*/
+	public PeriodoGlobalDTO() {
+		
+	}
 
+	/*Constructor de la clase PeriodoGlobalDTO*/
 	public PeriodoGlobalDTO(String nombre, String fechaInicio, String fechaFin) {
 		this.nombre = nombre;
 		this.fecha_inicio = fechaInicio;
@@ -25,20 +29,27 @@ public class PeriodoGlobalDTO {
 		this.nombre = nombre;
 	}
 
-	public String getFechaInicio() {
+	public String getFecha_inicio() {
 		return fecha_inicio;
 	}
 
-	public void setFechaInicio(String fechaInicio) {
+	public void setFecha_inicio(String fechaInicio) {
 		this.fecha_inicio = fechaInicio;
 	}
 
-	public String getFechaFin() {
+	public String getFecha_fin() {
 		return fecha_fin;
 	}
 
-	public void setFechaFin(String fechaFin) {
+	public void setFecha_fin(String fechaFin) {
 		this.fecha_fin = fechaFin;
 	}
+
+	@Override
+	public String toString() {
+		return this.nombre;
+	}
+	
+	
 	
 }

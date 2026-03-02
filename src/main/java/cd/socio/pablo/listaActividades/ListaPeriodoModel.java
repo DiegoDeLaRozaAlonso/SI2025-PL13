@@ -12,17 +12,25 @@ public class ListaPeriodoModel {
 	private Database db = new Database();
 	
 	
-	public String getFechaInicio() {
-		String sql = "SELECT fecha_inicio FROM Periodos WHERE nombre = ";
+	/*
+	 * Ya no se usan ya que sacamos las fechas directemente del objeto
+	 */
+	
+	/*public String getFechaInicio(String periodo) {
+		String sql = "SELECT fecha_inicio FROM Periodos WHERE nombre = ?";
 		
-		return sql;
+		List<PeriodoGlobalDTO> lista = db.executeQueryPojo(PeriodoGlobalDTO.class, sql, periodo);
+		
+		return (!lista.isEmpty()) ? lista.get(0).getFecha_inicio() : null;
 	}
 	
-	public String getFechaFin() {
-		String sql = "SELECT fecha_fin FROM Periodos WHERE nombre = ";
+	public String getFechaFin(String periodo) {
+		String sql = "SELECT fecha_fin FROM Periodos WHERE nombre = ?";
 		
-		return sql;
-	}
+		List<PeriodoGlobalDTO> lista = db.executeQueryPojo(PeriodoGlobalDTO.class, sql, periodo);
+		
+		return (!lista.isEmpty()) ? lista.get(0).getFecha_fin() : null;
+	}*/
 	
 	public List<PeriodoGlobalDTO> getPeriodoGlobal(){
 		
@@ -38,7 +46,7 @@ public class ListaPeriodoModel {
 		validateNotNull(fechaInicio, "La fecha de Inicio no puede ser nula");
 		validateNotNull(fechaFin, "La fecha de Fin no puede ser nula");
 		String sql = "SELECT nombre, descripcion AS desc, aforo, "
-	               + "fecha_inicio AS fechaInicio, fecha_fin AS fechaFin, "
+	               + "fecha_inicio, fecha_fin, "
 	               + "costo_socio AS precioSocio, costo_no_socio AS precioNoSocio "
 	               + "FROM Actividades WHERE fecha_inicio <= ? AND fecha_fin >= ?";
 		//String d = Util.dateToIsoString(periodo);
