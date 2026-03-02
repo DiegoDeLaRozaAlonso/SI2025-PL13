@@ -1,31 +1,51 @@
 package administracion;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
-import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
 
+// PDFBox
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+
 public class ReservaAdminModelo {
 
     private final Database db = new Database();
 
-    // Buscar socio por nombre o email (case-insensitive)
+    // Formato consistente para SQLite: "YYYY-MM-DD HH:MM:SS"
+    private static final DateTimeFormatter FMT =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     private static final String SQL_ID_SOCIO_BY_NOMBRE_O_EMAIL =
-        "select id_socio from Socios " +
+        "select id_socio, nombre from Socios " +
         "where lower(nombre)=lower(?) or lower(email)=lower(?) " +
         "limit 1";
 
-    // Buscar socio por id_socio (input numérico)
     private static final String SQL_EXISTE_SOCIO_BY_ID =
-        "select id_socio from Socios where id_socio=?";
+        "select id_socio, nombre from Socios where id_socio=?";
 
     private static final String SQL_ID_INSTALACION =
         "select id_instalacion from Instalaciones where nombre=?";
@@ -37,111 +57,284 @@ public class ReservaAdminModelo {
         "insert into Reservas(id_socio,id_instalacion,fecha_hora_inicio,duracion,costo,pagado,estado) " +
         "values(?,?,?,?,?,0,'activa')";
 
-    private static final String SQL_COUNT_SOLAPAMIENTO =
-        "select count(*) from Reservas " +
-        "where id_instalacion=? and estado='activa' " +
-        "and fecha_hora_inicio < ? " +
-        "and datetime(fecha_hora_inicio, '+' || duracion || ' minutes') > ?";
-
-    // ---------------------------------------------------
-    // 1️⃣ Calcular precio
-    // ---------------------------------------------------
+    // ==========================================================
+    // CALCULAR PRECIO
+    // ==========================================================
     public double calcularPrecio(String nombreInstalacion, int horas) {
-        Connection conn = null;
-        try {
-            conn = db.getConnection();
+        try (Connection conn = db.getConnection()) {
             QueryRunner qr = new QueryRunner();
 
-            Number idInst = qr.query(conn, SQL_ID_INSTALACION, new ScalarHandler<>(), nombreInstalacion);
+            Number idInst = qr.query(conn, SQL_ID_INSTALACION,
+                    new ScalarHandler<>(), nombreInstalacion);
             if (idInst == null) return 0;
 
-            Number precio = qr.query(conn, SQL_PRECIO, new ScalarHandler<>(), idInst.intValue());
+            Number precio = qr.query(conn, SQL_PRECIO,
+                    new ScalarHandler<>(), idInst.intValue());
             if (precio == null) return 0;
 
             return precio.doubleValue() * horas;
 
         } catch (SQLException e) {
             throw new ApplicationException(e);
-        } finally {
-            DbUtils.closeQuietly(conn);
         }
     }
 
-    // ---------------------------------------------------
-    // 2️⃣ Guardar reserva completa (busca en SOCIOS)
-    //    El parámetro socioInput puede ser: id_socio, email o nombre
-    // ---------------------------------------------------
-    public boolean guardarReserva(String socioInput,
-                                  String nombreInstalacion,
-                                  String fecha,
-                                  String hora,
-                                  int horas) {
+    // ==========================================================
+    // GUARDAR RESERVA
+    // ==========================================================
+    public boolean guardarReserva(
+            String socioInput,
+            String nombreInstalacion,
+            LocalDate fecha,
+            LocalTime horaInicio,
+            int horas) {
 
-        Connection conn = null;
-        try {
-            conn = db.getConnection();
+        try (Connection conn = db.getConnection()) {
+
             QueryRunner qr = new QueryRunner();
 
-            Integer idSocio = findIdSocio(conn, socioInput);
-            Number idInst   = qr.query(conn, SQL_ID_INSTALACION, new ScalarHandler<>(), nombreInstalacion);
+            // Validaciones
+            if (horas < 1 || horas > 3)
+                throw new ApplicationException("Solo se permiten 1, 2 o 3 horas");
 
-            if (idSocio == null || idInst == null)
-                return false;
+            if (horaInicio.getMinute() != 0)
+                throw new ApplicationException("La hora debe ser en punto");
 
-            LocalDate fechaLocal = LocalDate.parse(fecha); // yyyy-MM-dd
-            LocalTime horaLocal  = LocalTime.parse(hora);  // HH:mm
-            LocalDateTime inicio = LocalDateTime.of(fechaLocal, horaLocal);
+            LocalTime apertura = LocalTime.of(8, 0);
+            LocalTime cierre   = LocalTime.of(20, 0);
 
-            int duracionMinutos = horas * 60;
-            LocalDateTime fin   = inicio.plusMinutes(duracionMinutos);
+            if (horaInicio.isBefore(apertura) || horaInicio.isAfter(cierre))
+                throw new ApplicationException("Las reservas solo pueden empezar entre 08:00 y 20:00");
 
-            // Comprobar solapamiento
-            Number count = qr.query(conn, SQL_COUNT_SOLAPAMIENTO, new ScalarHandler<>(),
-                                    idInst.intValue(),
-                                    fin.toString(),     // fin B
-                                    inicio.toString()); // inicio B
+            LocalDateTime inicio = LocalDateTime.of(fecha, horaInicio);
+            if (inicio.isBefore(LocalDateTime.now()))
+                throw new ApplicationException("No se puede reservar en el pasado");
 
-            if (count != null && count.intValue() > 0)
-                return false;
+            int duracionMin = horas * 60;
+            LocalDateTime fin = inicio.plusMinutes(duracionMin);
 
-            // Insertar reserva
-            qr.update(conn, SQL_INS_RESERVA,
-                      idSocio.intValue(),
-                      idInst.intValue(),
-                      inicio.toString(),
-                      duracionMinutos,
-                      calcularPrecio(nombreInstalacion, horas));
+            if (fin.toLocalTime().isAfter(cierre))
+                throw new ApplicationException("La reserva no puede terminar después de las 20:00");
+
+            // Buscar socio (id + nombre)
+            int idSocio;
+            String nombreSocio;
+            Object[] socio = new QueryRunner().query(
+                    conn,
+                    SQL_ID_SOCIO_BY_NOMBRE_O_EMAIL,
+                    rs -> {
+                        if (rs.next()) {
+                            return new Object[]{rs.getInt(1), rs.getString(2)};
+                        }
+                        return null;
+                    },
+                    socioInput, socioInput
+            );
+
+            if (socio == null)
+                throw new ApplicationException("Socio no encontrado");
+
+            idSocio = (int) socio[0];
+            nombreSocio = (String) socio[1];
+
+            // Buscar instalación
+            Number idInst = qr.query(conn, SQL_ID_INSTALACION,
+                    new ScalarHandler<>(), nombreInstalacion);
+            if (idInst == null)
+                throw new ApplicationException("Instalación no encontrada");
+
+            // Normalizar fechas a TEXT (SQLite friendly)
+            String inicioStr = inicio.format(FMT);
+            String finStr    = fin.format(FMT);
+
+            // Transacción
+            boolean oldAutoCommit = conn.getAutoCommit();
+            conn.setAutoCommit(false);
+            try {
+                // Chequeo de conflicto (reservas + sesiones + planificaciones)
+                boolean conflicto = hayConflicto(conn,
+                        idInst.intValue(),
+                        inicioStr,
+                        finStr);
+
+                if (conflicto) {
+                    conn.rollback();
+                    throw new ApplicationException(
+                        "Conflicto de horario: ya existe una reserva/sesión/planificación en ese tramo");
+                }
+
+                // Insert
+                double precio = calcularPrecio(nombreInstalacion, horas);
+
+                qr.update(conn, SQL_INS_RESERVA,
+                        idSocio,
+                        idInst.intValue(),
+                        inicioStr,   // sin 'T'
+                        duracionMin,
+                        precio);
+
+                // Obtener id de la nueva reserva
+                Number idNuevaReserva = qr.query(conn,
+                        "SELECT last_insert_rowid()",
+                        new ScalarHandler<>());
+                int idReserva = idNuevaReserva.intValue();
+
+                // Generar resguardo PDF
+                generarResguardoPDF(
+                        idReserva,
+                        nombreSocio,
+                        idSocio,
+                        nombreInstalacion,
+                        fecha.toString(),
+                        horaInicio.toString(),
+                        horas,
+                        precio,
+                        false // pagado (lo gestionas aparte)
+                );
+
+                conn.commit();
+            } catch (SQLException | RuntimeException ex) {
+                try { conn.rollback(); } catch (SQLException ignore) {}
+                throw ex;
+            } finally {
+                try { conn.setAutoCommit(oldAutoCommit); } catch (SQLException ignore) {}
+            }
 
             return true;
 
         } catch (SQLException e) {
             throw new ApplicationException(e);
-        } finally {
-            DbUtils.closeQuietly(conn);
         }
     }
 
-    // ---------------------------------------------------
-    // 🔎 Buscar id_socio de forma flexible:
-    //    - Si es numérico: intenta id_socio
-    //    - Si no: por email o por nombre (case-insensitive)
-    // ---------------------------------------------------
-    private Integer findIdSocio(Connection conn, String socioInput) throws SQLException {
-        QueryRunner qr = new QueryRunner();
+    // ==========================================================
+    // COMPROBAR SOLAPAMIENTO (Reservas + Sesiones + Planificación)
+    // ==========================================================
+    private boolean hayConflicto(Connection conn,
+                                 int idInstalacion,
+                                 String inicioStr,  // yyyy-MM-dd HH:mm:ss
+                                 String finStr)     // yyyy-MM-dd HH:mm:ss
+            throws SQLException {
 
-        if (socioInput == null || socioInput.trim().isEmpty())
-            return null;
+        String sql =
+            // RESERVAS (usa fecha_hora_inicio + duracion)
+            "SELECT 1 FROM Reservas " +
+            "WHERE id_instalacion = ? " +
+            "AND estado = 'activa' " +
+            "AND datetime(?) < datetime(fecha_hora_inicio, '+' || duracion || ' minutes') " + // nueva_inicio < existente_fin
+            "AND datetime(?) > datetime(fecha_hora_inicio) " +                                // nueva_fin    > existente_inicio
+            "UNION " +
+            // SESIONES ACTIVIDAD (fecha + hora)
+            "SELECT 1 FROM SesionesActividad " +
+            "WHERE id_instalacion = ? " +
+            "AND datetime(?) < datetime(fecha || ' ' || hora_fin) " +
+            "AND datetime(?) > datetime(fecha || ' ' || hora_inicio) " +
+            "UNION " +
+            // PLANIFICACION ACTIVIDADES (fecha + hora)
+            "SELECT 1 FROM PlanificacionActividades " +
+            "WHERE id_instalacion = ? " +
+            "AND datetime(?) < datetime(fecha || ' ' || hora_fin) " +
+            "AND datetime(?) > datetime(fecha || ' ' || hora_inicio)";
 
-        String trimmed = socioInput.trim();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        // 1) Si es numérico, asumir que es id_socio
-        if (trimmed.matches("\\d+")) {
-            Number id = qr.query(conn, SQL_EXISTE_SOCIO_BY_ID, new ScalarHandler<>(), Integer.parseInt(trimmed));
-            return id == null ? null : id.intValue();
+            // RESERVAS
+            ps.setInt(1,  idInstalacion);
+            ps.setString(2, inicioStr);
+            ps.setString(3, finStr);
+
+            // SESIONES
+            ps.setInt(4,  idInstalacion);
+            ps.setString(5, inicioStr);
+            ps.setString(6, finStr);
+
+            // PLANIFICACIÓN
+            ps.setInt(7,  idInstalacion);
+            ps.setString(8, inicioStr);
+            ps.setString(9, finStr);
+
+            ResultSet rs = ps.executeQuery();
+            return rs.next(); // true → hay conflicto
         }
-
-        // 2) Si no es numérico, intentar por email o por nombre
-        Number id = qr.query(conn, SQL_ID_SOCIO_BY_NOMBRE_O_EMAIL, new ScalarHandler<>(), trimmed, trimmed);
-        return id == null ? null : id.intValue();
     }
+
+ // IMPORTS necesarios:
+ // import org.apache.pdfbox.pdmodel.PDDocument;
+ // import org.apache.pdfbox.pdmodel.PDPage;
+ // import org.apache.pdfbox.pdmodel.PDPageContentStream;
+ // import org.apache.pdfbox.pdmodel.font.PDFont;
+ // import org.apache.pdfbox.pdmodel.font.PDType1Font;
+ // import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+
+ private void generarResguardoPDF(
+         int idReserva,
+         String nombreSocio,
+         int idSocio,
+         String instalacion,
+         String fecha,
+         String horaInicio,
+         int horas,
+         double precio,
+         boolean pagado) {
+
+     // Crear carpeta si no existe
+     File carpeta = new File("resguardos");
+     if (!carpeta.exists())
+         carpeta.mkdirs();
+
+     String ruta = "resguardos/resguardo_" + idReserva + ".pdf";
+
+     try (PDDocument doc = new PDDocument()) {
+         PDPage page = new PDPage();
+         doc.addPage(page);
+
+         try (PDPageContentStream cs = new PDPageContentStream(doc, page)) {
+
+             PDFont fontTitle = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
+             PDFont fontBody  = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
+
+             // Título
+             cs.beginText();
+             cs.setFont(fontTitle, 20);
+             cs.newLineAtOffset(40, 750);
+             cs.showText("Resguardo de Reserva #" + idReserva);
+             cs.endText();
+
+             // Separador
+             cs.moveTo(40, 742);
+             cs.lineTo(555, 742);
+             cs.stroke();
+
+             // Contenido
+             int y = 720;
+             cs.setFont(fontBody, 12);
+
+             String[] texto = {
+                 "Socio: " + nombreSocio + " (ID " + idSocio + ")",
+                 "Instalación: " + instalacion,
+                 "Fecha reserva: " + fecha,
+                 "Hora inicio: " + horaInicio,
+                 "Duración: " + horas + " hora(s)",
+                 String.format("Precio: %.2f €", precio),
+                 "Pagado: " + (pagado ? "Sí" : "No"),
+                 "Fecha de emisión: " + LocalDate.now()
+             };
+
+             for (String linea : texto) {
+                 cs.beginText();
+                 cs.newLineAtOffset(40, y);
+                 cs.showText(linea);
+                 cs.endText();
+                 y -= 22;
+             }
+         }
+
+         doc.save(ruta);
+
+         // (Opcional) abrir automáticamente el PDF en el escritorio
+         // try { java.awt.Desktop.getDesktop().open(new File(ruta)); } catch (Exception ignore) {}
+     } catch (IOException e) {
+         throw new ApplicationException("Error creando PDF: " + e.getMessage());
+     }
+ }
 }

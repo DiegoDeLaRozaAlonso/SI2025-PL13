@@ -27,29 +27,14 @@ public class ReservaAdminControlador {
             }
         });
 
-        
-
         this.vista.getTextFNumHoras().getDocument().addDocumentListener(new DocumentListener() {
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                actualizarPrecio();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                actualizarPrecio();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                actualizarPrecio();
-            }
+            @Override public void insertUpdate(DocumentEvent e) { actualizarPrecio(); }
+            @Override public void removeUpdate(DocumentEvent e) { actualizarPrecio(); }
+            @Override public void changedUpdate(DocumentEvent e) { actualizarPrecio(); }
         });
     }
 
     private void actualizarPrecio() {
-
         String texto = vista.getTextFNumHoras().getText();
 
         if (texto.isEmpty()) {
@@ -75,21 +60,26 @@ public class ReservaAdminControlador {
     }
 
     private void realizarReserva() {
-
         try {
 
             String usuario = vista.getTextFUsuarios().getText().trim();
             String instalacion = vista.getTextFInstalaciones().getText().trim();
             String fechaTexto = vista.getTextFFecha().getText().trim();
             String horaTexto = vista.getTextFHora().getText().trim();
+            String horasTexto = vista.getTextFNumHoras().getText().trim();
 
-            int horas = Integer.parseInt(
-                    vista.getTextFNumHoras().getText().trim());
+            if (usuario.isEmpty() || instalacion.isEmpty()
+                    || fechaTexto.isEmpty() || horaTexto.isEmpty()
+                    || horasTexto.isEmpty()) {
 
-            // ✅ Solo 1, 2 o 3 horas
+                JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
+                return;
+            }
+
+            int horas = Integer.parseInt(horasTexto);
+
             if (horas < 1 || horas > 3) {
-                JOptionPane.showMessageDialog(null,
-                        "Solo se pueden reservar 1, 2 o 3 horas");
+                JOptionPane.showMessageDialog(null, "Solo se pueden reservar 1, 2 o 3 horas");
                 return;
             }
 
@@ -101,54 +91,40 @@ public class ReservaAdminControlador {
                     horaTexto,
                     DateTimeFormatter.ofPattern("HH:mm"));
 
-            // Hora en punto
             if (horaInicio.getMinute() != 0) {
-                JOptionPane.showMessageDialog(null,
-                        "La hora debe ser en punto (ej: 17:00)");
-                return;
-            }
-
-            // Entre 08:00 y 20:00
-            LocalTime apertura = LocalTime.of(8, 0);
-            LocalTime cierre = LocalTime.of(20, 0);
-
-            if (horaInicio.isBefore(apertura) || horaInicio.isAfter(cierre)) {
-                JOptionPane.showMessageDialog(null,
-                        "Las reservas solo pueden empezar entre 08:00 y 20:00");
-                return;
-            }
-
-            // Que no termine después de las 20:00
-            LocalTime horaFin = horaInicio.plusHours(horas);
-
-            if (horaFin.isAfter(cierre)) {
-                JOptionPane.showMessageDialog(null,
-                        "La reserva no puede terminar después de las 20:00");
+                JOptionPane.showMessageDialog(null, "La hora debe ser en punto (ej: 17:00)");
                 return;
             }
 
             boolean exito = modelo.guardarReserva(
-                    usuario, instalacion, fechaTexto, horaTexto, horas);
+                    usuario,
+                    instalacion,
+                    fecha,
+                    horaInicio,
+                    horas
+            );
 
             if (exito) {
-                JOptionPane.showMessageDialog(null,
-                        "Reserva realizada correctamente");
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Reserva realizada correctamente.\n" +
+                    "Se ha generado un resguardo PDF en la carpeta 'resguardos'."
+                );
             } else {
                 JOptionPane.showMessageDialog(null,
-                        "No se pudo realizar la reserva (usuario, instalación o solapamiento)");
+                        "No se pudo realizar la reserva");
             }
 
         } catch (DateTimeParseException e) {
-
             JOptionPane.showMessageDialog(null,
-                    "Revisa fecha (yyyy-MM-dd) y hora (HH:mm)");
+                    "Formato incorrecto. Fecha: yyyy-MM-dd | Hora: HH:mm");
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null,
+                    "El número de horas debe ser un número válido");
 
         } catch (Exception e) {
-
-            JOptionPane.showMessageDialog(null,
-                    "Error inesperado: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    
-    
 }

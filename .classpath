@@ -38,5 +38,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-app-3.0.6.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
