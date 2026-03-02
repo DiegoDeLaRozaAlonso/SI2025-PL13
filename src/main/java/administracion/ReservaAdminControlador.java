@@ -86,18 +86,46 @@ public class ReservaAdminControlador {
             int horas = Integer.parseInt(
                     vista.getTextFNumHoras().getText().trim());
 
-            if (horas <= 0) {
+            // ✅ Solo 1, 2 o 3 horas
+            if (horas < 1 || horas > 3) {
                 JOptionPane.showMessageDialog(null,
-                        "El número de horas debe ser mayor que 0");
+                        "Solo se pueden reservar 1, 2 o 3 horas");
                 return;
             }
 
-            // 🔥 VALIDAMOS AQUÍ
-            LocalDate.parse(fechaTexto,
+            LocalDate fecha = LocalDate.parse(
+                    fechaTexto,
                     DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            LocalTime.parse(horaTexto,
+            LocalTime horaInicio = LocalTime.parse(
+                    horaTexto,
                     DateTimeFormatter.ofPattern("HH:mm"));
+
+            // Hora en punto
+            if (horaInicio.getMinute() != 0) {
+                JOptionPane.showMessageDialog(null,
+                        "La hora debe ser en punto (ej: 17:00)");
+                return;
+            }
+
+            // Entre 08:00 y 20:00
+            LocalTime apertura = LocalTime.of(8, 0);
+            LocalTime cierre = LocalTime.of(20, 0);
+
+            if (horaInicio.isBefore(apertura) || horaInicio.isAfter(cierre)) {
+                JOptionPane.showMessageDialog(null,
+                        "Las reservas solo pueden empezar entre 08:00 y 20:00");
+                return;
+            }
+
+            // Que no termine después de las 20:00
+            LocalTime horaFin = horaInicio.plusHours(horas);
+
+            if (horaFin.isAfter(cierre)) {
+                JOptionPane.showMessageDialog(null,
+                        "La reserva no puede terminar después de las 20:00");
+                return;
+            }
 
             boolean exito = modelo.guardarReserva(
                     usuario, instalacion, fechaTexto, horaTexto, horas);

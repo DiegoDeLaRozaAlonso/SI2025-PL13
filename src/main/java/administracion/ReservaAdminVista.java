@@ -73,8 +73,8 @@ public class ReservaAdminVista {
 		lblUser.setBounds(20, 50, 90, 14);
 		frmReservaAdministracin.getContentPane().add(lblUser);
 		
-		JLabel lblDate = new JLabel("Fecha:");
-		lblDate.setBounds(20, 75, 90, 14);
+		JLabel lblDate = new JLabel("Fecha: (yyyy-mm-dd)");
+		lblDate.setBounds(20, 75, 104, 14);
 		frmReservaAdministracin.getContentPane().add(lblDate);
 		
 		JLabel lblHour = new JLabel("Hora:");
@@ -95,33 +95,33 @@ public class ReservaAdminVista {
 		frmReservaAdministracin.getContentPane().add(lblPrice);
 		
 		textFInstalaciones = new JTextField();
-		textFInstalaciones.setBounds(120, 22, 120, 20);
+		textFInstalaciones.setBounds(130, 22, 120, 20);
 		frmReservaAdministracin.getContentPane().add(textFInstalaciones);
 		textFInstalaciones.setColumns(10);
 		
 		textFUsuarios = new JTextField();
-		textFUsuarios.setBounds(120, 47, 120, 20);
+		textFUsuarios.setBounds(130, 47, 120, 20);
 		frmReservaAdministracin.getContentPane().add(textFUsuarios);
 		textFUsuarios.setColumns(10);
 		
 		textFFecha = new JTextField();
-		textFFecha.setBounds(120, 72, 120, 20);
+		textFFecha.setBounds(130, 72, 120, 20);
 		frmReservaAdministracin.getContentPane().add(textFFecha);
 		textFFecha.setColumns(10);
 		
 		textFHora = new JTextField();
-		textFHora.setBounds(120, 97, 120, 20);
+		textFHora.setBounds(130, 97, 120, 20);
 		frmReservaAdministracin.getContentPane().add(textFHora);
 		textFHora.setColumns(10);
 		
 		textFNumHoras = new JTextField();
-		textFNumHoras.setBounds(120, 122, 120, 20);
+		textFNumHoras.setBounds(130, 122, 120, 20);
 		frmReservaAdministracin.getContentPane().add(textFNumHoras);
 		textFNumHoras.setColumns(10);
 		
 		JComboBox cboxPayMethod = new JComboBox();
-		cboxPayMethod.setModel(new DefaultComboBoxModel(new String[] {"Tarjeta", "Mensualidad"}));
-		cboxPayMethod.setBounds(120, 146, 120, 22);
+		cboxPayMethod.setModel(new DefaultComboBoxModel(new String[] {"En el momento de uso", "Mensualidad"}));
+		cboxPayMethod.setBounds(130, 146, 150, 22);
 		frmReservaAdministracin.getContentPane().add(cboxPayMethod);
 		
 		btnReserv = new JButton("Reserva");
