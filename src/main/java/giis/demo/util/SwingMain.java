@@ -9,6 +9,10 @@ import java.awt.event.ActionEvent;
 import giis.demo.tkrun.*;
 import javax.swing.JPanel;
 
+import cd.socio.pablo.listaActividades.ListaPeriodoController;
+import cd.socio.pablo.listaActividades.ListaPeriodoModel;
+import cd.socio.pablo.listaActividades.ListaPeriodoView;
+
 /**
  * Punto de entrada principal que incluye botones para la ejecucion de las pantallas 
  * de las aplicaciones de ejemplo
@@ -52,16 +56,16 @@ public class SwingMain {
 		frame.setBounds(0, 0, 287, 185);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		
-		JButton btnEjecutarTkrun = new JButton("Ejecutar giis.demo.tkrun");
-		btnEjecutarTkrun.setBounds(51, 27, 149, 23);
-		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+		JButton btnListaActividades = new JButton("Ejecutar ListaActividades");
+		btnListaActividades.setBounds(51, 27, 149, 23);
+		btnListaActividades.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
-				CarrerasController controller=new CarrerasController(new CarrerasModel(), new CarrerasView());
+				ListaPeriodoController controller=new ListaPeriodoController(new ListaPeriodoModel(), new ListaPeriodoView());
 				controller.initController();
 			}
 		});
 		frame.getContentPane().setLayout(null);
-		frame.getContentPane().add(btnEjecutarTkrun);
+		frame.getContentPane().add(btnListaActividades);
 		
 			
 		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos en Blanco");
