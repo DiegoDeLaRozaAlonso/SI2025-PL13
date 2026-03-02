@@ -7,6 +7,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import giis.demo.tkrun.*; 
 import javax.swing.JPanel;
 
 import cd.login.diego.LoginController;
@@ -144,7 +147,16 @@ public class SwingMain {
 						JOptionPane.WARNING_MESSAGE
 				);
 				return;
+		JButton btnListaActividades = new JButton("Ejecutar ListaActividades");
+		btnListaActividades.setBounds(51, 27, 149, 23);
+		btnListaActividades.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+			public void actionPerformed(ActionEvent e) {
+				ListaPeriodoController controller=new ListaPeriodoController(new ListaPeriodoModel(), new ListaPeriodoView());
+				controller.initController();
 			}
+		});
+		frame.getContentPane().setLayout(null);
+		frame.getContentPane().add(btnListaActividades);
 
 			cd.admin.diego.planact.PlanActCrearActividadController controller =
 					new cd.admin.diego.planact.PlanActCrearActividadController(

@@ -198,5 +198,3 @@ CREATE TABLE Reduccion (
     FOREIGN KEY (id_socio) REFERENCES Socios(id_socio)
 );
 
-
-
