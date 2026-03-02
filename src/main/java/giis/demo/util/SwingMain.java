@@ -105,6 +105,8 @@ public class SwingMain {
 		});
 		panelCentro.add(btnCargarDatos);
 
+	/*	
+		
 		// =========================
 		// Ejecutar tkrun (botón original)
 		// =========================
@@ -119,6 +121,9 @@ public class SwingMain {
 		});
 		panelCentro.add(btnEjecutarTkrun);
 
+		*/
+		
+		
 		// =========================
 		// Ver disponibilidad (Socio) (botón original)
 		// =========================
