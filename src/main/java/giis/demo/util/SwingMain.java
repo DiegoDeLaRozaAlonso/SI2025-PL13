@@ -164,15 +164,12 @@ public class SwingMain {
 		 */
 			
 		JButton btnListaActividades = new JButton("Ejecutar ListaActividades");
-		//btnListaActividades.setBounds(51, 27, 149, 23);
 		btnListaActividades.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
 				ListaPeriodoController controller=new ListaPeriodoController(new ListaPeriodoModel(), new ListaPeriodoView());
 				controller.initController();
 			}
 		});
-		//frame.getContentPane().setLayout(null);
-		//frame.getContentPane().add(btnListaActividades);
 		panelCentro.add(btnListaActividades);
 
 		// =========================
