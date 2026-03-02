@@ -6,7 +6,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import giis.demo.tkrun.*;
+import giis.demo.tkrun.*; 
 import javax.swing.JPanel;
 
 import cd.socio.pablo.listaActividades.ListaPeriodoController;
