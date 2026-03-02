@@ -22,6 +22,7 @@ public class ListaPeriodoController {
 	public void initController() {
 		
 		vista.getComboBox().addActionListener(e -> SwingUtil.exceptionWrapper(() -> listaActividades()));
+		vista.getBotonVolver().addActionListener(e -> SwingUtil.exceptionWrapper(() -> vista.getFrame().dispose()));
 	
 	}
 	
