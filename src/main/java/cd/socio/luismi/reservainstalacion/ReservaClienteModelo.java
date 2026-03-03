@@ -98,7 +98,15 @@ public class ReservaClienteModelo {
 
             if (horaInicio.isBefore(apertura) || horaInicio.isAfter(cierre))
                 throw new ApplicationException("Las reservas solo pueden empezar entre 08:00 y 20:00");
-
+            
+            // Comprobamos para no permitir reservar más de 3 meses desde hoy
+            LocalDate limite = LocalDate.now().plusMonths(3);
+            if (fecha.isAfter(limite)) {
+                throw new ApplicationException(
+                    "No se pueden hacer reservas más de 3 meses después de hoy (límite: " + limite + ")"
+                );
+            }
+            
             LocalDateTime inicio = LocalDateTime.of(fecha, horaInicio);
             if (inicio.isBefore(LocalDateTime.now()))
                 throw new ApplicationException("No se puede reservar en el pasado");
