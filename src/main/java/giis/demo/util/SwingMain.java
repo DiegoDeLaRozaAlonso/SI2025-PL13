@@ -198,12 +198,9 @@ public class SwingMain {
 				    // Muestra la ventana (centrada respecto al frame principal)
 				    JFrame reservaFrame = vista.getFrame();
 				    reservaFrame.setLocationRelativeTo(frame);
-				    // Importante: evita cerrar TODA la app al cerrar esta ventana
 				    reservaFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				    reservaFrame.setVisible(true);
 				});
-
-				// ¡Asegúrate de añadir el botón correcto!
 				panelCentro.add(crearReservaAdmin);
 
 		// =========================
