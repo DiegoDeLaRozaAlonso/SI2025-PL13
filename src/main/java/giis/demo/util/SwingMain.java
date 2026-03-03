@@ -202,6 +202,38 @@ public class SwingMain {
 				    reservaFrame.setVisible(true);
 				});
 				panelCentro.add(crearReservaAdmin);
+		
+		//Crear reserva admin
+				JButton crearReservaSocio = new JButton("Crear Reserva Socio");
+				crearReservaSocio.addActionListener(e -> {
+
+				    if (sesion.isAdmin()) {
+				        JOptionPane.showMessageDialog(
+				                frame,
+				                "No tienes permisos para acceder a esta funcionalidad.\n"
+				                + "Esta ventana es para socios.",
+				                "Acceso denegado",
+				                JOptionPane.WARNING_MESSAGE
+				        );
+				        return;
+				    }
+				    String nomreUsuario=sesion.getNombre();
+				    // Crea vista y modelo
+				    cd.socio.luismi.reservainstalacion.ReservaClienteVista vista = new cd.socio.luismi.reservainstalacion.ReservaClienteVista();
+				    cd.socio.luismi.reservainstalacion.ReservaClienteModelo modelo = new cd.socio.luismi.reservainstalacion.ReservaClienteModelo();
+
+				    // Crea el controlador (vista, modelo)
+				    
+				    cd.socio.luismi.reservainstalacion.ReservaClienteControlador controller =
+				            new cd.socio.luismi.reservainstalacion.ReservaClienteControlador(vista, modelo, nomreUsuario);
+
+				    // Muestra la ventana (centrada respecto al frame principal)
+				    JFrame reservaFrame = vista.getFrame();
+				    reservaFrame.setLocationRelativeTo(frame);
+				    reservaFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				    reservaFrame.setVisible(true);
+				});
+				panelCentro.add(crearReservaSocio);
 
 		// =========================
 		// Gestionar Periodos (Administracion) (NUEVO botón + bloqueo)

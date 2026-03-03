@@ -7,29 +7,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
-
-import giis.demo.util.ApplicationException;
-import giis.demo.util.Database;
-
 // PDFBox
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+
+import giis.demo.util.ApplicationException;
+import giis.demo.util.Database;
 
 public class ReservaClienteModelo {
 
@@ -207,9 +200,6 @@ public class ReservaClienteModelo {
         }
     }
 
-    // ==========================================================
-    // COMPROBAR SOLAPAMIENTO (Reservas + Sesiones + Planificación)
-    // ==========================================================
     private boolean hayConflicto(Connection conn,
                                  int idInstalacion,
                                  String inicioStr,  // yyyy-MM-dd HH:mm:ss
@@ -258,15 +248,7 @@ public class ReservaClienteModelo {
         }
     }
 
- // IMPORTS necesarios:
- // import org.apache.pdfbox.pdmodel.PDDocument;
- // import org.apache.pdfbox.pdmodel.PDPage;
- // import org.apache.pdfbox.pdmodel.PDPageContentStream;
- // import org.apache.pdfbox.pdmodel.font.PDFont;
- // import org.apache.pdfbox.pdmodel.font.PDType1Font;
- // import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
-
- private void generarResguardoPDF(
+    private void generarResguardoPDF(
          int idReserva,
          String nombreSocio,
          int idSocio,

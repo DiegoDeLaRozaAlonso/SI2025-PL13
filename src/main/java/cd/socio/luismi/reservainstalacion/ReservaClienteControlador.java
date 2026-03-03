@@ -15,24 +15,22 @@ public class ReservaClienteControlador {
 
     private ReservaClienteVista vista;
     private ReservaClienteModelo modelo;
+    private String UserName;
 
-    public ReservaClienteControlador(ReservaClienteVista vista, ReservaClienteModelo modelo) {
-        this.vista = vista;
-        this.modelo = modelo;
+    public ReservaClienteControlador(ReservaClienteVista vista, ReservaClienteModelo modelo, String nombreUsuario) {
+		this.vista = vista;
+		this.modelo = modelo;
+		this.UserName = nombreUsuario;
+			
+		this.vista.getBtnReserv().addActionListener(e -> realizarReserva());
+			
+		this.vista.getTextFNumHoras().getDocument().addDocumentListener(new DocumentListener() {
+			@Override public void insertUpdate(DocumentEvent e) { actualizarPrecio(); }
+			@Override public void removeUpdate(DocumentEvent e) { actualizarPrecio(); }
+			@Override public void changedUpdate(DocumentEvent e) { actualizarPrecio(); }
+		});
+	}
 
-        this.vista.getBtnReserv().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                realizarReserva();
-            }
-        });
-
-        this.vista.getTextFNumHoras().getDocument().addDocumentListener(new DocumentListener() {
-            @Override public void insertUpdate(DocumentEvent e) { actualizarPrecio(); }
-            @Override public void removeUpdate(DocumentEvent e) { actualizarPrecio(); }
-            @Override public void changedUpdate(DocumentEvent e) { actualizarPrecio(); }
-        });
-    }
 
     private void actualizarPrecio() {
         String texto = vista.getTextFNumHoras().getText();
@@ -62,7 +60,7 @@ public class ReservaClienteControlador {
     private void realizarReserva() {
         try {
 
-            String usuario = vista.getTextFUsuarios().getText().trim();
+            String usuario = UserName;
             String instalacion = vista.getTextFInstalaciones().getText().trim();
             String fechaTexto = vista.getTextFFecha().getText().trim();
             String horaTexto = vista.getTextFHora().getText().trim();

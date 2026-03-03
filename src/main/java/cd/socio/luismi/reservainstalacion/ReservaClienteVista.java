@@ -18,35 +18,13 @@ import javax.swing.text.AttributeSet;
 
 public class ReservaClienteVista {
 
-	private JFrame frmReservaAdministracin;
+	private JFrame frmReservaSocio;
 	private JTextField textFInstalaciones;
-	private JTextField textFUsuarios;
 	private JTextField textFFecha;
 	private JTextField textFHora;
 	private JTextField textFNumHoras;
 	private JButton btnReserv;
 	private JLabel lblPrecio;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) { 
-
-	    EventQueue.invokeLater(() -> {
-
-	        try {
-	            ReservaClienteVista vista = new ReservaClienteVista();
-	            ReservaClienteModelo modelo = new ReservaClienteModelo();
-	            new ReservaClienteControlador(vista, modelo);
-
-	            vista.getFrame().setVisible(true);
-
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-
-	    });
-	}
 
 	/**
 	 * Create the application.
@@ -60,80 +38,71 @@ public class ReservaClienteVista {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmReservaAdministracin = new JFrame();
-		frmReservaAdministracin.setTitle("Reserva Administración");
-		frmReservaAdministracin.setBounds(100, 100, 450, 300);
-		frmReservaAdministracin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmReservaAdministracin.getContentPane().setLayout(null);
+		frmReservaSocio = new JFrame();
+		frmReservaSocio.setTitle("Reserva Socio");
+		frmReservaSocio.setBounds(100, 100, 450, 300);
+		frmReservaSocio.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmReservaSocio.getContentPane().setLayout(null);
 		
 		JLabel lblInstal = new JLabel("Instalaciones:");
 		lblInstal.setBounds(20, 25, 90, 14);
-		frmReservaAdministracin.getContentPane().add(lblInstal);
-		
-		JLabel lblUser = new JLabel("Usuario:");
-		lblUser.setBounds(20, 50, 90, 14);
-		frmReservaAdministracin.getContentPane().add(lblUser);
+		frmReservaSocio.getContentPane().add(lblInstal);
 		
 		JLabel lblDate = new JLabel("Fecha: (yyyy-mm-dd)");
-		lblDate.setBounds(20, 75, 104, 14);
-		frmReservaAdministracin.getContentPane().add(lblDate);
+		lblDate.setBounds(20, 50, 104, 14);
+		frmReservaSocio.getContentPane().add(lblDate);
 		
 		JLabel lblHour = new JLabel("Hora:");
-		lblHour.setBounds(20, 100, 90, 14);
-		frmReservaAdministracin.getContentPane().add(lblHour);
+		lblHour.setBounds(20, 75, 90, 14);
+		frmReservaSocio.getContentPane().add(lblHour);
 		
 		JLabel lblNunHours = new JLabel("Numero de Horas: ");
-		lblNunHours.setBounds(20, 125, 90, 14);
-		frmReservaAdministracin.getContentPane().add(lblNunHours);
+		lblNunHours.setBounds(20, 100, 90, 14);
+		frmReservaSocio.getContentPane().add(lblNunHours);
 		
 		JLabel lblPayMethod = new JLabel("Forma de Pago: ");
-		lblPayMethod.setBounds(20, 150, 90, 14);
-		frmReservaAdministracin.getContentPane().add(lblPayMethod);
+		lblPayMethod.setBounds(20, 125, 90, 14);
+		frmReservaSocio.getContentPane().add(lblPayMethod);
 		
 		JLabel lblPrice = new JLabel("Precio:");
 		lblPrice.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblPrice.setBounds(20, 215, 80, 35);
-		frmReservaAdministracin.getContentPane().add(lblPrice);
+		frmReservaSocio.getContentPane().add(lblPrice);
 		
 		textFInstalaciones = new JTextField();
-		textFInstalaciones.setBounds(130, 22, 120, 20);
-		frmReservaAdministracin.getContentPane().add(textFInstalaciones);
+		textFInstalaciones.setBounds(134, 22, 120, 20);
+		frmReservaSocio.getContentPane().add(textFInstalaciones);
 		textFInstalaciones.setColumns(10);
 		
-		textFUsuarios = new JTextField();
-		textFUsuarios.setBounds(130, 47, 120, 20);
-		frmReservaAdministracin.getContentPane().add(textFUsuarios);
-		textFUsuarios.setColumns(10);
-		
 		textFFecha = new JTextField();
-		textFFecha.setBounds(130, 72, 120, 20);
-		frmReservaAdministracin.getContentPane().add(textFFecha);
+		textFFecha.setBounds(134, 47, 120, 20);
+		frmReservaSocio.getContentPane().add(textFFecha);
 		textFFecha.setColumns(10);
 		
 		textFHora = new JTextField();
-		textFHora.setBounds(130, 97, 120, 20);
-		frmReservaAdministracin.getContentPane().add(textFHora);
+		textFHora.setBounds(134, 72, 120, 20);
+		frmReservaSocio.getContentPane().add(textFHora);
 		textFHora.setColumns(10);
 		
 		textFNumHoras = new JTextField();
-		textFNumHoras.setBounds(130, 122, 120, 20);
-		frmReservaAdministracin.getContentPane().add(textFNumHoras);
+		textFNumHoras.setBounds(134, 97, 120, 20);
+		frmReservaSocio.getContentPane().add(textFNumHoras);
 		textFNumHoras.setColumns(10);
 		
 		JComboBox cboxPayMethod = new JComboBox();
 		cboxPayMethod.setModel(new DefaultComboBoxModel(new String[] {"En el momento de uso", "Mensualidad"}));
-		cboxPayMethod.setBounds(130, 146, 150, 22);
-		frmReservaAdministracin.getContentPane().add(cboxPayMethod);
+		cboxPayMethod.setBounds(134, 121, 150, 22);
+		frmReservaSocio.getContentPane().add(cboxPayMethod);
 		
 		btnReserv = new JButton("Reserva");
 		btnReserv.setBounds(335, 223, 89, 23);
-		frmReservaAdministracin.getContentPane().add(btnReserv);
+		frmReservaSocio.getContentPane().add(btnReserv);
 		
 		lblPrecio = new JLabel("0.00€");
 		lblPrecio.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrecio.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblPrecio.setBounds(89, 215, 80, 35);
-		frmReservaAdministracin.getContentPane().add(lblPrecio);
+		frmReservaSocio.getContentPane().add(lblPrecio);
 		
 		limitarSoloNumeros(textFNumHoras);//llamada a nuestra funcion para limitar la entrada de datos
 		limitarHora(textFHora); //llama pa limitar lo que se puede poner en la hora 
@@ -147,14 +116,6 @@ public class ReservaClienteVista {
 
 	public void setTextFInstalaciones(JTextField textFInstalaciones) {
 		this.textFInstalaciones = textFInstalaciones;
-	}
-
-	public JTextField getTextFUsuarios() {
-		return textFUsuarios;
-	}
-
-	public void setTextFUsuarios(JTextField textFUsuarios) {
-		this.textFUsuarios = textFUsuarios;
 	}
 
 	public JTextField getTextFFecha() {
@@ -194,7 +155,7 @@ public class ReservaClienteVista {
 	}
 	
 	public JFrame getFrame() { //Necesario para conectar Modelo y Vista
-	    return frmReservaAdministracin;
+	    return frmReservaSocio;
 	}
 	
 	private void limitarSoloNumeros(JTextField campo) { //No se podra poner en una caja nada que no sean numeros
