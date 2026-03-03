@@ -98,6 +98,14 @@ public class ReservaAdminModelo {
 
             if (horaInicio.isBefore(apertura) || horaInicio.isAfter(cierre))
                 throw new ApplicationException("Las reservas solo pueden empezar entre 08:00 y 20:00");
+            
+            // Comprobamos para no permitir reservar más de 3 meses desde hoy
+            LocalDate limite = LocalDate.now().plusMonths(3);
+            if (fecha.isAfter(limite)) {
+                throw new ApplicationException(
+                    "No se pueden hacer reservas más de 3 meses después de hoy (límite: " + limite + ")"
+                );
+            }
 
             LocalDateTime inicio = LocalDateTime.of(fecha, horaInicio);
             if (inicio.isBefore(LocalDateTime.now()))
@@ -251,15 +259,7 @@ public class ReservaAdminModelo {
         }
     }
 
- // IMPORTS necesarios:
- // import org.apache.pdfbox.pdmodel.PDDocument;
- // import org.apache.pdfbox.pdmodel.PDPage;
- // import org.apache.pdfbox.pdmodel.PDPageContentStream;
- // import org.apache.pdfbox.pdmodel.font.PDFont;
- // import org.apache.pdfbox.pdmodel.font.PDType1Font;
- // import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
-
- private void generarResguardoPDF(
+    private void generarResguardoPDF(
          int idReserva,
          String nombreSocio,
          int idSocio,
