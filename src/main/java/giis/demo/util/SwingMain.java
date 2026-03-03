@@ -270,25 +270,47 @@ public class SwingMain {
 		JButton btnReservarActividad = new JButton("Reservar Actividad");
 		btnReservarActividad.setBounds(28, 129, 205, 23);
 		btnReservarActividad.addActionListener(new ActionListener() { //NOSONAR __codigo__ __autogenerado__
-		    public void actionPerformed(ActionEvent e) {
+		   
+			public void actionPerformed(ActionEvent e) {
+				if (!sesion.isAdmin()) {
+					JOptionPane.showMessageDialog(
+							frame,
+							"No tienes permisos para acceder a esta funcionalidad.\n"
+							+ "Solo un administrador puede acceder.",
+							"Acceso denegado",
+							JOptionPane.WARNING_MESSAGE
+					);
+					return;
+				}
 		        ReservarActividadController controller = new ReservarActividadController(
 		            new ReservarActividadModel(), new ReservarActividadView());
 		        controller.initController();
 		    }
 		});
-		frame.getContentPane().add(btnReservarActividad);
+		panelCentro.add(btnReservarActividad);
+
 
 		// BOTÓN VISUALIZAR RESERVAS
 		JButton btnVisualizacionReservas = new JButton("Visualización Reservas");
 		btnVisualizacionReservas.setBounds(28, 163, 205, 23);
 		btnVisualizacionReservas.addActionListener(new ActionListener() { //NOSONAR __codigo__ __autogenerado__
 		    public void actionPerformed(ActionEvent e) {
+		    	if (!sesion.isAdmin()) {
+					JOptionPane.showMessageDialog(
+							frame,
+							"No tienes permisos para acceder a esta funcionalidad.\n"
+							+ "Solo un administrador puede acceder.",
+							"Acceso denegado",
+							JOptionPane.WARNING_MESSAGE
+					);
+					return;
+				}
 		        VisualizacionReservasController controller = new VisualizacionReservasController(
 		            new VisualizacionReservasModel(), new VisualizacionReservasView());
 		        controller.initController();
 		    }
 		});
-		frame.getContentPane().add(btnVisualizacionReservas);
+		panelCentro.add(btnVisualizacionReservas);
 	
 		
 		
