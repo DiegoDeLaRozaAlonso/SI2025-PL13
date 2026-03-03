@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.ModuleLayer.Controller;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -12,6 +11,12 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import cd.admin.Alejandro.Reserva.ReservarActividadController;
+import cd.admin.Alejandro.Reserva.ReservarActividadModel;
+import cd.admin.Alejandro.Reserva.ReservarActividadView;
+import cd.admin.Alejandro.Visualizacion.VisualizacionReservasController;
+import cd.admin.Alejandro.Visualizacion.VisualizacionReservasModel;
+import cd.admin.Alejandro.Visualizacion.VisualizacionReservasView;
 import cd.admin.pablo.periodo.PeriodoController;
 import cd.admin.pablo.periodo.PeriodoModel;
 import cd.admin.pablo.periodo.PeriodoView;
@@ -260,6 +265,33 @@ public class SwingMain {
 		});
 		panelCentro.add(btnEjecutarPeriodo);
 
+		
+		// BOTÓN RESERVAR ACTIVIDAD
+		JButton btnReservarActividad = new JButton("Reservar Actividad");
+		btnReservarActividad.setBounds(28, 129, 205, 23);
+		btnReservarActividad.addActionListener(new ActionListener() { //NOSONAR __codigo__ __autogenerado__
+		    public void actionPerformed(ActionEvent e) {
+		        ReservarActividadController controller = new ReservarActividadController(
+		            new ReservarActividadModel(), new ReservarActividadView());
+		        controller.initController();
+		    }
+		});
+		frame.getContentPane().add(btnReservarActividad);
+
+		// BOTÓN VISUALIZAR RESERVAS
+		JButton btnVisualizacionReservas = new JButton("Visualización Reservas");
+		btnVisualizacionReservas.setBounds(28, 163, 205, 23);
+		btnVisualizacionReservas.addActionListener(new ActionListener() { //NOSONAR __codigo__ __autogenerado__
+		    public void actionPerformed(ActionEvent e) {
+		        VisualizacionReservasController controller = new VisualizacionReservasController(
+		            new VisualizacionReservasModel(), new VisualizacionReservasView());
+		        controller.initController();
+		    }
+		});
+		frame.getContentPane().add(btnVisualizacionReservas);
+	
+		
+		
 		// =========================
 		// Panel inferior: Cambiar de usuario (abajo derecha)
 		// =========================
