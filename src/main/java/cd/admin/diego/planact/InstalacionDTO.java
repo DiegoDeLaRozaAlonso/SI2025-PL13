@@ -1,9 +1,5 @@
 package cd.admin.diego.planact;
 
-/**
- * DTO simple para poblar el combo de instalaciones.
- * OJO: nombres en camelCase para que DbUtils mapee bien.
- */
 public class InstalacionDTO {
 	private int idInstalacion;
 	private String nombre;
@@ -24,6 +20,7 @@ public class InstalacionDTO {
 
 	@Override
 	public String toString() {
-		return nombre + " (" + tipo + ") - cap. " + capacidad;
+		String cap = (capacidad == null) ? "-" : capacidad.toString();
+		return nombre + " (" + tipo + ") - cap. " + cap;
 	}
 }
