@@ -129,7 +129,7 @@ public class SwingMain {
 		// =========================
 		// Crear/Planificar actividad (Administracion) (botón original + bloqueo)
 		// =========================
-		JButton planificarActividad = new JButton("Crear/Planificar actividad (Administracion)");
+		JButton planificarActividad = new JButton("Planificar actividad (Administracion)");
 		planificarActividad.addActionListener(e -> {
 
 			if (!sesion.isAdmin()) {
