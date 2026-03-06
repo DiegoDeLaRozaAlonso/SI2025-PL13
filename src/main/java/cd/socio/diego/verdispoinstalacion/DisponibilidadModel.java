@@ -42,7 +42,8 @@ public class DisponibilidadModel {
 		};
 	}
 
-	public TableModel getDisponibilidadTableModel(int idInstalacion, LocalDate fecha) {
+	// CAMBIO: añadimos idSocioLogueado
+	public TableModel getDisponibilidadTableModel(int idInstalacion, LocalDate fecha, int idSocioLogueado) {
 
 		HorarioDTO horario = getHorarioInstalacion(idInstalacion, fecha);
 		DefaultTableModel tm = baseTableModel();
@@ -80,7 +81,14 @@ public class DisponibilidadModel {
 			if (e == null) {
 				tm.addRow(new Object[] { t.format(HHMM), "LIBRE", "" });
 			} else {
-				tm.addRow(new Object[] { t.format(HHMM), "OCUPADA", e.getDetalle() });
+				String detalle = e.getDetalle();
+
+				// ✅ Si el evento es una reserva y es del socio logueado, lo marcamos
+				if (e.getIdSocio() != null && e.getIdSocio().intValue() == idSocioLogueado) {
+					detalle = detalle + " — Esta reserva es tuya";
+				}
+
+				tm.addRow(new Object[] { t.format(HHMM), "OCUPADA", detalle });
 			}
 		}
 
@@ -131,11 +139,13 @@ public class DisponibilidadModel {
 		List<EventoOcupacionDTO> eventos = new ArrayList<>();
 
 		// 1) Reservas (activa o completada)
+		// CAMBIO: traemos id_socio AS idSocio
 		String sqlReservas = ""
 				+ "SELECT "
 				+ "time(fecha_hora_inicio) AS horaInicio, "
 				+ "time(datetime(fecha_hora_inicio, '+' || duracion || ' minutes')) AS horaFin, "
-				+ "('Reserva #' || id_reserva || ' (' || estado || ')') AS detalle "
+				+ "('Reserva #' || id_reserva || ' (' || estado || ')') AS detalle, "
+				+ "id_socio AS idSocio "
 				+ "FROM Reservas "
 				+ "WHERE id_instalacion = ? "
 				+ "AND date(fecha_hora_inicio) = ? "
@@ -143,12 +153,13 @@ public class DisponibilidadModel {
 
 		eventos.addAll(db.executeQueryPojo(EventoOcupacionDTO.class, sqlReservas, idInstalacion, fecha.toString()));
 
-		// 2) SesionesActividad
+		// 2) SesionesActividad (idSocio no aplica)
 		String sqlSesiones = ""
 				+ "SELECT "
 				+ "sa.hora_inicio AS horaInicio, "
 				+ "sa.hora_fin AS horaFin, "
-				+ "('Sesión: ' || a.nombre) AS detalle "
+				+ "('Sesión: ' || a.nombre) AS detalle, "
+				+ "NULL AS idSocio "
 				+ "FROM SesionesActividad sa "
 				+ "JOIN Actividades a ON a.id_actividad = sa.id_actividad "
 				+ "WHERE sa.id_instalacion = ? "
@@ -156,12 +167,13 @@ public class DisponibilidadModel {
 
 		eventos.addAll(db.executeQueryPojo(EventoOcupacionDTO.class, sqlSesiones, idInstalacion, fecha.toString()));
 
-		// 3) PlanificacionActividades
+		// 3) PlanificacionActividades (idSocio no aplica)
 		String sqlPlan = ""
 				+ "SELECT "
 				+ "pa.hora_inicio AS horaInicio, "
 				+ "pa.hora_fin AS horaFin, "
-				+ "('Planificación: ' || a.nombre) AS detalle "
+				+ "('Planificación: ' || a.nombre) AS detalle, "
+				+ "NULL AS idSocio "
 				+ "FROM PlanificacionActividades pa "
 				+ "JOIN Actividades a ON a.id_actividad = pa.id_actividad "
 				+ "WHERE pa.id_instalacion = ? "

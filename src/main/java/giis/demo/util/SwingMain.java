@@ -120,7 +120,8 @@ public class SwingMain {
 			cd.socio.diego.verdispoinstalacion.DisponibilidadController controller =
 					new cd.socio.diego.verdispoinstalacion.DisponibilidadController(
 							new cd.socio.diego.verdispoinstalacion.DisponibilidadModel(),
-							new cd.socio.diego.verdispoinstalacion.DisponibilidadView()
+							new cd.socio.diego.verdispoinstalacion.DisponibilidadView(),
+							sesion.getId() // ✅ PASAMOS EL SOCIO LOGUEADO
 					);
 			controller.initController();
 		});

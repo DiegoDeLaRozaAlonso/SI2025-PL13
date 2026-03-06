@@ -16,9 +16,14 @@ public class DisponibilidadController {
 	private final DisponibilidadModel model;
 	private final DisponibilidadView view;
 
-	public DisponibilidadController(DisponibilidadModel m, DisponibilidadView v) {
+	// NUEVO
+	private final int idSocioLogueado;
+
+	// CAMBIO: añadimos idSocioLogueado al constructor
+	public DisponibilidadController(DisponibilidadModel m, DisponibilidadView v, int idSocioLogueado) {
 		this.model = m;
 		this.view = v;
+		this.idSocioLogueado = idSocioLogueado;
 		initView();
 	}
 
@@ -80,7 +85,8 @@ public class DisponibilidadController {
 
 		LocalDate fecha = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-		TableModel tm = model.getDisponibilidadTableModel(inst.getIdInstalacion(), fecha);
+		// CAMBIO: pasamos el id del socio logueado
+		TableModel tm = model.getDisponibilidadTableModel(inst.getIdInstalacion(), fecha, idSocioLogueado);
 		view.getTabla().setModel(tm);
 
 		// ✅ NO llamar a autoAdjustColumns aquí (te rompe el ancho "hasta la derecha")
