@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class ActividadDTO {
 	
+	private int id;
 	private String nombre;
 	private String desc;
 	private int aforo;
@@ -29,8 +30,12 @@ public class ActividadDTO {
 	}
 	
 	/*Getters y setters de la clase ActividadDTO*/
+	
+	
 
 	public String getNombre() {return nombre;}
+
+	public int getId() {return id;}
 
 	public void setNombre(String nombre) {this.nombre = nombre;}
 

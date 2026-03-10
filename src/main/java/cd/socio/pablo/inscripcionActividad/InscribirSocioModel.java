@@ -7,7 +7,7 @@ import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
 import giis.demo.util.Util;
 
-public class ListaPeriodoModel {
+public class InscribirSocioModel {
 
 	private Database db = new Database();
 	
@@ -39,8 +39,15 @@ public class ListaPeriodoModel {
 		return db.executeQueryPojo(PeriodoGlobalDTO.class, sql);
 	}*/
 	
+	public void inscribirSocioActividad(SocioDTO socio, ActividadDTO actividad) {
+		String sql = "INSERT INTO Inscripciones (id_actividad, id_socio, nombre_no_socio, fecha_inscripcion, estado, pagado, tipo) "
+				+ "VALUES (?, ?, NULL, ?, ?, ?, 'socio')";
+		db.executeUpdate(sql, actividad.getId(), socio.getId(), , , );
+	}
+	
 	/**
 	 * Obtiene la lista de carreras activas en forma objetos para una fecha de inscripcion dada
+	 * @return List<ActividadDTO>
 	 */
 	public List<ActividadDTO> getListaActividades(String fechaInicio, String fechaFin) {
 		validateNotNull(fechaInicio, "La fecha de Inicio no puede ser nula");

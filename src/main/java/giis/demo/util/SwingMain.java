@@ -24,6 +24,9 @@ import cd.login.diego.LoginController;
 import cd.login.diego.LoginModel;
 import cd.login.diego.LoginView;
 import cd.login.diego.UsuarioSesion;
+import cd.socio.pablo.inscripcionActividad.InscribirSocioController;
+import cd.socio.pablo.inscripcionActividad.InscribirSocioModel;
+import cd.socio.pablo.inscripcionActividad.InscribirSocioView;
 import cd.socio.pablo.listaActividades.ListaPeriodoController;
 import cd.socio.pablo.listaActividades.ListaPeriodoModel;
 import cd.socio.pablo.listaActividades.ListaPeriodoView;
@@ -181,7 +184,15 @@ public class SwingMain {
 		/*
 		 * Un usuario se inscribe a si mismo
 		 */
-		
+		JButton btnInscribirUsuario = new JButton("Inscripcion Actividad (Socio)");
+		btnInscribirUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				InscribirSocioController controller = new InscribirSocioController(new InscribirSocioModel(), new InscribirSocioView());
+				controller.initController();
+			}
+		});
+		panelCentro.add(btnInscribirUsuario);
 		
 		
 		

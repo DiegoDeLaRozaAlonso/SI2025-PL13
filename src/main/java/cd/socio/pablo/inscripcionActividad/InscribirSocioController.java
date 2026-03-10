@@ -1,17 +1,16 @@
 package cd.socio.pablo.inscripcionActividad;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.Date;
 import java.util.List;
 
 import giis.demo.util.SwingUtil;
 
 public class InscribirSocioController {
 	
-	private ListaPeriodoModel model;
+	private InscribirSocioModel model;
 	private InscribirSocioView vista;
 	
-	public InscribirSocioController(ListaPeriodoModel m, InscribirSocioView v) {
+	public InscribirSocioController(InscribirSocioModel m, InscribirSocioView v) {
 		this.model = m;
 		this.vista = v;
 		//no hay inicializacion especifica del modelo, solo de la vista
@@ -19,27 +18,33 @@ public class InscribirSocioController {
 		this.initController();
 	}
 	
+	
 	public void initController() {
 		
 		vista.getBotonVolver().addActionListener(e -> SwingUtil.exceptionWrapper(() -> vista.getFrame().dispose()));
+		vista.getBotonListarActividades().addActionListener(e -> SwingUtil.exceptionWrapper(() -> listaActividades()));
+		vista.getBotonInscribir().addActionListener(e -> SwingUtil.exceptionWrapper(() -> vista.getFrame().dispose()));
 	
 	}
 	
-	/*private void getFechas() {
-		vista.getFechaInicio().getDate();
-		vista.getFechaFin().getDate();
-	}*/
-	
 	private void listaActividades() {
+		/*Date dateInicio = vista.getFechaInicio().getDate();
+		Date dateFin = vista.getFechaFin().getDate();
+		String fechaInicio;
+		String fechaFin;
 
-		String fechaInicio = vista.getFechaInicio().getDate().toString();
-		String fechaFin = vista.getFechaFin().getDate().toString();
+		if(dateInicio != null) {
+			fechaInicio = dateInicio.toString();
+		}
 		
-		if (!(fechaInicio.isBlank() || fechaFin.isBlank())) {
-			List<ActividadDTO> actividades = model.getListaActividades(
-					vista.getFechaInicio().getDate().toString(),
-					vista.getFechaFin().getDate().toString() 
-			);
+		if(dateFin != null) {
+			fechaFin = dateFin.toString();
+		}
+		*/
+		List<ActividadDTO> actividades = model.getListaActividades(
+				vista.getFechaInicio().getDate().toString(),
+				vista.getFechaFin().getDate().toString() 
+		);
 			
 		//Definimos las columnas de la tabla
 		String[] columnas = {"nombre", "desc", "aforo", 
@@ -51,7 +56,6 @@ public class InscribirSocioController {
 		//Auto ajustamos el tamaño de las columnas
 		SwingUtil.autoAdjustColumns(vista.getTable());
 		
-		}
 	}
 	
 	public void initView() {

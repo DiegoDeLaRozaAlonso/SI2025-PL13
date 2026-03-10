@@ -15,6 +15,7 @@ public class InscribirSocioView {
 	private JFrame frame;
 	private JButton bVolver;
 	private JButton bInscribir;
+	private JButton bListarActividades;
 	private JTable tablaActividades;
 	private JLabel labelSocio;
 	private JLabel lblNewLabel_1;
@@ -81,8 +82,8 @@ public class InscribirSocioView {
 		frame.getContentPane().add(bInscribir);
 		
 		lblNewLabel_1 = new JLabel("Lista de Actividades");
-		lblNewLabel_1.setFont(new Font("Calibri", Font.PLAIN, 25));
-		lblNewLabel_1.setBounds(10, 58, 222, 36);
+		lblNewLabel_1.setFont(new Font("Calibri", Font.PLAIN, 34));
+		lblNewLabel_1.setBounds(10, 69, 302, 58);
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		dFechaInicio = new JDateChooser();
@@ -102,6 +103,10 @@ public class InscribirSocioView {
 		lblNewLabel_2_1_1.setFont(new Font("Calibri", Font.PLAIN, 16));
 		lblNewLabel_2_1_1.setBounds(344, 58, 95, 25);
 		frame.getContentPane().add(lblNewLabel_2_1_1);
+		
+		bListarActividades = new JButton("Buscar Actividades");
+		bListarActividades.setBounds(522, 88, 140, 22);
+		frame.getContentPane().add(bListarActividades);
 	}
 	
 	public JFrame getFrame() {return this.frame;}
@@ -109,6 +114,7 @@ public class InscribirSocioView {
 	public JLabel getLabelSocio() {return this.labelSocio;}
 	public JButton getBotonVolver() {return this.bVolver ;}
 	public JButton getBotonInscribir() {return this.bInscribir ;}
+	public JButton getBotonListarActividades() {return this.bListarActividades ;}
 	public JDateChooser getFechaInicio() {return this.dFechaInicio;}
 	public JDateChooser getFechaFin() {return this.dFechaFin;}
 }
