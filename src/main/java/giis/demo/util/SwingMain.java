@@ -239,6 +239,29 @@ public class SwingMain {
 				    reservaFrame.setVisible(true);
 				});
 				panelCentro.add(crearReservaSocio);
+				
+				//Mis reservas socio
+				JButton misReservas = new JButton("Mis reservas (socio)");
+				misReservas.addActionListener(e -> {
+
+				    if (sesion.isAdmin()) {
+				        JOptionPane.showMessageDialog(
+				                frame,
+				                "No tienes permisos para acceder a esta funcionalidad.\n"
+				                + "Esta ventana es para socios.",
+				                "Acceso denegado",
+				                JOptionPane.WARNING_MESSAGE
+				        );
+				        return;
+				    }
+
+				    cd.socio.diego.misReservas.MisReservasView vista = new cd.socio.diego.misReservas.MisReservasView();
+				    cd.socio.diego.misReservas.MisReservasModel modelo = new cd.socio.diego.misReservas.MisReservasModel();
+
+				    cd.socio.diego.misReservas.MisReservasController controller =
+				            new cd.socio.diego.misReservas.MisReservasController(modelo, vista, sesion.getId());
+				});
+				panelCentro.add(misReservas);
 
 		// =========================
 		// Gestionar Periodos (Administracion) (NUEVO botón + bloqueo)
