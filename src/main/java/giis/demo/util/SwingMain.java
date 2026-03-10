@@ -177,6 +177,14 @@ public class SwingMain {
 		});
 		panelCentro.add(btnListaActividades);
 		
+		
+		/*
+		 * Un usuario se inscribe a si mismo
+		 */
+		
+		
+		
+		
 		//Crear reserva admin
 				JButton crearReservaAdmin = new JButton("Crear Reserva Admin");
 				crearReservaAdmin.addActionListener(e -> {
