@@ -1,7 +1,10 @@
 package cd.socio.pablo.inscripcionActividad;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import cd.admin.pablo.periodo.PeriodoDTO;
 import giis.demo.tkrun.CarreraDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
@@ -11,6 +14,7 @@ public class InscribirSocioModel {
 
 	private Database db = new Database();
 	
+	private String fechaFin;
 	
 	/*
 	 * Ya no se usan ya que sacamos las fechas directemente del objeto
@@ -39,6 +43,22 @@ public class InscribirSocioModel {
 		return db.executeQueryPojo(PeriodoGlobalDTO.class, sql);
 	}*/
 	
+	public void insertarInscripcion(InscripcionDTO ins) {
+		
+		validaParametros(
+				
+		);
+		
+		convierteFecha(ins);
+	}
+	
+	private void convierteFecha(InscripcionDTO periodo){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		this.fechaFin = sdf.format(periodo.getFecha_inscripcion());
+		
+	}
+	
 	public void inscribirSocioActividad(SocioDTO socio, ActividadDTO actividad) {
 		String sql = "INSERT INTO Inscripciones (id_actividad, id_socio, nombre_no_socio, fecha_inscripcion, estado, pagado, tipo) "
 				+ "VALUES (?, ?, NULL, ?, ?, ?, 'socio')";
@@ -59,6 +79,18 @@ public class InscribirSocioModel {
 		//String d = Util.dateToIsoString(periodo);
 		return db.executeQueryPojo(ActividadDTO.class, sql, fechaFin, fechaInicio);
 		//return db.executeQueryPojo(ActividadDTO.class, sql, d, d, d, d, d);
+	}
+	
+	private void validaFechas(Date fechaInicio, Date fechaFin) {
+	
+		validateNotNull(fechaInicio, "La fecha de fin del periodo de SOCIOS no puede ser nula");
+		validateNotNull(fechaFin, "La fecha de fin del periodo de NO SOCIOS no puede ser nula");
+		validaFecha(fechaInicio.compareTo(fechaFin) <= 0, "La fecha de inicio no puede ser posterior a la de fin de SOCIO");
+	}
+	
+	private void validaFecha(boolean condition, String message) {
+		if (!condition)
+			throw new ApplicationException(message);
 	}
 	
 	/* De uso general para validacion de objetos */

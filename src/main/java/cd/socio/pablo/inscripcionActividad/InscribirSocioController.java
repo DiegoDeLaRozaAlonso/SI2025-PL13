@@ -9,6 +9,7 @@ public class InscribirSocioController {
 	
 	private InscribirSocioModel model;
 	private InscribirSocioView vista;
+	private List<ActividadDTO> actividades;
 	
 	public InscribirSocioController(InscribirSocioModel m, InscribirSocioView v) {
 		this.model = m;
@@ -23,16 +24,17 @@ public class InscribirSocioController {
 		
 		vista.getBotonVolver().addActionListener(e -> SwingUtil.exceptionWrapper(() -> vista.getFrame().dispose()));
 		vista.getBotonListarActividades().addActionListener(e -> SwingUtil.exceptionWrapper(() -> listaActividades()));
-		vista.getBotonInscribir().addActionListener(e -> SwingUtil.exceptionWrapper(() -> vista.getFrame().dispose()));
+		vista.getBotonInscribir().addActionListener(e -> SwingUtil.exceptionWrapper(() -> inscribirUsuario()));
 	
 	}
 	
 	private void listaActividades() {
-		/*Date dateInicio = vista.getFechaInicio().getDate();
+		Date dateInicio = vista.getFechaInicio().getDate();
 		Date dateFin = vista.getFechaFin().getDate();
-		String fechaInicio;
-		String fechaFin;
-
+		String fechaInicio = "";
+		String fechaFin = "";
+		
+		
 		if(dateInicio != null) {
 			fechaInicio = dateInicio.toString();
 		}
@@ -40,15 +42,13 @@ public class InscribirSocioController {
 		if(dateFin != null) {
 			fechaFin = dateFin.toString();
 		}
-		*/
-		List<ActividadDTO> actividades = model.getListaActividades(
-				vista.getFechaInicio().getDate().toString(),
-				vista.getFechaFin().getDate().toString() 
-		);
+		
+		/*Lista de actividades de dicho periodo*/
+		actividades = model.getListaActividades(fechaInicio, fechaFin);
 			
 		//Definimos las columnas de la tabla
 		String[] columnas = {"nombre", "desc", "aforo", 
-				"fecha_inicio", "fecha_fin", "precioSocio", "precioNoSocio"};
+				"fecha_inicio", "fecha_fin", "precioSocio", "fecha_fin"};
 		
 		javax.swing.table.TableModel tmodel = SwingUtil.getTableModelFromPojos(actividades, columnas);
 		vista.getTable().setModel(tmodel);
@@ -56,6 +56,14 @@ public class InscribirSocioController {
 		//Auto ajustamos el tamaño de las columnas
 		SwingUtil.autoAdjustColumns(vista.getTable());
 		
+	}
+	
+	private void inscribirUsuario() {
+		int id_actividad = vista.getTable().getSelectedRow();
+ 
+		InscripcionDTO ins = new InscripcionDTO(
+				actividades.get(id_actividad).getId(),
+				);
 	}
 	
 	public void initView() {
