@@ -45,9 +45,9 @@ public class InscribirSocioModel {
 	
 	public void insertarInscripcion(InscripcionDTO ins) {
 		
-		validaParametros(
+		/*validaParametros(
 				
-		);
+		);*/
 		
 		convierteFecha(ins);
 	}
@@ -59,10 +59,23 @@ public class InscribirSocioModel {
 		
 	}
 	
-	public void inscribirSocioActividad(SocioDTO socio, ActividadDTO actividad) {
-		String sql = "INSERT INTO Inscripciones (id_actividad, id_socio, nombre_no_socio, fecha_inscripcion, estado, pagado, tipo) "
+	public String compruebaAforo(ActividadDTO actividad) {
+		
+		String sql = "SELECT * FROM	INSCRIPCIONES WHERE id_actividad = ?";
+		
+		List<ActividadDTO> lista = 
+				db.executeQueryPojo(ActividadDTO.class, sql, actividad.getId());
+		
+		return (lista.size() < actividad.getAforo()) ? "admitido" : "lista_espera";
+		
+	}
+	
+	public void inscribirSocioActividad(SocioDTO socio, ActividadDTO actividad, InscripcionDTO ins) {
+		String sql = "INSERT INTO Inscripciones "
+				+ "(id_actividad, id_socio, nombre_no_socio, fecha_inscripcion, estado, pagado, tipo) "
 				+ "VALUES (?, ?, NULL, ?, ?, ?, 'socio')";
-		db.executeUpdate(sql, actividad.getId(), socio.getId(), , , );
+		db.executeUpdate(sql, actividad.getId(), socio.getId(), 
+				ins.getFecha_inscripcion(), compruebaAforo(actividad), 0);
 	}
 	
 	/**
