@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,12 +30,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ContabilidadMensualView {
 
-	// Colores
-	private static final Color COLOR_NAVY       = new Color( 26,  41,  64);
-	private static final Color COLOR_GOLD       = new Color(200, 168,  75);
-	private static final Color COLOR_BG         = new Color(244, 241, 236);
-	private static final Color COLOR_RED        = new Color(192,  23,  75);
-	private static final Color COLOR_BLUE       = new Color( 26,  86, 219);
+	private static final Color COLOR_HEADER_BG = new Color(220, 220, 220);
+	private static final Color COLOR_BG        = new Color(240, 240, 240);
 
 	private JFrame            frame;
 	private JComboBox<String> cmbMes;
@@ -49,7 +44,6 @@ public class ContabilidadMensualView {
 	private JLabel            lblMeta;
 	private JLabel            lblTotalGeneral;
 
-	/** Formato actualmente seleccionado: "CSV" o "TXT" */
 	private String formatoActual = "CSV";
 
 	public ContabilidadMensualView() {
@@ -64,30 +58,30 @@ public class ContabilidadMensualView {
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().setBackground(COLOR_BG);
 
-		frame.getContentPane().add(buildPanelHeader(),    BorderLayout.NORTH);
-		frame.getContentPane().add(buildPanelCentro(),    BorderLayout.CENTER);
+		frame.getContentPane().add(buildPanelHeader(), BorderLayout.NORTH);
+		frame.getContentPane().add(buildPanelCentro(), BorderLayout.CENTER);
 	}
 
 	// ── Cabecera ──────────────────────────────────────────────────────────────
 
 	private JPanel buildPanelHeader() {
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBackground(COLOR_NAVY);
+		panel.setBackground(COLOR_HEADER_BG);
 		panel.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(0, 0, 4, 0, COLOR_GOLD),
-				BorderFactory.createEmptyBorder(16, 24, 16, 24)));
+				BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY),
+				BorderFactory.createEmptyBorder(14, 20, 14, 20)));
 
 		JPanel izq = new JPanel();
 		izq.setOpaque(false);
 		izq.setLayout(new BoxLayout(izq, BoxLayout.Y_AXIS));
 
 		JLabel lblSub = new JLabel("ADMINISTRACIÓN");
-		lblSub.setFont(new Font("Monospaced", Font.PLAIN, 11));
-		lblSub.setForeground(COLOR_GOLD);
+		lblSub.setFont(new Font("SansSerif", Font.PLAIN, 11));
+		lblSub.setForeground(Color.DARK_GRAY);
 
 		JLabel lblTitulo = new JLabel("Contabilidad Mensual");
-		lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 22));
-		lblTitulo.setForeground(Color.WHITE);
+		lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 20));
+		lblTitulo.setForeground(Color.BLACK);
 
 		izq.add(lblSub);
 		izq.add(Box.createVerticalStrut(4));
@@ -103,10 +97,10 @@ public class ContabilidadMensualView {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBackground(COLOR_BG);
-		panel.setBorder(BorderFactory.createEmptyBorder(16, 24, 16, 24));
+		panel.setBorder(BorderFactory.createEmptyBorder(14, 20, 14, 20));
 
 		panel.add(buildPanelControles());
-		panel.add(Box.createVerticalStrut(16));
+		panel.add(Box.createVerticalStrut(14));
 		panel.add(buildPanelResultado());
 
 		return panel;
@@ -117,30 +111,30 @@ public class ContabilidadMensualView {
 	private JPanel buildPanelControles() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		panel.setBackground(Color.WHITE);
+		panel.setBackground(COLOR_HEADER_BG);
 		panel.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(new Color(221, 221, 221)),
-				BorderFactory.createEmptyBorder(16, 20, 16, 20)));
-		panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 90));
+				BorderFactory.createLineBorder(Color.GRAY),
+				BorderFactory.createEmptyBorder(12, 16, 12, 16)));
+		panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
 		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		// Selector de mes
 		JPanel subMes = new JPanel();
 		subMes.setOpaque(false);
 		subMes.setLayout(new BoxLayout(subMes, BoxLayout.Y_AXIS));
-		JLabel lblMesLabel = new JLabel("MES");
-		lblMesLabel.setFont(new Font("Monospaced", Font.PLAIN, 11));
-		lblMesLabel.setForeground(new Color(136, 136, 136));
 
-		// Generar opciones "Enero 2026", "Febrero 2026"...
+		JLabel lblMesLabel = new JLabel("MES");
+		lblMesLabel.setFont(new Font("SansSerif", Font.BOLD, 11));
+		lblMesLabel.setForeground(Color.DARK_GRAY);
+
 		String[] opciones = new String[ContabilidadMensualModel.NOMBRES_MESES.length];
 		for (int i = 0; i < opciones.length; i++)
-			opciones[i] = ContabilidadMensualModel.NOMBRES_MESES[i] + " " + ContabilidadMensualModel.ANHO_BASE;
+			opciones[i] = ContabilidadMensualModel.NOMBRES_MESES[i]
+					+ " " + ContabilidadMensualModel.ANHO_BASE;
 		cmbMes = new JComboBox<>(opciones);
 		cmbMes.setName("cmbMes");
 		cmbMes.setSelectedIndex(1); // Febrero por defecto
-		cmbMes.setFont(new Font("Monospaced", Font.PLAIN, 13));
-		cmbMes.setMaximumSize(new Dimension(180, 32));
+		cmbMes.setMaximumSize(new Dimension(180, 26));
 
 		subMes.add(lblMesLabel);
 		subMes.add(Box.createVerticalStrut(4));
@@ -150,27 +144,28 @@ public class ContabilidadMensualView {
 		JPanel subFormato = new JPanel();
 		subFormato.setOpaque(false);
 		subFormato.setLayout(new BoxLayout(subFormato, BoxLayout.Y_AXIS));
+
 		JLabel lblFormatoLabel = new JLabel("FORMATO");
-		lblFormatoLabel.setFont(new Font("Monospaced", Font.PLAIN, 11));
-		lblFormatoLabel.setForeground(new Color(136, 136, 136));
+		lblFormatoLabel.setFont(new Font("SansSerif", Font.BOLD, 11));
+		lblFormatoLabel.setForeground(Color.DARK_GRAY);
 
 		JPanel toggleWrap = new JPanel(new java.awt.GridLayout(1, 2));
-		toggleWrap.setBorder(BorderFactory.createLineBorder(new Color(204, 204, 204)));
-		toggleWrap.setMaximumSize(new Dimension(130, 32));
+		toggleWrap.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		toggleWrap.setMaximumSize(new Dimension(120, 26));
 
 		btnCSV = new JButton("CSV");
 		btnCSV.setName("btnCSV");
-		btnCSV.setFont(new Font("Monospaced", Font.BOLD, 12));
-		btnCSV.setBackground(COLOR_NAVY);
-		btnCSV.setForeground(COLOR_GOLD);
+		btnCSV.setFont(new Font("SansSerif", Font.BOLD, 12));
+		btnCSV.setBackground(Color.DARK_GRAY);
+		btnCSV.setForeground(Color.WHITE);
 		btnCSV.setBorderPainted(false);
 		btnCSV.setFocusPainted(false);
 
 		btnTXT = new JButton("TXT");
 		btnTXT.setName("btnTXT");
-		btnTXT.setFont(new Font("Monospaced", Font.PLAIN, 12));
-		btnTXT.setBackground(new Color(250, 250, 248));
-		btnTXT.setForeground(new Color(85, 85, 85));
+		btnTXT.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		btnTXT.setBackground(Color.LIGHT_GRAY);
+		btnTXT.setForeground(Color.DARK_GRAY);
 		btnTXT.setBorderPainted(false);
 		btnTXT.setFocusPainted(false);
 
@@ -182,23 +177,15 @@ public class ContabilidadMensualView {
 		subFormato.add(toggleWrap);
 
 		// Botón generar
-		btnGenerar = new JButton("GENERAR INFORME");
+		btnGenerar = new JButton("Generar Informe");
 		btnGenerar.setName("btnGenerar");
-		btnGenerar.setFont(new Font("Monospaced", Font.BOLD, 13));
-		btnGenerar.setBackground(COLOR_NAVY);
-		btnGenerar.setForeground(COLOR_GOLD);
-		btnGenerar.setBorderPainted(false);
-		btnGenerar.setFocusPainted(false);
+		btnGenerar.setFont(new Font("SansSerif", Font.BOLD, 12));
 		btnGenerar.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 
 		// Botón descargar (oculto hasta generar)
-		btnDescargar = new JButton("↓ DESCARGAR CSV");
+		btnDescargar = new JButton("↓ Descargar CSV");
 		btnDescargar.setName("btnDescargar");
-		btnDescargar.setFont(new Font("Monospaced", Font.BOLD, 13));
-		btnDescargar.setBackground(COLOR_GOLD);
-		btnDescargar.setForeground(COLOR_NAVY);
-		btnDescargar.setBorderPainted(false);
-		btnDescargar.setFocusPainted(false);
+		btnDescargar.setFont(new Font("SansSerif", Font.BOLD, 12));
 		btnDescargar.setVisible(false);
 		btnDescargar.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 
@@ -207,13 +194,13 @@ public class ContabilidadMensualView {
 		panel.add(subFormato);
 		panel.add(Box.createHorizontalStrut(20));
 		panel.add(btnGenerar);
-		panel.add(Box.createHorizontalStrut(12));
+		panel.add(Box.createHorizontalStrut(10));
 		panel.add(btnDescargar);
 
 		return panel;
 	}
 
-	// ── Panel de resultado (tabla + meta) ─────────────────────────────────────
+	// ── Panel de resultado ────────────────────────────────────────────────────
 
 	private JPanel buildPanelResultado() {
 		panelResultado = new JPanel();
@@ -222,39 +209,30 @@ public class ContabilidadMensualView {
 		panelResultado.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelResultado.setVisible(false);
 
-		// Tabla
+		// Tabla estilo Swing por defecto
 		tabSocios = new JTable();
 		tabSocios.setName("tabSocios");
-		tabSocios.setFont(new Font("SansSerif", Font.PLAIN, 13));
-		tabSocios.setRowHeight(38);
-		tabSocios.setGridColor(new Color(238, 238, 238));
-		tabSocios.setShowVerticalLines(false);
-		tabSocios.getTableHeader().setBackground(COLOR_NAVY);
-		tabSocios.getTableHeader().setForeground(COLOR_GOLD);
-		tabSocios.getTableHeader().setFont(new Font("Monospaced", Font.PLAIN, 11));
-		tabSocios.getTableHeader().setReorderingAllowed(false);
-		tabSocios.setDefaultRenderer(Object.class, new ContabilidadCellRenderer());
+		tabSocios.setRowHeight(24);
 
 		JScrollPane scroll = new JScrollPane(tabSocios);
 		scroll.setAlignmentX(Component.LEFT_ALIGNMENT);
-		scroll.setBorder(BorderFactory.createLineBorder(new Color(221, 221, 221)));
 
-		// Panel total inferior
+		// Panel total
 		JPanel panelTotal = new JPanel(new BorderLayout());
-		panelTotal.setBackground(COLOR_BG);
+		panelTotal.setBackground(COLOR_HEADER_BG);
 		panelTotal.setMaximumSize(new Dimension(Integer.MAX_VALUE, 44));
 		panelTotal.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelTotal.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(2, 0, 0, 0, COLOR_NAVY),
-				BorderFactory.createEmptyBorder(10, 18, 10, 18)));
+				BorderFactory.createMatteBorder(1, 0, 0, 0, Color.GRAY),
+				BorderFactory.createEmptyBorder(10, 16, 10, 16)));
 
 		JLabel lblTotalTexto = new JLabel("TOTAL GENERAL");
-		lblTotalTexto.setFont(new Font("Monospaced", Font.BOLD, 13));
-		lblTotalTexto.setForeground(COLOR_NAVY);
+		lblTotalTexto.setFont(new Font("SansSerif", Font.BOLD, 12));
+		lblTotalTexto.setForeground(Color.DARK_GRAY);
 
 		lblTotalGeneral = new JLabel("0,00 €");
-		lblTotalGeneral.setFont(new Font("Monospaced", Font.BOLD, 18));
-		lblTotalGeneral.setForeground(COLOR_NAVY);
+		lblTotalGeneral.setFont(new Font("SansSerif", Font.BOLD, 16));
+		lblTotalGeneral.setForeground(Color.BLACK);
 		lblTotalGeneral.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		panelTotal.add(lblTotalTexto,   BorderLayout.WEST);
@@ -262,60 +240,19 @@ public class ContabilidadMensualView {
 
 		// Meta info
 		lblMeta = new JLabel(" ");
-		lblMeta.setFont(new Font("Monospaced", Font.PLAIN, 11));
-		lblMeta.setForeground(new Color(136, 136, 136));
+		lblMeta.setFont(new Font("SansSerif", Font.PLAIN, 11));
+		lblMeta.setForeground(Color.GRAY);
 		lblMeta.setAlignmentX(Component.LEFT_ALIGNMENT);
-		lblMeta.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		panelResultado.add(scroll);
 		panelResultado.add(panelTotal);
-		panelResultado.add(Box.createVerticalStrut(6));
+		panelResultado.add(Box.createVerticalStrut(4));
 		panelResultado.add(lblMeta);
 
 		return panelResultado;
 	}
 
-	// ── Renderer de celdas ────────────────────────────────────────────────────
-
-	class ContabilidadCellRenderer extends DefaultTableCellRenderer {
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value,
-				boolean isSelected, boolean hasFocus, int row, int column) {
-			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-			setFont(new Font("SansSerif", Font.PLAIN, 13));
-			setBackground(row % 2 == 0 ? new Color(250, 250, 248) : Color.WHITE);
-			setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(238, 238, 238)));
-			setForeground(new Color(51, 51, 51));
-			setHorizontalAlignment(SwingConstants.LEFT);
-
-			// Columna ID: monoespaciado gris
-			if (column == 0) {
-				setFont(new Font("Monospaced", Font.PLAIN, 12));
-				setForeground(new Color(136, 136, 136));
-			}
-
-			// Columnas Actividades y Reservas: color si > 0, gris si = 0
-			if (column == 2 || column == 3) {
-				setFont(new Font("Monospaced", Font.PLAIN, 13));
-				boolean esCero = value != null && value.toString().startsWith("0,00");
-				setForeground(esCero ? new Color(170, 170, 170)
-						: (column == 2 ? COLOR_BLUE : COLOR_RED));
-				setHorizontalAlignment(SwingConstants.RIGHT);
-			}
-
-			// Columna Total: negrita
-			if (column == 4) {
-				boolean esCero = value != null && value.toString().startsWith("0,00");
-				setFont(new Font("Monospaced", Font.BOLD, 14));
-				setForeground(esCero ? new Color(170, 170, 170) : COLOR_NAVY);
-				setHorizontalAlignment(SwingConstants.RIGHT);
-			}
-
-			return this;
-		}
-	}
-
-	// ── Metodos para el controlador ───────────────────────────────────────────
+	// ── Getters para el controlador ───────────────────────────────────────────
 
 	public JFrame            getFrame()        { return this.frame; }
 	public JComboBox<String> getCmbMes()       { return this.cmbMes; }
@@ -325,12 +262,10 @@ public class ContabilidadMensualView {
 	public JButton           getBtnDescargar() { return this.btnDescargar; }
 	public String            getFormato()      { return this.formatoActual; }
 
-	/** Devuelve el numero de mes seleccionado (1-12) */
 	public int getMesSeleccionado() {
 		return cmbMes.getSelectedIndex() + 1;
 	}
 
-	/** Devuelve el texto del mes seleccionado, ej. "Febrero 2026" */
 	public String getMesTexto() {
 		return (String) cmbMes.getSelectedItem();
 	}
@@ -339,12 +274,12 @@ public class ContabilidadMensualView {
 	public void setFormato(String formato) {
 		this.formatoActual = formato;
 		boolean csv = "CSV".equals(formato);
-		btnCSV.setBackground(csv ? COLOR_NAVY : new Color(250, 250, 248));
-		btnCSV.setForeground(csv ? COLOR_GOLD : new Color(85, 85, 85));
-		btnTXT.setBackground(csv ? new Color(250, 250, 248) : COLOR_NAVY);
-		btnTXT.setForeground(csv ? new Color(85, 85, 85) : COLOR_GOLD);
+		btnCSV.setBackground(csv ? Color.DARK_GRAY : Color.LIGHT_GRAY);
+		btnCSV.setForeground(csv ? Color.WHITE : Color.DARK_GRAY);
+		btnTXT.setBackground(csv ? Color.LIGHT_GRAY : Color.DARK_GRAY);
+		btnTXT.setForeground(csv ? Color.DARK_GRAY : Color.WHITE);
 		if (btnDescargar.isVisible())
-			btnDescargar.setText("↓ DESCARGAR " + formato);
+			btnDescargar.setText("↓ Descargar " + formato);
 	}
 
 	/** Rellena la tabla con los datos y muestra el panel de resultado */
@@ -368,7 +303,6 @@ public class ContabilidadMensualView {
 		}
 		tabSocios.setModel(model);
 
-		// Ajuste de anchos
 		tabSocios.getColumnModel().getColumn(0).setPreferredWidth(70);
 		tabSocios.getColumnModel().getColumn(0).setMaxWidth(80);
 		tabSocios.getColumnModel().getColumn(2).setPreferredWidth(160);
@@ -381,7 +315,7 @@ public class ContabilidadMensualView {
 
 		panelResultado.setVisible(true);
 		btnDescargar.setVisible(true);
-		btnDescargar.setText("↓ DESCARGAR " + formatoActual);
+		btnDescargar.setText("↓ Descargar " + formatoActual);
 
 		frame.revalidate();
 		frame.repaint();
