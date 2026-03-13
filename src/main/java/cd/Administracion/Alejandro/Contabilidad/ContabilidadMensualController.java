@@ -1,8 +1,12 @@
 package cd.Administracion.Alejandro.Contabilidad;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import giis.demo.util.ApplicationException;
 import giis.demo.util.SwingUtil;
@@ -14,7 +18,7 @@ import giis.demo.util.SwingUtil;
  *  - ejecutando initController() para instalar los manejadores de eventos
  *
  * Gestiona la generacion de la tabla de socios con sus importes pendientes
- * y la descarga del informe en formato CSV o TXT.
+ * y la descarga del informe en formato CSV o TXT mediante un dialogo de fichero.
  */
 public class ContabilidadMensualController {
 
@@ -56,7 +60,7 @@ public class ContabilidadMensualController {
 	 * Carga los datos del mes seleccionado y los muestra en la tabla.
 	 */
 	private void generarInforme() {
-		int mes    = view.getMesSeleccionado();
+		int mes         = view.getMesSeleccionado();
 		String mesTexto = view.getMesTexto();
 		List<ContabilidadMensualDTO> datos =
 				model.getContabilidadMensual(mes, ContabilidadMensualModel.ANHO_BASE);
@@ -64,30 +68,42 @@ public class ContabilidadMensualController {
 	}
 
 	/**
-	 * Genera el fichero en el formato seleccionado (CSV o TXT) y lo guarda
-	 * en el directorio de trabajo con el nombre contabilidad_<mes>.csv/txt
+	 * Abre un dialogo para que el usuario elija donde guardar el fichero,
+	 * genera el contenido en el formato seleccionado (CSV o TXT) y lo guarda.
 	 */
 	private void descargarInforme() {
-		int mes = view.getMesSeleccionado();
+		int mes         = view.getMesSeleccionado();
 		String mesTexto = view.getMesTexto();
+		String formato  = view.getFormato();
+
 		List<ContabilidadMensualDTO> datos =
 				model.getContabilidadMensual(mes, ContabilidadMensualModel.ANHO_BASE);
 
-		String formato   = view.getFormato();
 		String nombreFichero = "contabilidad_" + mesTexto.replace(" ", "_")
 				+ "." + formato.toLowerCase();
 
-		try (FileWriter fw = new FileWriter(nombreFichero)) {
+		// Dialogo para elegir donde guardar
+		JFileChooser chooser = new JFileChooser();
+		chooser.setSelectedFile(new File(nombreFichero));
+		chooser.setDialogTitle("Guardar informe");
+
+		int opcion = chooser.showSaveDialog(view.getFrame());
+		if (opcion != JFileChooser.APPROVE_OPTION)
+			return; // el usuario cancelo
+
+		File fichero = chooser.getSelectedFile();
+
+		try (FileWriter fw = new FileWriter(fichero)) {
 			if ("CSV".equals(formato)) {
 				fw.write(generarCSV(datos, mesTexto));
 			} else {
 				fw.write(generarTXT(datos, mesTexto));
 			}
-			javax.swing.JOptionPane.showMessageDialog(
+			JOptionPane.showMessageDialog(
 					view.getFrame(),
-					"Fichero guardado: " + nombreFichero,
+					"Fichero guardado en: " + fichero.getAbsolutePath(),
 					"Descarga completada",
-					javax.swing.JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.INFORMATION_MESSAGE);
 		} catch (IOException ex) {
 			throw new ApplicationException("Error al guardar el fichero: " + ex.getMessage());
 		}
