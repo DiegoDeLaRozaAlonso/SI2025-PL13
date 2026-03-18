@@ -62,7 +62,7 @@ public class InscribirSocioController {
 		int id_actividad = vista.getTable().getSelectedRow();
  
 		InscripcionDTO ins = new InscripcionDTO(
-				actividades.get(id_actividad).getId(),
+				actividades.get(id_actividad).getId(), vista.getLabelSocio().getText(),
 				);
 	}
 	
