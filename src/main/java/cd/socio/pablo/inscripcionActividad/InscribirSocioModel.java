@@ -83,18 +83,25 @@ public class InscribirSocioModel {
 	 * @return List<ActividadDTO>
 	 */
 	public List<ActividadDTO> getListaActividades(String fechaInicio, String fechaFin) {
-		validateNotNull(fechaInicio, "La fecha de Inicio no puede ser nula");
-		validateNotNull(fechaFin, "La fecha de Fin no puede ser nula");
-		String sql = "SELECT nombre, descripcion AS desc, aforo, "
-	               + "fecha_inicio, fecha_fin, "
-	               + "costo_socio AS precioSocio, costo_no_socio AS precioNoSocio "
-	               + "FROM Actividades WHERE fecha_inicio <= ? AND fecha_fin >= ?";
-		//String d = Util.dateToIsoString(periodo);
+		
+		validaFechas(fechaInicio, fechaFin);
+//		String sql = "SELECT nombre, descripcion AS desc, aforo, "
+//	               + "fecha_inicio, fecha_fin, "
+//	               + "costo_socio AS precioSocio, costo_no_socio AS precioNoSocio "
+//	               + "FROM Actividades WHERE fecha_inicio <= ? AND fecha_fin >= ?";
+		
+		String sql = "SELECT a.nombre, a.descripcion AS desc, a.aforo, "
+	               + "a.fecha_inicio, a.fecha_fin, "
+	               + "a.costo_socio AS precioSocio, a.costo_no_socio AS precioNoSocio, "
+	               + "p.fecha_fin AS fecha_fin_periodo " 
+	               + "FROM Actividades a "
+	               + "INNER JOIN PeriodosGlobales p ON a.id_periodo = p.id_periodo_global "
+	               + "WHERE a.fecha_inicio <= ? AND a.fecha_fin >= ?";
+
 		return db.executeQueryPojo(ActividadDTO.class, sql, fechaFin, fechaInicio);
-		//return db.executeQueryPojo(ActividadDTO.class, sql, d, d, d, d, d);
 	}
 	
-	private void validaFechas(Date fechaInicio, Date fechaFin) {
+	private void validaFechas(String fechaInicio, String fechaFin) {
 	
 		validateNotNull(fechaInicio, "La fecha de fin del periodo de SOCIOS no puede ser nula");
 		validateNotNull(fechaFin, "La fecha de fin del periodo de NO SOCIOS no puede ser nula");

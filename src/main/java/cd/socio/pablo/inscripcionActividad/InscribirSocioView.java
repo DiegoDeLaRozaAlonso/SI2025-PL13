@@ -107,7 +107,7 @@ public class InscribirSocioView {
 		frame.getContentPane().add(lblNewLabel_2_1_1);
 		
 		bListarActividades = new JButton("Buscar Actividades");
-		bListarActividades.setBounds(522, 88, 140, 22);
+		bListarActividades.setBounds(512, 88, 172, 39);
 		frame.getContentPane().add(bListarActividades);
 		
 		JRadioButton radioPagoEnActo = new JRadioButton("Pago en el acto");

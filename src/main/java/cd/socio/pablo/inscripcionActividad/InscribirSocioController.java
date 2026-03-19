@@ -20,7 +20,6 @@ public class InscribirSocioController {
 		this.usuario = usuario;
 		//no hay inicializacion especifica del modelo, solo de la vista
 		this.initView(this.usuario);
-		this.initController();
 	}
 	
 	
@@ -35,17 +34,17 @@ public class InscribirSocioController {
 	private void listaActividades() {
 		Date dateInicio = vista.getFechaInicio().getDate();
 		Date dateFin = vista.getFechaFin().getDate();
-		String fechaInicio = Util.dateToIsoString(dateInicio);
-		String fechaFin = Util.dateToIsoString(dateFin);
+		String fechaInicio = null;
+		String fechaFin = null;
 		
 		
-		/*if(dateInicio != null) {
-			fechaInicio = dateInicio.toString();
+		if(dateInicio != null) {
+			fechaInicio = Util.dateToIsoString(dateInicio);
 		}
 		
 		if(dateFin != null) {
-			fechaFin = dateFin.toString();
-		}*/
+			fechaFin = Util.dateToIsoString(dateFin);
+		}
 		
 		/*Lista de actividades de dicho periodo*/
 		actividades = model.getListaActividades(fechaInicio, fechaFin);
@@ -61,7 +60,6 @@ public class InscribirSocioController {
 		SwingUtil.autoAdjustColumns(vista.getTable());
 		
 	}
-	
 	
 	
 	/**
@@ -80,7 +78,7 @@ public class InscribirSocioController {
 	
 	public void initView(UsuarioSesion s) {
 		
-		//limpiamos la lista por si acaso
+		//Ponemos el nombre del usuario que se está inscribiendo
 		vista.getLabelSocio().setText(s.getNombre()+"");
 		
 		/*//Cargamos el primer periodo en la tabla para que no salga vacía
