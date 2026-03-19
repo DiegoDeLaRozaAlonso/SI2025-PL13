@@ -50,7 +50,7 @@ public class InscribirSocioController {
 		actividades = model.getListaActividades(fechaInicio, fechaFin);
 			
 		//Definimos las columnas de la tabla
-		String[] columnas = {"nombre", "desc", "aforo", 
+		String[] columnas = {"nombre", "descripcion", "aforo", 
 				"fecha_inicio", "fecha_fin", "precioSocio", "fecha_fin_periodo"};
 		
 		javax.swing.table.TableModel tmodel = SwingUtil.getTableModelFromPojos(actividades, columnas);

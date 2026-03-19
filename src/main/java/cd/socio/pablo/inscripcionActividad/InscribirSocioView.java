@@ -10,19 +10,20 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
 public class InscribirSocioView {
 
 	private JFrame frame;
-	private JButton bVolver;
-	private JButton bInscribir;
-	private JButton bListarActividades;
+	private JButton bVolver, bInscribir, bListarActividades;
 	private JTable tablaActividades;
 	private JLabel labelSocio;
 	private JLabel lblNewLabel_1;
 	private JDateChooser dFechaInicio;
 	private JDateChooser dFechaFin;
 	private JRadioButton radioPagoEnActo;
+	private JRadioButton radioPagoMensual;
+	private ButtonGroup grupoRadio;
 
 	/**
 	 * Launch the application.
@@ -124,6 +125,12 @@ public class InscribirSocioView {
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblNewLabel_2.setBounds(10, 549, 156, 31);
 		frame.getContentPane().add(lblNewLabel_2);
+		
+		grupoRadio = new ButtonGroup();
+		grupoRadio.add(radioPagoEnActo);
+		grupoRadio.add(radioMensualidad);
+		radioMensualidad.setSelected(true);
+		
 	}
 	
 	public JFrame getFrame() {return this.frame;}
@@ -134,4 +141,7 @@ public class InscribirSocioView {
 	public JButton getBotonListarActividades() {return this.bListarActividades ;}
 	public JDateChooser getFechaInicio() {return this.dFechaInicio;}
 	public JDateChooser getFechaFin() {return this.dFechaFin;}
+	public JRadioButton getRadioMensual() {return this.radioPagoMensual;}
+	public JRadioButton getRadioEfectivo() {return this.radioPagoEnActo;}
+	
 }

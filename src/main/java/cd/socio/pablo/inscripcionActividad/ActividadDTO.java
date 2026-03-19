@@ -6,13 +6,13 @@ public class ActividadDTO {
 	
 	private int id;
 	private String nombre;
-	private String desc;
+	private String descripcion;
 	private int aforo;
 	private String fecha_inicio;
 	private String fecha_fin;
 	private double precioSocio;
 	private double precioNoSocio;
-	private Date fecha_fin_periodo;
+	private String fecha_fin_periodo;
 	
 	
 	//Necesario parque el DButil funcione
@@ -30,9 +30,9 @@ public class ActividadDTO {
 
 	public void setNombre(String nombre) {this.nombre = nombre;}
 
-	public String getDesc() {return desc;}
+	public String getDescripcion() {return descripcion;}
 
-	public void setDesc(String desc) {this.desc = desc;}
+	public void setDescripcion(String desc) {this.descripcion = desc;}
 
 	public int getAforo() {
 		return aforo;
@@ -74,11 +74,11 @@ public class ActividadDTO {
 		this.precioNoSocio = precioNoSocio;
 	}
 
-	public Date getFecha_fin_periodo() {
+	public String getFecha_fin_periodo() {
 		return fecha_fin_periodo;
 	}
 
-	public void setFecha_fin_periodo(Date fecha_fin_periodo) {
+	public void setFecha_fin_periodo(String fecha_fin_periodo) {
 		this.fecha_fin_periodo = fecha_fin_periodo;
 	}
 	

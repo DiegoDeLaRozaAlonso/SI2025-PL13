@@ -90,7 +90,7 @@ public class InscribirSocioModel {
 //	               + "costo_socio AS precioSocio, costo_no_socio AS precioNoSocio "
 //	               + "FROM Actividades WHERE fecha_inicio <= ? AND fecha_fin >= ?";
 		
-		String sql = "SELECT a.nombre, a.descripcion AS desc, a.aforo, "
+		String sql = "SELECT a.nombre, a.descripcion, a.aforo, "
 	               + "a.fecha_inicio, a.fecha_fin, "
 	               + "a.costo_socio AS precioSocio, a.costo_no_socio AS precioNoSocio, "
 	               + "p.fecha_fin AS fecha_fin_periodo " 
