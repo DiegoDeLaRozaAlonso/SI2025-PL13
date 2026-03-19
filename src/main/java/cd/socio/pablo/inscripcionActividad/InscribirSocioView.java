@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import com.toedter.calendar.JDateChooser;
+import javax.swing.JRadioButton;
 
 public class InscribirSocioView {
 
@@ -21,6 +22,7 @@ public class InscribirSocioView {
 	private JLabel lblNewLabel_1;
 	private JDateChooser dFechaInicio;
 	private JDateChooser dFechaFin;
+	private JRadioButton radioPagoEnActo;
 
 	/**
 	 * Launch the application.
@@ -50,7 +52,7 @@ public class InscribirSocioView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 821, 644);
+		frame.setBounds(100, 100, 821, 728);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null); 
 		
@@ -61,7 +63,7 @@ public class InscribirSocioView {
 		
 		bVolver = new JButton("Volver");
 		bVolver.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		bVolver.setBounds(502, 540, 140, 37);
+		bVolver.setBounds(502, 608, 140, 37);
 		frame.getContentPane().add(bVolver);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -78,7 +80,7 @@ public class InscribirSocioView {
 		
 		bInscribir = new JButton("Inscribirse");
 		bInscribir.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		bInscribir.setBounds(157, 540, 140, 37);
+		bInscribir.setBounds(157, 608, 140, 37);
 		frame.getContentPane().add(bInscribir);
 		
 		lblNewLabel_1 = new JLabel("Lista de Actividades");
@@ -107,6 +109,21 @@ public class InscribirSocioView {
 		bListarActividades = new JButton("Buscar Actividades");
 		bListarActividades.setBounds(522, 88, 140, 22);
 		frame.getContentPane().add(bListarActividades);
+		
+		JRadioButton radioPagoEnActo = new JRadioButton("Pago en el acto");
+		radioPagoEnActo.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		radioPagoEnActo.setBounds(512, 554, 140, 23);
+		frame.getContentPane().add(radioPagoEnActo);
+		
+		JRadioButton radioMensualidad = new JRadioButton("Mensualidad");
+		radioMensualidad.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		radioMensualidad.setBounds(172, 554, 125, 23);
+		frame.getContentPane().add(radioMensualidad);
+		
+		JLabel lblNewLabel_2 = new JLabel("Método de Pago");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblNewLabel_2.setBounds(10, 549, 156, 31);
+		frame.getContentPane().add(lblNewLabel_2);
 	}
 	
 	public JFrame getFrame() {return this.frame;}

@@ -12,6 +12,7 @@ public class ActividadDTO {
 	private Date fecha_fin;
 	private double precioSocio;
 	private double precioNoSocio;
+	private Date fecha_fin_periodo;
 	
 	
 	//Necesario parque el DButil funcione
@@ -72,8 +73,14 @@ public class ActividadDTO {
 	public void setPrecioNoSocio(double precioNoSocio) {
 		this.precioNoSocio = precioNoSocio;
 	}
-	
-	
+
+	public Date getFecha_fin_periodo() {
+		return fecha_fin_periodo;
+	}
+
+	public void setFecha_fin_periodo(Date fecha_fin_periodo) {
+		this.fecha_fin_periodo = fecha_fin_periodo;
+	}
 	
 
 }

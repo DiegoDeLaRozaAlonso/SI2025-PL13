@@ -188,7 +188,7 @@ public class SwingMain {
 		btnInscribirUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				InscribirSocioController controller = new InscribirSocioController(new InscribirSocioModel(), new InscribirSocioView());
+				InscribirSocioController controller = new InscribirSocioController(new InscribirSocioModel(), new InscribirSocioView(), sesion);
 				controller.initController();
 			}
 		});
