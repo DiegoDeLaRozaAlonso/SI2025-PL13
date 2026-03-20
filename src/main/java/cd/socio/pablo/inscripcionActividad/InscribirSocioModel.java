@@ -50,12 +50,20 @@ public class InscribirSocioModel {
 		
 		validaFechas(fechaInicio, fechaFin);
 		
+//		String sql = "SELECT a.id_actividad, a.nombre, a.descripcion, a.aforo, "
+//	               + "a.fecha_inicio, a.fecha_fin, "
+//	               + "a.costo_socio AS precioSocio, a.costo_no_socio AS precioNoSocio, "
+//	               + "p.fecha_fin AS fecha_fin_periodo " 
+//	               + "FROM Actividades a "
+//	               + "INNER JOIN PeriodosInscripcion p ON a.id_periodo = p.id_periodo "
+//	               + "WHERE a.fecha_inicio <= ? AND a.fecha_fin >= ?";
+		
 		String sql = "SELECT a.id_actividad, a.nombre, a.descripcion, a.aforo, "
 	               + "a.fecha_inicio, a.fecha_fin, "
-	               + "a.costo_socio AS precioSocio, a.costo_no_socio AS precioNoSocio, "
-	               + "p.fecha_fin AS fecha_fin_periodo " 
+	               + "a.costo_socio AS precioSocio, "
+	               + "p.fecha_fin_socio AS fecha_fin_periodo " 
 	               + "FROM Actividades a "
-	               + "INNER JOIN PeriodosGlobales p ON a.id_periodo = p.id_periodo_global "
+	               + "INNER JOIN PeriodosInscripcion p ON a.id_periodo = p.id_periodo "
 	               + "WHERE a.fecha_inicio <= ? AND a.fecha_fin >= ?";
 
 		return db.executeQueryPojo(ActividadDTO.class, sql, fechaFin, fechaInicio);

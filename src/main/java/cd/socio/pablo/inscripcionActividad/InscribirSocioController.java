@@ -70,8 +70,6 @@ public class InscribirSocioController {
 	//TODO pillar el usuario que se logea en el main
 	private void crearInscripcion() {
 		
-		System.out.println(""+model.tieneDeudas(usuario));
-		
 		if (model.tieneDeudas(usuario)) {
 			JOptionPane.showMessageDialog(
 					vista.getFrame(), "Tienes deudas no puedes inscribirte","¡¡¡MOROSO!!!", JOptionPane.ERROR_MESSAGE);
