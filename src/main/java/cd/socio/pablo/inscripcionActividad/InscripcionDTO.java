@@ -6,14 +6,14 @@ public class InscripcionDTO {
 	
 	private int id_actividad;
 	private int id_socio;
-	private Date fecha_inscripcion;
+	private String fecha_inscripcion;
 	private String estado;
 	private boolean pagado;
 	private String tipo;
 	
 	public InscripcionDTO() {}
 
-	public InscripcionDTO(int id_actividad, int id_socio, Date fecha_inscripcion,
+	public InscripcionDTO(int id_actividad, int id_socio, String fecha_inscripcion,
 			String estado, boolean pagado, String tipo) {
 		this.id_actividad = id_actividad;
 		this.id_socio = id_socio;
@@ -41,11 +41,11 @@ public class InscripcionDTO {
 	}
 
 
-	public Date getFecha_inscripcion() {
+	public String getFecha_inscripcion() {
 		return fecha_inscripcion;
 	}
 
-	public void setFecha_inscripcion(Date fecha_inscripcion) {
+	public void setFecha_inscripcion(String fecha_inscripcion) {
 		this.fecha_inscripcion = fecha_inscripcion;
 	}
 

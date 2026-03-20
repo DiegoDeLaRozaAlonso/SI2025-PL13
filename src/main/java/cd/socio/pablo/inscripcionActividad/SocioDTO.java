@@ -4,6 +4,7 @@ public class SocioDTO {
 	
 	private int id;
 	private String nombre;
+	private boolean debe_dinero;
 	
 	public SocioDTO(int id, String nombre) {
 		super();
@@ -29,6 +30,14 @@ public class SocioDTO {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public boolean isDebeDinero() {
+		return debe_dinero;
+	}
+
+	public void setDebeDinero(boolean debeDinero) {
+		this.debe_dinero = debeDinero;
 	}
 
 	@Override

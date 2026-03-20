@@ -3,6 +3,8 @@ package cd.socio.pablo.inscripcionActividad;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import cd.login.diego.UsuarioSesion;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
@@ -19,7 +21,7 @@ public class InscribirSocioController {
 		this.vista = v;
 		this.usuario = usuario;
 		//no hay inicializacion especifica del modelo, solo de la vista
-		this.initView(this.usuario);
+		this.initView();
 	}
 	
 	
@@ -27,7 +29,7 @@ public class InscribirSocioController {
 		
 		vista.getBotonVolver().addActionListener(e -> SwingUtil.exceptionWrapper(() -> vista.getFrame().dispose()));
 		vista.getBotonListarActividades().addActionListener(e -> SwingUtil.exceptionWrapper(() -> listaActividades()));
-		vista.getBotonInscribir().addActionListener(e -> SwingUtil.exceptionWrapper(() -> inscribirUsuario()));
+		vista.getBotonInscribir().addActionListener(e -> SwingUtil.exceptionWrapper(() -> crearInscripcion()));
 	
 	}
 	
@@ -66,20 +68,51 @@ public class InscribirSocioController {
 	 * Método que inscribe al Usuario generando una inscripcion
 	 */
 	//TODO pillar el usuario que se logea en el main
-	private void inscribirUsuario() {
+	private void crearInscripcion() {
+		
+		System.out.println(""+model.tieneDeudas(usuario));
+		
+		if (model.tieneDeudas(usuario)) {
+			JOptionPane.showMessageDialog(
+					vista.getFrame(), "Tienes deudas no puedes inscribirte","¡¡¡MOROSO!!!", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
 		int filaSeleccionada = vista.getTable().getSelectedRow();
+		
+		if (filaSeleccionada == -1) {
+	        JOptionPane.showMessageDialog(vista.getFrame(), "Por favor, selecciona una actividad de la tabla.");
+	        return;
+	    }
 		ActividadDTO actividad = actividades.get(filaSeleccionada);
-		Date fechaActual = new Date();
+		Date hoy = new Date();
+		String fechaActual = Util.dateToIsoString(hoy);
+		String estado = model.compruebaAforo(actividad);
+		boolean estaPagado = false;
+		
+		if (vista.getRadioEfectivo().isSelected()) {
+			estaPagado = true;
+		}
  
 		InscripcionDTO ins = new InscripcionDTO(
-				actividad.getId(), usuario.getId(), fechaActual,
-				"admitido", false, "socio");
+				actividad.getId(), this.usuario.getId(), fechaActual,
+				estado, estaPagado, "socio");
+		
+		if(model.inscribirSocioActividad(usuario, actividad, ins) == 1) {
+			JOptionPane.showMessageDialog(
+					vista.getFrame(), "Inscripcion en"+ actividad.getNombre() +" realizada con exito");
+		}
+		else {
+			JOptionPane.showMessageDialog(
+					vista.getFrame(), ""+actividad.getNombre() +" tiene aforo completo seras añadido a lista de espera");
+		}
+
 	}
 	
-	public void initView(UsuarioSesion s) {
+	public void initView() {
 		
 		//Ponemos el nombre del usuario que se está inscribiendo
-		vista.getLabelSocio().setText(s.getNombre()+"");
+		vista.getLabelSocio().setText(this.usuario.getNombre()+"");
 		
 		/*//Cargamos el primer periodo en la tabla para que no salga vacía
 		listaActividades();*/

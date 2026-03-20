@@ -111,15 +111,15 @@ public class InscribirSocioView {
 		bListarActividades.setBounds(512, 88, 172, 39);
 		frame.getContentPane().add(bListarActividades);
 		
-		JRadioButton radioPagoEnActo = new JRadioButton("Pago en el acto");
+		radioPagoEnActo = new JRadioButton("Pago en el acto");
 		radioPagoEnActo.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		radioPagoEnActo.setBounds(512, 554, 140, 23);
 		frame.getContentPane().add(radioPagoEnActo);
 		
-		JRadioButton radioMensualidad = new JRadioButton("Mensualidad");
-		radioMensualidad.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		radioMensualidad.setBounds(172, 554, 125, 23);
-		frame.getContentPane().add(radioMensualidad);
+		radioPagoMensual = new JRadioButton("Mensualidad");
+		radioPagoMensual.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		radioPagoMensual.setBounds(172, 554, 125, 23);
+		frame.getContentPane().add(radioPagoMensual);
 		
 		JLabel lblNewLabel_2 = new JLabel("Método de Pago");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -128,8 +128,8 @@ public class InscribirSocioView {
 		
 		grupoRadio = new ButtonGroup();
 		grupoRadio.add(radioPagoEnActo);
-		grupoRadio.add(radioMensualidad);
-		radioMensualidad.setSelected(true);
+		grupoRadio.add(radioPagoMensual);
+		radioPagoMensual.setSelected(true);
 		
 	}
 	
@@ -143,5 +143,6 @@ public class InscribirSocioView {
 	public JDateChooser getFechaFin() {return this.dFechaFin;}
 	public JRadioButton getRadioMensual() {return this.radioPagoMensual;}
 	public JRadioButton getRadioEfectivo() {return this.radioPagoEnActo;}
+	public ButtonGroup getGrupoRadio() {return this.grupoRadio;}
 	
 }

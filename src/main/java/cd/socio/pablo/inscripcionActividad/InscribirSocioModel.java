@@ -1,81 +1,45 @@
 package cd.socio.pablo.inscripcionActividad;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-import cd.admin.pablo.periodo.PeriodoDTO;
-import giis.demo.tkrun.CarreraDisplayDTO;
+import cd.login.diego.UsuarioSesion;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
-import giis.demo.util.Util;
 
 public class InscribirSocioModel {
 
 	private Database db = new Database();
 	
-	private String fechaFin;
-	
-	/*
-	 * Ya no se usan ya que sacamos las fechas directemente del objeto
-	 */
-	
-	/*public String getFechaInicio(String periodo) {
-		String sql = "SELECT fecha_inicio FROM Periodos WHERE nombre = ?";
-		
-		List<PeriodoGlobalDTO> lista = db.executeQueryPojo(PeriodoGlobalDTO.class, sql, periodo);
-		
-		return (!lista.isEmpty()) ? lista.get(0).getFecha_inicio() : null;
-	}
-	
-	public String getFechaFin(String periodo) {
-		String sql = "SELECT fecha_fin FROM Periodos WHERE nombre = ?";
-		
-		List<PeriodoGlobalDTO> lista = db.executeQueryPojo(PeriodoGlobalDTO.class, sql, periodo);
-		
-		return (!lista.isEmpty()) ? lista.get(0).getFecha_fin() : null;
-	}*/
-	
-	/*public List<PeriodoGlobalDTO> getPeriodoGlobal(){
-		
-		String sql = "SELECT nombre, fecha_inicio, fecha_fin from PeriodosGlobales";
-		
-		return db.executeQueryPojo(PeriodoGlobalDTO.class, sql);
-	}*/
-	
-	public void insertarInscripcion(InscripcionDTO ins) {
-		
-		/*validaParametros(
-				
-		);*/
-		
-		convierteFecha(ins);
-	}
-	
-	private void convierteFecha(InscripcionDTO periodo){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		
-		this.fechaFin = sdf.format(periodo.getFecha_inscripcion());
-		
-	}
+	private int idActividad;
 	
 	public String compruebaAforo(ActividadDTO actividad) {
 		
 		String sql = "SELECT * FROM	INSCRIPCIONES WHERE id_actividad = ?";
 		
-		List<ActividadDTO> lista = 
-				db.executeQueryPojo(ActividadDTO.class, sql, actividad.getId());
+		List<InscripcionDTO> lista = 
+				db.executeQueryPojo(InscripcionDTO.class, sql, actividad.getId());
 		
 		return (lista.size() < actividad.getAforo()) ? "admitido" : "lista_espera";
 		
 	}
 	
-	public void inscribirSocioActividad(SocioDTO socio, ActividadDTO actividad, InscripcionDTO ins) {
+	/**
+	 * Añade a la BBDD la inscripcion a una actividad del usuario
+	 * @param socio
+	 * @param actividad
+	 * @param ins
+	 * @return devuelve 1 si hay aforo y 0 si va a lista_espera
+	 */
+	public int inscribirSocioActividad(UsuarioSesion socio, ActividadDTO actividad, InscripcionDTO ins) {
+				
 		String sql = "INSERT INTO Inscripciones "
 				+ "(id_actividad, id_socio, nombre_no_socio, fecha_inscripcion, estado, pagado, tipo) "
 				+ "VALUES (?, ?, NULL, ?, ?, ?, 'socio')";
 		db.executeUpdate(sql, actividad.getId(), socio.getId(), 
-				ins.getFecha_inscripcion(), compruebaAforo(actividad), 0);
+				ins.getFecha_inscripcion(), ins.getEstado(), ins.isPagado());
+		
+		return (ins.getEstado().equals("admitido")) ? 1 : 0;
 	}
 	
 	/**
@@ -85,12 +49,8 @@ public class InscribirSocioModel {
 	public List<ActividadDTO> getListaActividades(String fechaInicio, String fechaFin) {
 		
 		validaFechas(fechaInicio, fechaFin);
-//		String sql = "SELECT nombre, descripcion AS desc, aforo, "
-//	               + "fecha_inicio, fecha_fin, "
-//	               + "costo_socio AS precioSocio, costo_no_socio AS precioNoSocio "
-//	               + "FROM Actividades WHERE fecha_inicio <= ? AND fecha_fin >= ?";
 		
-		String sql = "SELECT a.nombre, a.descripcion, a.aforo, "
+		String sql = "SELECT a.id_actividad, a.nombre, a.descripcion, a.aforo, "
 	               + "a.fecha_inicio, a.fecha_fin, "
 	               + "a.costo_socio AS precioSocio, a.costo_no_socio AS precioNoSocio, "
 	               + "p.fecha_fin AS fecha_fin_periodo " 
@@ -99,6 +59,13 @@ public class InscribirSocioModel {
 	               + "WHERE a.fecha_inicio <= ? AND a.fecha_fin >= ?";
 
 		return db.executeQueryPojo(ActividadDTO.class, sql, fechaFin, fechaInicio);
+	}
+	
+	public boolean tieneDeudas(UsuarioSesion socio) {
+		String sql = "SELECT debe_dinero AS debeDinero from Socios WHERE id_socio = ?";
+		List<SocioDTO> lista = db.executeQueryPojo(SocioDTO.class, sql, socio.getId());
+		
+		return (lista.get(0).isDebeDinero()) ? true : false;
 	}
 	
 	private void validaFechas(String fechaInicio, String fechaFin) {

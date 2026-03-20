@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class ActividadDTO {
 	
-	private int id;
+	private int id_actividad;
 	private String nombre;
 	private String descripcion;
 	private int aforo;
@@ -14,19 +14,20 @@ public class ActividadDTO {
 	private double precioNoSocio;
 	private String fecha_fin_periodo;
 	
-	
 	//Necesario parque el DButil funcione
 	public ActividadDTO() {
 		
 	}
 	
 	/*Getters y setters de la clase ActividadDTO*/
-	
-	
 
 	public String getNombre() {return nombre;}
 
-	public int getId() {return id;}
+	public int getId() {return id_actividad;}
+
+	public void setId_actividad(int id_actividad) {
+		this.id_actividad = id_actividad;
+	}
 
 	public void setNombre(String nombre) {this.nombre = nombre;}
 
@@ -81,6 +82,5 @@ public class ActividadDTO {
 	public void setFecha_fin_periodo(String fecha_fin_periodo) {
 		this.fecha_fin_periodo = fecha_fin_periodo;
 	}
-	
 
 }
