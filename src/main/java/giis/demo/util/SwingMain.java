@@ -239,6 +239,29 @@ public class SwingMain {
 				    reservaFrame.setVisible(true);
 				});
 				panelCentro.add(crearReservaSocio);
+		
+				// Botón Cancelar Reserva Admin
+				JButton cancelReservaAdmin = new JButton("Cancelar Reserva Admin");
+
+				cancelReservaAdmin.addActionListener(e -> {
+
+				    if (!sesion.isAdmin()) {
+				        JOptionPane.showMessageDialog(
+				                frame,
+				                "No tienes permisos para acceder a esta funcionalidad.\n" +
+				                "Esta ventana es solo para administración.",
+				                "Acceso denegado",
+				                JOptionPane.WARNING_MESSAGE
+				        );
+				        return;
+				    }
+
+				    // El controlador crea y muestra la vista, no hace falta nada más
+				    new cd.admin.luismi.cancelReser.CancelReservaControlador();
+
+				});
+
+				panelCentro.add(cancelReservaAdmin);
 
 		// =========================
 		// Gestionar Periodos (Administracion) (NUEVO botón + bloqueo)
