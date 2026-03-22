@@ -6,7 +6,7 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
-import giis.demo.util.SwingUtil; 
+import giis.demo.util.SwingUtil;
 
 public class ResActConflictosController {
 
@@ -51,13 +51,30 @@ public class ResActConflictosController {
 		List<ConflictoActividadDto> seleccionados =
 				view.getConflictosActividadesMarcados();
 
-		// Evitar duplicados
+		List<ConflictoActividadDto> todosLosConflictos =
+				model.getConflictosConActividades(actividadSeleccionada.getIdActividad());
+
 		Set<Integer> actividadesMarcadas = new HashSet<Integer>();
 		for (ConflictoActividadDto dto : seleccionados) {
 			actividadesMarcadas.add(dto.getIdActividadConflicto());
 		}
 
-		// 1. Eliminar planificación SOLO de las marcadas
+		Set<Integer> actividadesEnConflicto = new HashSet<Integer>();
+		for (ConflictoActividadDto dto : todosLosConflictos) {
+			actividadesEnConflicto.add(dto.getIdActividadConflicto());
+		}
+
+		if (!actividadesMarcadas.containsAll(actividadesEnConflicto)) {
+			JOptionPane.showMessageDialog(
+					view.getFrame(),
+					"No se puede reservar la nueva actividad porque existen conflictos "
+					+ "con actividades ya planificadas que no han sido marcadas con prioridad.",
+					"Conflictos sin resolver",
+					JOptionPane.WARNING_MESSAGE
+			);
+			return;
+		}
+
 		for (Integer idActividadConflicto : actividadesMarcadas) {
 			model.eliminarPlanificacionActividadConflicto(
 					actividadSeleccionada.getIdActividad(),
@@ -65,17 +82,18 @@ public class ResActConflictosController {
 			);
 		}
 
-		// 2. Cancelar reservas automáticamente
+		int reservasCanceladas = model.getConflictosConReservasSocios(
+				actividadSeleccionada.getIdActividad()
+		).size();
+
 		model.cancelarReservasEnConflicto(
 				actividadSeleccionada.getIdActividad()
 		);
 
-		// 3. Crear nueva planificación
 		model.crearPlanificacionNuevaActividad(
 				actividadSeleccionada.getIdActividad()
 		);
 
-		// 4. Mensaje informativo
 		String nombresActividades = "";
 
 		for (ConflictoActividadDto dto : seleccionados) {
@@ -91,9 +109,14 @@ public class ResActConflictosController {
 
 		String mensaje =
 				"Cambios realizados correctamente:\n"
-				+ "- Actividades en conflicto eliminadas: " + nombresActividades + "\n"
-				+ "- Reservas de socios canceladas automáticamente\n"
-				+ "- Nueva planificación creada";
+				+ "- Actividades en conflicto eliminadas: " + nombresActividades + "\n";
+
+		if (reservasCanceladas > 0) {
+			mensaje += "- Reservas de socios canceladas automáticamente: "
+					+ reservasCanceladas + "\n";
+		}
+
+		mensaje += "- Nueva planificación creada";
 
 		JOptionPane.showMessageDialog(
 				view.getFrame(),

@@ -18,6 +18,10 @@ public class ResActController {
 	public void initController() {
 		view.getBtnAtras().addActionListener(e -> view.close());
 
+		view.getBtnActualizar().addActionListener(
+				e -> SwingUtil.exceptionWrapper(() -> cargarTabla())
+		);
+
 		view.getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

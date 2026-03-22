@@ -20,6 +20,7 @@ public class ResActView {
 	private JFrame frame;
 	private JTable table;
 	private DefaultTableModel tableModel;
+	private JButton btnActualizar;
 	private JButton btnAtras;
 	private List<ActividadSinReservaDto> actividades;
 
@@ -61,7 +62,9 @@ public class ResActView {
 		frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
 
 		JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		btnActualizar = new JButton("Actualizar");
 		btnAtras = new JButton("Atrás");
+		panelInferior.add(btnActualizar);
 		panelInferior.add(btnAtras);
 		frame.getContentPane().add(panelInferior, BorderLayout.SOUTH);
 	}
@@ -95,6 +98,10 @@ public class ResActView {
 
 	public JTable getTable() {
 		return table;
+	}
+
+	public JButton getBtnActualizar() {
+		return btnActualizar;
 	}
 
 	public JButton getBtnAtras() {
