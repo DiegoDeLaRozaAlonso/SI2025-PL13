@@ -27,6 +27,9 @@ import cd.login.diego.UsuarioSesion;
 import cd.socio.pablo.listaActividades.ListaPeriodoController;
 import cd.socio.pablo.listaActividades.ListaPeriodoModel;
 import cd.socio.pablo.listaActividades.ListaPeriodoView;
+import cd.admin.diego.resact.ResActController;
+import cd.admin.diego.resact.ResActModel;
+import cd.admin.diego.resact.ResActView;
 
 public class SwingMain {
 
@@ -152,6 +155,29 @@ public class SwingMain {
 		});
 		panelCentro.add(planificarActividad);
 		
+		JButton btnReservaParaActividad = new JButton("Reserva para actividad (Administracion)");
+		btnReservaParaActividad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if (!sesion.isAdmin()) {
+					JOptionPane.showMessageDialog(
+							frame,
+							"No tienes permisos para acceder a esta funcionalidad.\n"
+							+ "Solo un administrador puede acceder.",
+							"Acceso denegado",
+							JOptionPane.WARNING_MESSAGE
+					);
+					return;
+				}
+
+				ResActController controller = new ResActController(
+						new ResActModel(),
+						new ResActView()
+				);
+				controller.initController();
+			}
+		});
+		panelCentro.add(btnReservaParaActividad);
 		
 		/*
 		 * Ejecuta la lista de actividades	

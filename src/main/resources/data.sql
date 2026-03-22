@@ -352,3 +352,27 @@ INSERT INTO Reduccion (id_credito, id_socio, nombre_no_socio, monto, fecha_gener
 (6, NULL, 'Óscar Núñez', 12.00, '2026-02-09', NULL, 'Crédito por no admisión (lista de espera)'),
 (7, 7, NULL, 18.00, '2026-02-20', '2026-03-01', 'Crédito por incidencia en pista (pádel)'),
 (8, 2, NULL, 6.00, '2026-02-11', NULL, 'Ajuste por error de cobro (diferencia)');
+
+
+
+
+------------------------------------------------------------
+-- CASOS EXTRA HU 34013 - RESACT
+------------------------------------------------------------
+
+INSERT INTO Actividades
+(id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo)
+VALUES
+(101, 'Prueba1resact', 'Actividad de prueba con conflicto solo con otra actividad.', 7, 18, 12.00, 20.00, '2026-03-10', '2026-03-20', 4),
+(102, 'Prueba2resact', 'Actividad de prueba con conflicto con actividad y con reserva de socio.', 2, 8, 20.00, 35.00, '2026-03-15', '2026-03-25', 2);
+
+INSERT INTO SesionesActividad
+(id_sesion, id_actividad, fecha, hora_inicio, hora_fin, id_instalacion)
+VALUES
+(101, 101, '2026-03-12', '18:00', '19:00', 7),
+(102, 102, '2026-03-17', '19:00', '20:00', 2);
+
+INSERT INTO Reservas
+(id_reserva, id_socio, id_instalacion, fecha_hora_inicio, duracion, costo, pagado, estado, motivo_cancelacion)
+VALUES
+(101, 6, 2, '2026-03-17 19:00', 60, 12.00, 1, 'activa', NULL);
