@@ -6,7 +6,7 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
-import giis.demo.util.SwingUtil;
+import giis.demo.util.SwingUtil; 
 
 public class ResActConflictosController {
 

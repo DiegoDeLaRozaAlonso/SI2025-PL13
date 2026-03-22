@@ -69,23 +69,23 @@ public class ResActModel {
 		return db.executeQueryPojo(ConflictoReservaDto.class, sql, idActividad);
 	}
 
-	// 🔧 CAMBIADO
+	// 🔧 CAMBIADO 
 	public void cancelarReservasEnConflicto(int idActividadNueva) {
 		String sql =
-			"UPDATE Reservas "
-			+ "SET estado = 'cancelada', "
-			+ "    motivo_cancelacion = 'Coincidencia con una actividad' "
-			+ "WHERE id_reserva IN ( "
-			+ "    SELECT DISTINCT r.id_reserva "
-			+ "    FROM SesionesActividad sa "
-			+ "    INNER JOIN Reservas r "
-			+ "        ON sa.id_instalacion = r.id_instalacion "
-			+ "        AND date(r.fecha_hora_inicio) = sa.fecha "
-			+ "        AND sa.hora_inicio < time(r.fecha_hora_inicio, '+' || r.duracion || ' minutes') "
-			+ "        AND sa.hora_fin > time(r.fecha_hora_inicio) "
-			+ "    WHERE sa.id_actividad = ? "
-			+ "      AND r.estado = 'activa' "
-			+ ")";
+				"UPDATE Reservas "
+						+ "SET estado = 'cancelada', "
+						+ "    motivo_cancelacion = 'Coincidencia con una actividad' "
+						+ "WHERE id_reserva IN ( "
+						+ "    SELECT DISTINCT r.id_reserva "
+						+ "    FROM SesionesActividad sa "
+						+ "    INNER JOIN Reservas r "
+						+ "        ON sa.id_instalacion = r.id_instalacion "
+						+ "        AND date(r.fecha_hora_inicio) = sa.fecha "
+						+ "        AND sa.hora_inicio < time(r.fecha_hora_inicio, '+' || r.duracion || ' minutes') "
+						+ "        AND sa.hora_fin > time(r.fecha_hora_inicio) "
+						+ "    WHERE sa.id_actividad = ? "
+						+ "      AND r.estado = 'activa' "
+						+ ")";
 
 		db.executeUpdate(sql, idActividadNueva);
 	}
