@@ -50,17 +50,10 @@ public class InscribirSocioModel {
 		
 		validaFechas(fechaInicio, fechaFin);
 		
-//		String sql = "SELECT a.id_actividad, a.nombre, a.descripcion, a.aforo, "
-//	               + "a.fecha_inicio, a.fecha_fin, "
-//	               + "a.costo_socio AS precioSocio, a.costo_no_socio AS precioNoSocio, "
-//	               + "p.fecha_fin AS fecha_fin_periodo " 
-//	               + "FROM Actividades a "
-//	               + "INNER JOIN PeriodosInscripcion p ON a.id_periodo = p.id_periodo "
-//	               + "WHERE a.fecha_inicio <= ? AND a.fecha_fin >= ?";
-		
 		String sql = "SELECT a.id_actividad, a.nombre, a.descripcion, a.aforo, "
 	               + "a.fecha_inicio, a.fecha_fin, "
 	               + "a.costo_socio AS precioSocio, "
+	               + "p.fecha_inicio_socio AS fecha_inicio_periodo, "
 	               + "p.fecha_fin_socio AS fecha_fin_periodo " 
 	               + "FROM Actividades a "
 	               + "INNER JOIN PeriodosInscripcion p ON a.id_periodo = p.id_periodo "
@@ -69,6 +62,11 @@ public class InscribirSocioModel {
 		return db.executeQueryPojo(ActividadDTO.class, sql, fechaFin, fechaInicio);
 	}
 	
+	/**
+	 * Comprueba que el socio no tiene deudas pendientes
+	 * @param socio
+	 * @return true si es moroso y false si está al corriente de pago
+	 */
 	public boolean tieneDeudas(UsuarioSesion socio) {
 		String sql = "SELECT debe_dinero AS debeDinero from Socios WHERE id_socio = ?";
 		List<SocioDTO> lista = db.executeQueryPojo(SocioDTO.class, sql, socio.getId());
@@ -76,12 +74,31 @@ public class InscribirSocioModel {
 		return (lista.get(0).isDebeDinero()) ? true : false;
 	}
 	
+	/**
+	 * Comprueba que el socio no estuviera ya inscrito en dicha actividad
+	 * @param socio
+	 * @param actividad
+	 * @return
+	 */
+	public boolean inscripcionRepetida(UsuarioSesion socio, ActividadDTO actividad) {
+		String sql = "SELECT * FROM Inscripciones WHERE  id_actividad = ? AND id_socio = ?";
+		List<InscripcionDTO> inscripciones = db.executeQueryPojo(InscripcionDTO.class, sql, actividad.getId(), socio.getId());
+		
+		return (inscripciones.size() == 0) ? false : true;
+	}
+	
+	/**
+	 * Comprueba que las fechas no son nulas o que la de fin ocurra antes que la de inicio
+	 * @param fechaInicio
+	 * @param fechaFin
+	 */
 	private void validaFechas(String fechaInicio, String fechaFin) {
 	
 		validateNotNull(fechaInicio, "La fecha de fin del periodo de SOCIOS no puede ser nula");
 		validateNotNull(fechaFin, "La fecha de fin del periodo de NO SOCIOS no puede ser nula");
 		validaFecha(fechaInicio.compareTo(fechaFin) <= 0, "La fecha de inicio no puede ser posterior a la de fin de SOCIO");
 	}
+	
 	
 	private void validaFecha(boolean condition, String message) {
 		if (!condition)

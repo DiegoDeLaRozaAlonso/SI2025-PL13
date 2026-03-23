@@ -2,9 +2,7 @@ package cd.socio.pablo.inscripcionActividad;
 
 import java.util.Date;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import cd.login.diego.UsuarioSesion;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
@@ -53,7 +51,7 @@ public class InscribirSocioController {
 			
 		//Definimos las columnas de la tabla
 		String[] columnas = {"nombre", "descripcion", "aforo", 
-				"fecha_inicio", "fecha_fin", "precioSocio", "fecha_fin_periodo"};
+				"fecha_inicio", "fecha_fin", "precioSocio", "fecha_inicio_periodo", "fecha_fin_periodo"};
 		
 		javax.swing.table.TableModel tmodel = SwingUtil.getTableModelFromPojos(actividades, columnas);
 		vista.getTable().setModel(tmodel);
@@ -82,6 +80,7 @@ public class InscribirSocioController {
 	        JOptionPane.showMessageDialog(vista.getFrame(), "Por favor, selecciona una actividad de la tabla.");
 	        return;
 	    }
+		
 		ActividadDTO actividad = actividades.get(filaSeleccionada);
 		Date hoy = new Date();
 		String fechaActual = Util.dateToIsoString(hoy);
@@ -89,16 +88,30 @@ public class InscribirSocioController {
 		boolean estaPagado = false;
 		
 		if (vista.getRadioEfectivo().isSelected()) {
+			String tarjeta = JOptionPane.showInputDialog(
+					vista.getFrame(), "Introduzca una tarjeta de crédito", "Procesar pago", JOptionPane.QUESTION_MESSAGE);
+			
+			//Comprobamos que se ha introducido una tarjeta de crédito
+			if(tarjeta == null || tarjeta.trim().isEmpty()) {
+				return; //Si se ha dejado el campo vació se cancela la operación
+			}
+			//Si llegamos aqui es que se ha introducido una tarjeta
 			estaPagado = true;
 		}
- 
+		
+		if (model.inscripcionRepetida(usuario, actividad) == true) {
+			JOptionPane.showMessageDialog(vista.getFrame(), 
+					"El usuario ya está inscrito", "Inscripcion ya hecha", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
 		InscripcionDTO ins = new InscripcionDTO(
 				actividad.getId(), this.usuario.getId(), fechaActual,
 				estado, estaPagado, "socio");
 		
 		if(model.inscribirSocioActividad(usuario, actividad, ins) == 1) {
 			JOptionPane.showMessageDialog(
-					vista.getFrame(), "Inscripcion en"+ actividad.getNombre() +" realizada con exito");
+					vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
 		}
 		else {
 			JOptionPane.showMessageDialog(

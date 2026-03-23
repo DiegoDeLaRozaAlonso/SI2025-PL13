@@ -12,6 +12,7 @@ public class ActividadDTO {
 	private String fecha_fin;
 	private double precioSocio;
 	private double precioNoSocio;
+	private String fecha_inicio_periodo;
 	private String fecha_fin_periodo;
 	
 	//Necesario parque el DButil funcione
@@ -20,8 +21,23 @@ public class ActividadDTO {
 	}
 	
 	/*Getters y setters de la clase ActividadDTO*/
+	
+	
 
 	public String getNombre() {return nombre;}
+
+	public String getFecha_inicio_periodo() {
+		return fecha_inicio_periodo;
+	}
+
+	public void setFecha_inicio_periodo(String fecha_inicio_periodo) {
+		this.fecha_inicio_periodo = fecha_inicio_periodo;
+	}
+
+	
+	public int getId_actividad() {
+		return id_actividad;
+	}
 
 	public int getId() {return id_actividad;}
 
