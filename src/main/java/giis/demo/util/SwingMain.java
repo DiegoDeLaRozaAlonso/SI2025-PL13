@@ -311,6 +311,21 @@ public class SwingMain {
 		    }
 		});
 		panelCentro.add(btnVisualizacionReservas);
+		
+		// BOTÓN PAGOS PENDIENTES
+				
+				
+				JButton btnContabilidad = new JButton("Contabilidad Mensual");
+				btnContabilidad.addActionListener(e -> {
+				    if (!sesion.isAdmin()) {
+				        JOptionPane.showMessageDialog(frame, "Solo administradores.", "Acceso denegado", JOptionPane.WARNING_MESSAGE);
+				        return;
+				    }
+				    ContabilidadMensualController controller = new ContabilidadMensualController(
+				        new ContabilidadMensualModel(), new ContabilidadMensualView());
+				    controller.initController();
+				});
+				panelCentro.add(btnContabilidad);
 	
 		
 		
