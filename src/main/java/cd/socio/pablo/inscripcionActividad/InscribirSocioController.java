@@ -87,6 +87,8 @@ public class InscribirSocioController {
 		String estado = model.compruebaAforo(actividad);
 		boolean estaPagado = false;
 		
+		model.enPlazo(actividad); //comprueba que no esté inscrito ya en la actividad
+		
 		if (vista.getRadioEfectivo().isSelected()) {
 			String tarjeta = JOptionPane.showInputDialog(
 					vista.getFrame(), "Introduzca una tarjeta de crédito", "Procesar pago", JOptionPane.QUESTION_MESSAGE);

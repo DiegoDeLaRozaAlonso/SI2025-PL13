@@ -1,11 +1,12 @@
 package cd.socio.pablo.inscripcionActividad;
 
-import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import cd.login.diego.UsuarioSesion;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
+import giis.demo.util.Util;
 
 public class InscribirSocioModel {
 
@@ -85,6 +86,19 @@ public class InscribirSocioModel {
 		List<InscripcionDTO> inscripciones = db.executeQueryPojo(InscripcionDTO.class, sql, actividad.getId(), socio.getId());
 		
 		return (inscripciones.size() == 0) ? false : true;
+	}
+	
+	/**
+	 * Comprueba que el socio cumple con los periodos de inscripcion
+	 * @param a
+	 */
+	public void enPlazo(ActividadDTO a) {
+		Date fecha = new Date();
+		
+		String fechaHoy = Util.dateToIsoString(fecha);
+		
+		validaFecha(a.getFecha_inicio_periodo().compareTo(fechaHoy) <= 0, "No ha empezado el periodo de inscripcion");
+		validaFecha(fechaHoy.compareTo(a.getFecha_fin_periodo()) <= 0, "Ya termino el periodo de inscripcion");
 	}
 	
 	/**
