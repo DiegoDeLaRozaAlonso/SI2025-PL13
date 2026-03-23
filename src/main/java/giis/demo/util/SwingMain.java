@@ -336,7 +336,8 @@ public class SwingMain {
 		    }
 		});
 		panelCentro.add(btnVisualizacionReservas);
-		// BOTÓN PAGOS PENDIENTES
+
+    // BOTÓN PAGOS PENDIENTES
 		JButton btnPagosPendientes = new JButton("Mis Pagos Pendientes");
 		btnPagosPendientes.addActionListener(new ActionListener() { //NOSONAR __codigo__ __autogenerado__
 		    public void actionPerformed(ActionEvent e) {
