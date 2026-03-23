@@ -11,19 +11,23 @@ import java.util.*;
 public class CancelReservaModelo {
 
     private final Database db = new Database();
+
+    // SQLite devuelve "yyyy-MM-dd HH:mm:ss", normalizamos a "yyyy-MM-dd HH:mm"
     private final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    // Lista socios
+    // ==========================================================
+    // LISTA DE SOCIOS
+    // ==========================================================
     public List<String> getNombresSocios() {
         List<String> lista = new ArrayList<>();
 
         try (Connection conn = db.getConnection();
-             PreparedStatement ps = conn.prepareStatement("SELECT nombre FROM Socios ORDER BY nombre")) {
+             PreparedStatement ps = conn.prepareStatement(
+                     "SELECT nombre FROM Socios ORDER BY nombre")) {
 
             ResultSet rs = ps.executeQuery();
-
             while (rs.next())
-                lista.add(rs.getString(1));
+                lista.add(rs.getString("nombre"));
 
             return lista;
 
@@ -32,7 +36,9 @@ public class CancelReservaModelo {
         }
     }
 
-    // Reservas activas por socio
+    // ==========================================================
+    // RESERVAS ACTIVAS DE UN SOCIO
+    // ==========================================================
     public List<Object[]> getReservasSocio(String nombre) {
 
         String sql = """
@@ -48,13 +54,12 @@ public class CancelReservaModelo {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, nombre);
-
             ResultSet rs = ps.executeQuery();
-            List<Object[]> lista = new ArrayList<>();
 
+            List<Object[]> lista = new ArrayList<>();
             while (rs.next()) {
                 lista.add(new Object[]{
-                        rs.getInt(1),
+                        rs.getInt("id_reserva"),
                         rs.getString(2),
                         rs.getString(3),
                         rs.getInt(4)
@@ -68,28 +73,30 @@ public class CancelReservaModelo {
         }
     }
 
-    // ✅ corregido: normaliza fecha ANTES de parsear
-    private String normalizarFecha(String fechaBD) {
-        // formato con segundos → cortar
-        if (fechaBD.length() > 16) {
-            return fechaBD.substring(0, 16);
-        }
-        return fechaBD;
+    // ==========================================================
+    // NORMALIZAR FECHA: QUITAR SEGUNDOS
+    // ==========================================================
+    private String normalizarFecha(String fecha) {
+        if (fecha.length() >= 16)
+            return fecha.substring(0, 16);
+        return fecha;
     }
 
-    public String calcularFin(String inicio, int duracion) {
+    // ==========================================================
+    // CALCULAR FIN DE RESERVA
+    // ==========================================================
+    public String calcularFin(String inicio, int duracionMin) {
 
         inicio = normalizarFecha(inicio);
 
         LocalDateTime ini = LocalDateTime.parse(inicio, FMT);
-        return ini.plusMinutes(duracion)
+        return ini.plusMinutes(duracionMin)
                   .toLocalTime()
                   .withSecond(0)
                   .withNano(0)
                   .toString();
     }
 
-    // Cancelar reserva (versión final)
     public void cancelarReserva(int idReserva, String motivo) {
 
         try (Connection conn = db.getConnection()) {
@@ -104,22 +111,25 @@ public class CancelReservaModelo {
             if (!rs.next())
                 throw new ApplicationException("Reserva no encontrada o ya cancelada.");
 
-            int idSocio = rs.getInt(1);
-            String fechaBD = rs.getString(2);
+            int idSocio = rs.getInt("id_socio");
+            String fechaBD = rs.getString("fecha_hora_inicio");
+            double costo = rs.getDouble("costo");
 
-            // ✅ normalizar fecha (evita errores de parseo y errores de comparación)
-            fechaBD = normalizarFecha(fechaBD);
+            // Normalizar: quitar segundos si los hay
+            if (fechaBD.length() > 16)
+                fechaBD = fechaBD.substring(0, 16);
 
-            LocalDateTime inicio = LocalDateTime.parse(fechaBD, FMT)
-                    .withSecond(0).withNano(0);
+            LocalDateTime inicio = LocalDateTime.parse(fechaBD, FMT);
+            LocalDateTime ahora  = LocalDateTime.now().withSecond(0).withNano(0);
 
-            LocalDateTime ahora = LocalDateTime.now()
-                    .withSecond(0).withNano(0);
+            // ✅ Primero descartamos pasado y presente
+            if (!inicio.isAfter(ahora)) {
+                throw new ApplicationException(
+                    "No se puede cancelar una reserva que ya ha comenzado o pertenece a una fecha/hora pasada."
+                );
+            }
 
-            if (!inicio.isAfter(ahora))
-                throw new ApplicationException("La reserva ya ha comenzado, no se puede cancelar.");
-
-            // ✅ Cancelar
+            // Cancelar
             PreparedStatement ps2 = conn.prepareStatement(
                     "UPDATE Reservas SET estado='cancelada', motivo_cancelacion=? WHERE id_reserva=?"
             );
@@ -127,15 +137,8 @@ public class CancelReservaModelo {
             ps2.setInt(2, idReserva);
             ps2.executeUpdate();
 
-            // ✅ Devolver horas
-            PreparedStatement ps3 = conn.prepareStatement(
-                    "UPDATE Socios SET debe_dinero=0 WHERE id_socio=?"
-            );
-            ps3.setInt(1, idSocio);
-            ps3.executeUpdate();
-
-            // ✅ PDF cancelación
-            new PDFCancelacion().generar(idReserva, idSocio, motivo, rs.getDouble(3));
+            // PDF
+            new PDFCancelacion().generar(idReserva, idSocio, motivo, costo);
 
         } catch (SQLException e) {
             throw new ApplicationException(e);
