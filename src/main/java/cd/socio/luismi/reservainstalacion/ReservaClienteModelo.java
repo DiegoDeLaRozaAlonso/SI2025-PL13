@@ -147,52 +147,74 @@ public class ReservaClienteModelo {
                 throw new ApplicationException("No puedes reservar más de 4 horas en el mismo día.");
 
 
-            // ==========================================================
-            // ✅ REGLA 3: No más de 3 horas consecutivas
-            // ==========================================================
-            String sqlReservas = """
-                SELECT fecha_hora_inicio, duracion
-                FROM Reservas
-                WHERE id_socio=? AND DATE(fecha_hora_inicio)=? AND estado='activa'
-            """;
+         // ==========================================================
+         // ✅ REGLA 3: No más de 3 horas continuadas
+         // ==========================================================
 
-            List<Object[]> reservasDia = qr.query(conn, sqlReservas, rs -> {
-                List<Object[]> list = new ArrayList<>();
-                while (rs.next()) {
+         // Sacar todas las reservas activas del día del socio
+         String sqlReservasDia = """
+                 SELECT fecha_hora_inicio, duracion
+                 FROM Reservas
+                 WHERE id_socio=? 
+                 AND DATE(fecha_hora_inicio)=?
+                 AND estado='activa'
+                 """;
 
-                    String raw = rs.getString(1);
-                    // Normalizar formato
-                    if (raw.length() > 16)
-                        raw = raw.substring(0, 16);
+         List<LocalDateTime[]> bloques = qr.query(conn, sqlReservasDia, rs -> {
+             List<LocalDateTime[]> list = new ArrayList<>();
+             while (rs.next()) {
+                 String raw = rs.getString(1);
 
-                    LocalDateTime ini = LocalDateTime.parse(raw.replace(" ", "T"));
-                    int d = rs.getInt(2);
+                 // Normalizar formato (quitar segundos)
+                 if (raw.length() > 16) raw = raw.substring(0, 16);
 
-                    list.add(new Object[]{ini, d});
-                }
-                return list;
-            }, idSocio, fecha.toString());
+                 LocalDateTime ini = LocalDateTime.parse(raw.replace(" ", "T"));
+                 LocalDateTime fi  = ini.plusMinutes(rs.getInt(2));
 
-            LocalDateTime nuevaIni = inicio;
-            LocalDateTime nuevaFin = inicio.plusHours(horas);
+                 list.add(new LocalDateTime[]{ini, fi});
+             }
+             return list;
+         }, idSocio, fecha.toString());
 
-            for (Object[] r : reservasDia) {
-                LocalDateTime ini = (LocalDateTime) r[0];
-                LocalDateTime fi = ini.plusMinutes((int) r[1]);
+         // ✅ Añadir la NUEVA reserva a la lista
+         bloques.add(new LocalDateTime[]{inicio, fin});
 
-                // ¿Están contiguas / solapadas?
-                boolean juntas = (!nuevaFin.isBefore(ini)) && (!nuevaIni.isAfter(fi));
+         // ✅ Ordenar todos los bloques por hora de inicio
+         bloques.sort((a, b) -> a[0].compareTo(b[0]));
 
-                if (juntas) {
-                    LocalDateTime minIni = ini.isBefore(nuevaIni) ? ini : nuevaIni;
-                    LocalDateTime maxFin = fi.isAfter(nuevaFin) ? fi : nuevaFin;
+         // ✅ Fusionar intervalos solapados o contiguos y comprobar
+         LocalDateTime bloqueIni = bloques.get(0)[0];
+         LocalDateTime bloqueFin = bloques.get(0)[1];
 
-                    long total = Duration.between(minIni, maxFin).toHours();
+         for (int i = 1; i < bloques.size(); i++) {
 
-                    if (total > 3)
-                        throw new ApplicationException("No puedes reservar más de 3 horas seguidas.");
-                }
-            }
+             LocalDateTime ini = bloques.get(i)[0];
+             LocalDateTime fi  = bloques.get(i)[1];
+
+             // Se solapan o son contiguos: (ini <= bloqueFin)
+             if (!ini.isAfter(bloqueFin)) {
+
+                 // Ampliar bloque
+                 if (fi.isAfter(bloqueFin))
+                     bloqueFin = fi;
+
+             } else {
+
+                 // Antes de pasar al siguiente bloque: comprobar duración
+                 long horasBloque = Duration.between(bloqueIni, bloqueFin).toHours();
+                 if (horasBloque > 3)
+                     throw new ApplicationException("No se pueden reservar más de 3 horas seguidas.");
+
+                 // Nuevo bloque
+                 bloqueIni = ini;
+                 bloqueFin = fi;
+             }
+         }
+
+         // ✅ Comprobar el ÚLTIMO bloque resultante
+         long horasBloque = Duration.between(bloqueIni, bloqueFin).toHours();
+         if (horasBloque > 3)
+             throw new ApplicationException("No se pueden reservar más de 3 horas seguidas.");
 
 
             // ==========================================================
