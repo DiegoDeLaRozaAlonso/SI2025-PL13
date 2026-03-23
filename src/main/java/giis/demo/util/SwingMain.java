@@ -11,6 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import cd.Administracion.Alejandro.Contabilidad.ContabilidadMensualController;
+import cd.Administracion.Alejandro.Contabilidad.ContabilidadMensualModel;
+import cd.Administracion.Alejandro.Contabilidad.ContabilidadMensualView;
 import cd.admin.Alejandro.Reserva.ReservarActividadController;
 import cd.admin.Alejandro.Reserva.ReservarActividadModel;
 import cd.admin.Alejandro.Reserva.ReservarActividadView;
@@ -27,6 +30,9 @@ import cd.login.diego.UsuarioSesion;
 import cd.socio.pablo.inscripcionActividad.InscribirSocioController;
 import cd.socio.pablo.inscripcionActividad.InscribirSocioModel;
 import cd.socio.pablo.inscripcionActividad.InscribirSocioView;
+import cd.socio.AlejandroVisualizacionReservas.PagosPendientesController;
+import cd.socio.AlejandroVisualizacionReservas.PagosPendientesModel;
+import cd.socio.AlejandroVisualizacionReservas.PagosPendientesView;
 import cd.socio.pablo.listaActividades.ListaPeriodoController;
 import cd.socio.pablo.listaActividades.ListaPeriodoModel;
 import cd.socio.pablo.listaActividades.ListaPeriodoView;
@@ -330,7 +336,37 @@ public class SwingMain {
 		    }
 		});
 		panelCentro.add(btnVisualizacionReservas);
-	
+		// BOTÓN PAGOS PENDIENTES
+		JButton btnPagosPendientes = new JButton("Mis Pagos Pendientes");
+		btnPagosPendientes.addActionListener(new ActionListener() { //NOSONAR __codigo__ __autogenerado__
+		    public void actionPerformed(ActionEvent e) {
+		        if (sesion.isAdmin()) {
+		            JOptionPane.showMessageDialog(
+		                    frame,
+		                    "Esta funcionalidad es solo para socios.",
+		                    "Acceso denegado",
+		                    JOptionPane.WARNING_MESSAGE
+		            );
+		            return;
+		        }
+		        PagosPendientesController controller = new PagosPendientesController(
+		            sesion.getId(), new PagosPendientesModel(), new PagosPendientesView());
+		        controller.initController();
+		    }
+		});
+		panelCentro.add(btnPagosPendientes);
+		
+		JButton btnContabilidad = new JButton("Contabilidad Mensual");
+		btnContabilidad.addActionListener(e -> {
+		    if (!sesion.isAdmin()) {
+		        JOptionPane.showMessageDialog(frame, "Solo administradores.", "Acceso denegado", JOptionPane.WARNING_MESSAGE);
+		        return;
+		    }
+		    ContabilidadMensualController controller = new ContabilidadMensualController(
+		        new ContabilidadMensualModel(), new ContabilidadMensualView());
+		    controller.initController();
+		});
+		panelCentro.add(btnContabilidad);
 		
 		
 		// =========================
