@@ -27,6 +27,9 @@ import cd.login.diego.LoginController;
 import cd.login.diego.LoginModel;
 import cd.login.diego.LoginView;
 import cd.login.diego.UsuarioSesion;
+import cd.socio.pablo.inscripcionActividad.InscribirSocioController;
+import cd.socio.pablo.inscripcionActividad.InscribirSocioModel;
+import cd.socio.pablo.inscripcionActividad.InscribirSocioView;
 import cd.socio.AlejandroVisualizacionReservas.PagosPendientesController;
 import cd.socio.AlejandroVisualizacionReservas.PagosPendientesModel;
 import cd.socio.AlejandroVisualizacionReservas.PagosPendientesView;
@@ -182,6 +185,22 @@ public class SwingMain {
 			}
 		});
 		panelCentro.add(btnListaActividades);
+		
+		
+		/*
+		 * Un usuario se inscribe a si mismo
+		 */
+		JButton btnInscribirUsuario = new JButton("Inscripcion Actividad (Socio)");
+		btnInscribirUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				InscribirSocioController controller = new InscribirSocioController(new InscribirSocioModel(), new InscribirSocioView(), sesion);
+				controller.initController();
+			}
+		});
+		panelCentro.add(btnInscribirUsuario);
+		
+		
 		
 		//Crear reserva admin
 				JButton crearReservaAdmin = new JButton("Crear Reserva Admin");
