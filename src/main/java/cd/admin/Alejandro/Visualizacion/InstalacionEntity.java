@@ -1,5 +1,5 @@
 package cd.admin.Alejandro.Visualizacion;
-
+//
 /**
  * Datos del modelo de dominio de cada instalacion del centro.
  * IMPORTANTE: todos los campos son String aunque en la BD sean INTEGER,
