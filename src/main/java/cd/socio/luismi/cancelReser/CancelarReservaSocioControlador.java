@@ -13,26 +13,28 @@ public class CancelarReservaSocioControlador {
     private CancelarReservaSocioVista vista;
     private int idSocio;
 
-    public CancelarReservaSocioControlador(int idSocio) {
+    public CancelarReservaSocioControlador(int idSocio,
+                                           CancelReservaModeloSocio modelo,
+                                           CancelarReservaSocioVista vista) {
         this.idSocio = idSocio;
-
-        modelo = new CancelReservaModeloSocio();
-        vista = new CancelarReservaSocioVista();
+        this.modelo = modelo;
+        this.vista = vista;
 
         cargarTabla();
 
         vista.tabla.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
+
                 int fila = vista.tabla.getSelectedRow();
                 int col  = vista.tabla.getSelectedColumn();
 
-                if (col == 3) { // boton cancelar
-
+                // columna 3 = botón “Cancelar”
+                if (col == 3) {
                     int idReserva = (int) vista.modelo.getValueAt(fila, 4);
 
                     String motivo = JOptionPane.showInputDialog(
-                        vista, "Motivo de cancelación:"
-                    );
+                            vista, "Motivo de cancelación:");
 
                     if (motivo != null && !motivo.isBlank()) {
                         try {
@@ -45,8 +47,6 @@ public class CancelarReservaSocioControlador {
                 }
             }
         });
-
-        vista.setVisible(true);
     }
 
     private void cargarTabla() {
@@ -60,7 +60,11 @@ public class CancelarReservaSocioControlador {
             String horaFin = modelo.calcularFin(fechaHora, (int) r[3]);
 
             vista.modelo.addRow(new Object[]{
-                r[1], fecha, horaIni + " / " + horaFin, "Cancelar", r[0]
+                r[1],                 // instalación
+                fecha,                // fecha
+                horaIni + " / " + horaFin, // horas
+                "Cancelar",            // botón
+                r[0]                  // id (oculto)
             });
         }
     }

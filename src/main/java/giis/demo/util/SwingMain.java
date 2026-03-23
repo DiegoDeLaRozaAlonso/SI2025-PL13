@@ -240,6 +240,43 @@ public class SwingMain {
 				});
 				panelCentro.add(crearReservaSocio);
 
+				// Cancelar reserva socio
+				JButton cancelarReservaSocio = new JButton("Cancelar Mis Reservas");
+
+				cancelarReservaSocio.addActionListener(e -> {
+
+				    // Solo SOCIOS pueden cancelar sus propias reservas
+				    if (sesion.isAdmin()) {
+				        JOptionPane.showMessageDialog(
+				                frame,
+				                "Esta funcionalidad es solo para socios.\nUn administrador no puede cancelar aquí.",
+				                "Acceso denegado",
+				                JOptionPane.WARNING_MESSAGE
+				        );
+				        return;
+				    }
+
+				    // Obtener id del socio logueado
+				    int idSocio = sesion.getId();  // ⚠️ ASEGÚRATE DE QUE TU SESION TIENE getId()
+
+				    // Crear modelo y vista para SOCIO
+				    cd.socio.luismi.cancelReser.CancelReservaModeloSocio modelo =
+				            new cd.socio.luismi.cancelReser.CancelReservaModeloSocio();
+
+				    cd.socio.luismi.cancelReser.CancelarReservaSocioVista vista =
+				            new cd.socio.luismi.cancelReser.CancelarReservaSocioVista();
+
+				    // Controlador
+				    new cd.socio.luismi.cancelReser.CancelarReservaSocioControlador(
+				            idSocio, modelo, vista
+				    );
+
+				    // Mostrar ventana
+				    vista.setLocationRelativeTo(frame);
+				    vista.setVisible(true);
+				});
+
+				panelCentro.add(cancelarReservaSocio);
 		// =========================
 		// Gestionar Periodos (Administracion) (NUEVO botón + bloqueo)
 		// =========================

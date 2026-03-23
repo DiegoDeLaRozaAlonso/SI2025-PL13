@@ -50,7 +50,9 @@ public class CancelReservaModeloSocio {
         }
     }
 
-    // Normalizar fecha SQLite → sin segundos
+    // ==========================================================
+    // NORMALIZAR FECHA SQLite → quitar segundos
+    // ==========================================================
     private String normalizar(String f) {
         if (f.length() >= 16)
             return f.substring(0, 16);
@@ -58,14 +60,32 @@ public class CancelReservaModeloSocio {
     }
 
     // ==========================================================
-    // CANCELAR RESERVA (VERSIÓN SOCIO)
+    // CALCULAR HORA FIN (para la tabla del socio)
+    // ==========================================================
+    public String calcularFin(String inicio, int duracionMin) {
+
+        if (inicio.length() > 16)
+            inicio = inicio.substring(0, 16);
+
+        LocalDateTime ini = LocalDateTime.parse(inicio, FMT);
+
+        return ini.plusMinutes(duracionMin)
+                  .toLocalTime()
+                  .withSecond(0)
+                  .withNano(0)
+                  .toString();
+    }
+
+    // ==========================================================
+    // CANCELAR RESERVA (VERSIÓN SOCIO - FINAL)
     // ==========================================================
     public void cancelarReserva(int idReserva, int idSocio, String motivo) {
 
         try (Connection conn = db.getConnection()) {
 
             PreparedStatement ps = conn.prepareStatement(
-                "SELECT fecha_hora_inicio, costo FROM Reservas WHERE id_reserva=? AND id_socio=? AND estado='activa'"
+                "SELECT fecha_hora_inicio, costo FROM Reservas " +
+                "WHERE id_reserva=? AND id_socio=? AND estado='activa'"
             );
             ps.setInt(1, idReserva);
             ps.setInt(2, idSocio);
@@ -79,16 +99,16 @@ public class CancelReservaModeloSocio {
             double costo = rs.getDouble("costo");
 
             LocalDateTime inicio = LocalDateTime.parse(fechaBD, FMT);
-            LocalDateTime ahora = LocalDateTime.now().withSecond(0).withNano(0);
+            LocalDateTime ahora  = LocalDateTime.now().withSecond(0).withNano(0);
 
-            // ✅ BLOQUEO ABSOLUTO: si inicio <= ahora → NO cancelar
+            // ✅ BLOQUEO TOTAL: NO cancelar si ha empezado o empieza ahora
             if (!inicio.isAfter(ahora)) {
                 throw new ApplicationException(
                     "No se puede cancelar una reserva que ya ha comenzado o pertenece a una fecha/hora pasada."
                 );
             }
 
-            // ✅ Cancelar: solo estado + motivo
+            // ✅ CANCELACIÓN: solo actualizar estado + motivo
             PreparedStatement ps2 = conn.prepareStatement(
                 "UPDATE Reservas SET estado='cancelada', motivo_cancelacion=? WHERE id_reserva=?"
             );
@@ -96,7 +116,7 @@ public class CancelReservaModeloSocio {
             ps2.setInt(2, idReserva);
             ps2.executeUpdate();
 
-            // ✅ PDF igual que en admin
+            // ✅ PDF (igual que administración)
             new PDFCancelacion().generar(idReserva, idSocio, motivo, costo);
 
         } catch (SQLException e) {
