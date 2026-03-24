@@ -4,14 +4,14 @@ import java.util.Date;
 import java.util.List;
 
 import cd.login.diego.UsuarioSesion;
-import cd.socio.pablo.inscripcionActividad.ActividadDTO;
+import cd.admin.pablo.inscripcionActividad.ActividadDTO;
 import cd.socio.pablo.inscripcionActividad.InscripcionDTO;
 import cd.socio.pablo.inscripcionActividad.SocioDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
 import giis.demo.util.Util;
 
-public class InscribirSocioModel {
+public class InscribirAdminModel {
 
 	private Database db = new Database();
 	
@@ -58,12 +58,23 @@ public class InscribirSocioModel {
 	               + "a.fecha_inicio, a.fecha_fin, "
 	               + "a.costo_socio AS precioSocio, "
 	               + "p.fecha_inicio_socio AS fecha_inicio_periodo, "
-	               + "p.fecha_fin_socio AS fecha_fin_periodo " 
+	               + "p.fecha_fin_socio AS fecha_fin_periodo, " 
+	               + "p.fecha_fin_noSocio AS fecha_fin_no_socio "
 	               + "FROM Actividades a "
 	               + "INNER JOIN PeriodosInscripcion p ON a.id_periodo = p.id_periodo "
 	               + "WHERE a.fecha_inicio <= ? AND a.fecha_fin >= ?";
 
 		return db.executeQueryPojo(ActividadDTO.class, sql, fechaFin, fechaInicio);
+	}
+	
+	/**
+	 * Para listar a los socios
+	 * @return
+	 */
+	public List<SocioDTO> getSocios(){
+		String sql = "SELECT * from Socios";
+		
+		return db.executeQueryPojo(SocioDTO.class, sql);
 	}
 	
 	/**

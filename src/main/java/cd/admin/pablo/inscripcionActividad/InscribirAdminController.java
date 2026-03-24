@@ -8,20 +8,21 @@ import javax.swing.JOptionPane;
 import cd.login.diego.UsuarioSesion;
 import cd.socio.pablo.inscripcionActividad.ActividadDTO;
 import cd.socio.pablo.inscripcionActividad.InscripcionDTO;
+import cd.socio.pablo.inscripcionActividad.SocioDTO;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
 
-public class InscribirSocioController {
+public class InscribirAdminController {
 	
-	private InscribirSocioModel model;
-	private InscribirSocioView vista;
+	private InscribirAdminModel model;
+	private InscribirAdminView vista;
 	private List<ActividadDTO> actividades;
+	private List<SocioDTO> listaSocios;
 	private UsuarioSesion usuario;
 	
-	public InscribirSocioController(InscribirSocioModel m, InscribirSocioView v, UsuarioSesion usuario) {
+	public InscribirAdminController(InscribirAdminModel m, InscribirAdminView v) {
 		this.model = m;
 		this.vista = v;
-		this.usuario = usuario;
 		//no hay inicializacion especifica del modelo, solo de la vista
 		this.initView();
 	}
@@ -55,7 +56,8 @@ public class InscribirSocioController {
 			
 		//Definimos las columnas de la tabla
 		String[] columnas = {"nombre", "descripcion", "aforo", 
-				"fecha_inicio", "fecha_fin", "precioSocio", "fecha_inicio_periodo", "fecha_fin_periodo"};
+				"fecha_inicio", "fecha_fin", "precioSocio", 
+				"fecha_inicio_periodo", "fecha_fin_periodo", "fecha_fin_no_socio"};
 		
 		javax.swing.table.TableModel tmodel = SwingUtil.getTableModelFromPojos(actividades, columnas);
 		vista.getTable().setModel(tmodel);
@@ -127,12 +129,15 @@ public class InscribirSocioController {
 	}
 	
 	public void initView() {
+		//Cogemos los socios de la BBDD
+		listaSocios = model.getSocios();
 		
-		//Ponemos el nombre del usuario que se está inscribiendo
-		vista.getLabelSocio().setText(this.usuario.getNombre()+"");
+		//limpiamos la lista por si acaso
+		vista.getComboSocio().removeAllItems();
 		
-		/*//Cargamos el primer periodo en la tabla para que no salga vacía
-		listaActividades();*/
+		for (SocioDTO socio : listaSocios) {
+			vista.getComboSocio().addItem(socio);
+		}
 		
 		// Abre la ventana (sustituye al main generado por WindowBuilder)
 		vista.getFrame().setVisible(true); 
