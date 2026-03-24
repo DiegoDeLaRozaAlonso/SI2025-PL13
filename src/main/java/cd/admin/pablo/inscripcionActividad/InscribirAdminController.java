@@ -18,7 +18,7 @@ public class InscribirAdminController {
 	private InscribirAdminView vista;
 	private List<ActividadDTO> actividades;
 	private List<SocioDTO> listaSocios;
-	private UsuarioSesion usuario;
+	private SocioDTO usuario;
 	
 	public InscribirAdminController(InscribirAdminModel m, InscribirAdminView v) {
 		this.model = m;
@@ -33,9 +33,30 @@ public class InscribirAdminController {
 		vista.getBotonVolver().addActionListener(e -> SwingUtil.exceptionWrapper(() -> vista.getFrame().dispose()));
 		vista.getBotonListarActividades().addActionListener(e -> SwingUtil.exceptionWrapper(() -> listaActividades()));
 		vista.getBotonInscribir().addActionListener(e -> SwingUtil.exceptionWrapper(() -> crearInscripcion()));
+		vista.getRadioNoSocio().addActionListener(e -> SwingUtil.exceptionWrapper(() -> alternarVistaSocio()));
+		vista.getRadioSocio().addActionListener(e -> SwingUtil.exceptionWrapper(() -> alternarVistaSocio()));
 	
 	}
 	
+	
+	private void alternarVistaSocio() {
+	    if (vista.getRadioSocio().isSelected()) {
+	        // Si es SOCIO, vuelve a aparecer la opción de mensualidad
+	        vista.getRadioMensual().setVisible(true);
+	    } else {
+	        // Si es NO SOCIO, desaparece la mensualidad
+	        vista.getRadioMensual().setVisible(false);
+	        
+	        // Si justo estaba seleccionada la mensualidad, la cambiamos a Tarjeta automáticamente
+	        if (vista.getRadioMensual().isSelected()) {
+	            vista.getRadioTarjeta().setSelected(true);
+	        }
+	    }
+	}
+	
+	/**
+	 * Se encarga de listar las actividades en la tabla según la fecha seleccionada
+	 */
 	private void listaActividades() {
 		Date dateInicio = vista.getFechaInicio().getDate();
 		Date dateFin = vista.getFechaFin().getDate();
@@ -64,7 +85,14 @@ public class InscribirAdminController {
 
 		//Auto ajustamos el tamaño de las columnas
 		SwingUtil.autoAdjustColumns(vista.getTable());
-		
+	}
+	
+	/**
+	 * Comprueba si está seleccionada la opción de socio o no socio
+	 * @return
+	 */
+	private boolean esSocio() {
+		return vista.getRadioSocio().isSelected();
 	}
 	
 	
@@ -74,11 +102,27 @@ public class InscribirAdminController {
 	//TODO pillar el usuario que se logea en el main
 	private void crearInscripcion() {
 		
-		if (model.tieneDeudas(usuario)) {
-			JOptionPane.showMessageDialog(
-					vista.getFrame(), "Tienes deudas no puedes inscribirte","¡¡¡MOROSO!!!", JOptionPane.ERROR_MESSAGE);
-			return;
+		boolean esSocio = esSocio();
+
+		//Comprobamos si está seleccionado socio
+		if (esSocio) {
+			usuario = (SocioDTO) vista.getComboSocio().getSelectedItem();
+			
+			//Cogemos al usuario seleccionado en el comboBox
+			if (model.tieneDeudas(usuario)) {
+				JOptionPane.showMessageDialog(
+						vista.getFrame(), "Tienes deudas no puedes inscribirte","¡¡¡MOROSO!!!", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		} else {
+			String nombre, dni, correo, telefono;
+			
+			nombre = vista.getNombre().getText();
+			dni = vista.getDNI().getText();
+			correo = vista.getCorreo().getText();
+			telefono = vista.getTelefono().toString();
 		}
+		
 		
 		int filaSeleccionada = vista.getTable().getSelectedRow();
 		
@@ -87,13 +131,19 @@ public class InscribirAdminController {
 	        return;
 	    }
 		
-		ActividadDTO actividad = actividades.get(filaSeleccionada);
-		Date hoy = new Date();
-		String fechaActual = Util.dateToIsoString(hoy);
-		String estado = model.compruebaAforo(actividad);
+		ActividadDTO actividad = actividades.get(filaSeleccionada); //actividad seleccionada en la tabla
+		Date hoy = new Date();//coge la fecha de hoy
+		String fechaActual = Util.dateToIsoString(hoy); //convierte a String la fecha
+		String estado = model.compruebaAforo(actividad);//comprueba que queda aforo disponible
 		boolean estaPagado = false;
 		
-		model.enPlazo(actividad); //comprueba que no esté inscrito ya en la actividad
+		model.enPlazo(actividad, esSocio); //comprueba que esté dentro del plazo
+		
+		if (model.inscripcionRepetida(usuario, actividad) == true) {
+			JOptionPane.showMessageDialog(vista.getFrame(),
+					"El usuario ya está inscrito", "Inscripcion ya hecha", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		
 		if (vista.getRadioEfectivo().isSelected()) {
 			String tarjeta = JOptionPane.showInputDialog(
@@ -106,15 +156,12 @@ public class InscribirAdminController {
 			//Si llegamos aqui es que se ha introducido una tarjeta
 			estaPagado = true;
 		}
-		
-		if (model.inscripcionRepetida(usuario, actividad) == true) {
-			JOptionPane.showMessageDialog(vista.getFrame(), 
-					"El usuario ya está inscrito", "Inscripcion ya hecha", JOptionPane.ERROR_MESSAGE);
-			return;
+		if (vista.getRadioTarjeta().isSelected()) {
+			estaPagado = true;
 		}
 		
 		InscripcionDTO ins = new InscripcionDTO(
-				actividad.getId(), this.usuario.getId(), fechaActual,
+				actividad.getId(), this.usuario.getId_socio(), fechaActual,
 				estado, estaPagado, "socio");
 		
 		if(model.inscribirSocioActividad(usuario, actividad, ins) == 1) {
@@ -125,9 +172,11 @@ public class InscribirAdminController {
 			JOptionPane.showMessageDialog(
 					vista.getFrame(), ""+actividad.getNombre() +" tiene aforo completo seras añadido a lista de espera");
 		}
-
 	}
 	
+	/**
+	 * Lo que se ve nada más se abre la página
+	 */
 	public void initView() {
 		//Cogemos los socios de la BBDD
 		listaSocios = model.getSocios();

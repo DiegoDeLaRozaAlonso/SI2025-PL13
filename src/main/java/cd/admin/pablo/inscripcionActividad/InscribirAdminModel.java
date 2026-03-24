@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import cd.login.diego.UsuarioSesion;
-import cd.admin.pablo.inscripcionActividad.ActividadDTO;
+import cd.socio.pablo.inscripcionActividad.ActividadDTO;
 import cd.socio.pablo.inscripcionActividad.InscripcionDTO;
 import cd.socio.pablo.inscripcionActividad.SocioDTO;
 import giis.demo.util.ApplicationException;
@@ -14,9 +14,7 @@ import giis.demo.util.Util;
 public class InscribirAdminModel {
 
 	private Database db = new Database();
-	
-	private int idActividad;
-	
+		
 	public String compruebaAforo(ActividadDTO actividad) {
 		
 		String sql = "SELECT * FROM	INSCRIPCIONES WHERE id_actividad = ?";
@@ -35,12 +33,12 @@ public class InscribirAdminModel {
 	 * @param ins
 	 * @return devuelve 1 si hay aforo y 0 si va a lista_espera
 	 */
-	public int inscribirSocioActividad(UsuarioSesion socio, ActividadDTO actividad, InscripcionDTO ins) {
+	public int inscribirSocioActividad(SocioDTO socio, ActividadDTO actividad, InscripcionDTO ins) {
 				
 		String sql = "INSERT INTO Inscripciones "
 				+ "(id_actividad, id_socio, nombre_no_socio, fecha_inscripcion, estado, pagado, tipo) "
 				+ "VALUES (?, ?, NULL, ?, ?, ?, 'socio')";
-		db.executeUpdate(sql, actividad.getId(), socio.getId(), 
+		db.executeUpdate(sql, actividad.getId(), socio.getId_socio(), 
 				ins.getFecha_inscripcion(), ins.getEstado(), ins.isPagado());
 		
 		return (ins.getEstado().equals("admitido")) ? 1 : 0;
@@ -82,9 +80,9 @@ public class InscribirAdminModel {
 	 * @param socio
 	 * @return true si es moroso y false si está al corriente de pago
 	 */
-	public boolean tieneDeudas(UsuarioSesion socio) {
-		String sql = "SELECT debe_dinero AS debeDinero from Socios WHERE id_socio = ?";
-		List<SocioDTO> lista = db.executeQueryPojo(SocioDTO.class, sql, socio.getId());
+	public boolean tieneDeudas(SocioDTO socio) {
+		String sql = "SELECT id_socio AS id, nombre, debe_dinero AS debeDinero from Socios WHERE id_socio = ?";
+		List<SocioDTO> lista = db.executeQueryPojo(SocioDTO.class, sql, socio.getId_socio());
 		
 		return (lista.get(0).isDebeDinero()) ? true : false;
 	}
@@ -95,9 +93,22 @@ public class InscribirAdminModel {
 	 * @param actividad
 	 * @return
 	 */
-	public boolean inscripcionRepetida(UsuarioSesion socio, ActividadDTO actividad) {
+	public boolean inscripcionRepetida(SocioDTO socio, ActividadDTO actividad) {
 		String sql = "SELECT * FROM Inscripciones WHERE  id_actividad = ? AND id_socio = ?";
-		List<InscripcionDTO> inscripciones = db.executeQueryPojo(InscripcionDTO.class, sql, actividad.getId(), socio.getId());
+		List<InscripcionDTO> inscripciones = db.executeQueryPojo(InscripcionDTO.class, sql, actividad.getId(), socio.getId_socio());
+		
+		return (inscripciones.size() == 0) ? false : true;
+	}
+	
+	/**
+	 * Comprueba que el no socio no estuviera ya inscrito en dicha actividad
+	 * @param socio
+	 * @param actividad
+	 * @return
+	 */
+	public boolean inscripcionRepetidaNS(String dni, ActividadDTO actividad) {
+		String sql = "SELECT * FROM Inscripciones WHERE  id_actividad = ? AND dni = ?";
+		List<InscripcionDTO> inscripciones = db.executeQueryPojo(InscripcionDTO.class, sql, actividad.getId(), dni);
 		
 		return (inscripciones.size() == 0) ? false : true;
 	}
@@ -106,13 +117,17 @@ public class InscribirAdminModel {
 	 * Comprueba que el socio cumple con los periodos de inscripcion
 	 * @param a
 	 */
-	public void enPlazo(ActividadDTO a) {
+	public void enPlazo(ActividadDTO a, boolean esSocio) {
 		Date fecha = new Date();
 		
 		String fechaHoy = Util.dateToIsoString(fecha);
-		
-		validaFecha(a.getFecha_inicio_periodo().compareTo(fechaHoy) <= 0, "No ha empezado el periodo de inscripcion");
-		validaFecha(fechaHoy.compareTo(a.getFecha_fin_periodo()) <= 0, "Ya termino el periodo de inscripcion");
+		if (esSocio) { 
+			validaFecha(a.getFecha_inicio_periodo().compareTo(fechaHoy) <= 0, "No ha empezado el periodo de inscripcion de Socios");
+			validaFecha(fechaHoy.compareTo(a.getFecha_fin_periodo()) <= 0, "Ya termino el periodo de inscripcion de Socios");
+		} else {
+			validaFecha(a.getFecha_fin_periodo().compareTo(fechaHoy) <= 0, "No ha empezado el periodo de inscripcion de No Socio");
+			validaFecha(fechaHoy.compareTo(a.getFecha_fin_no_socio()) <= 0, "Ya termino el periodo de inscripcion de No socio");
+		}
 	}
 	
 	/**

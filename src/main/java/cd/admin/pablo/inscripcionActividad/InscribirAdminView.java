@@ -22,17 +22,18 @@ public class InscribirAdminView {
 	private JLabel lblNewLabel_1;
 	private JDateChooser dFechaInicio;
 	private JDateChooser dFechaFin;
-	private JRadioButton radioPagoEnActo;
+	private JRadioButton radioPagoTarjeta;
 	private JRadioButton radioPagoMensual;
 	private JRadioButton radioSocio;
 	private JRadioButton radioNoSocio;
 	private ButtonGroup grupoRadio;
+	private JRadioButton radioPagoEfectivo;
 	private ButtonGroup grupoSocio;
 	private JComboBox comboSocios;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTextField tNombre;
+	private JTextField tTelefono;
+	private JTextField tDNI;
+	private JTextField tCorreo;
 
 	/**
 	 * Launch the application.
@@ -62,7 +63,7 @@ public class InscribirAdminView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 821, 819);
+		frame.setBounds(100, 100, 976, 819);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -72,7 +73,7 @@ public class InscribirAdminView {
 		frame.getContentPane().add(bVolver);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 179, 793, 380);
+		scrollPane.setBounds(10, 179, 940, 380);
 		frame.getContentPane().add(scrollPane);
 		
 		tablaActividades = new JTable();
@@ -110,14 +111,14 @@ public class InscribirAdminView {
 		bListarActividades.setBounds(512, 130, 172, 39);
 		frame.getContentPane().add(bListarActividades);
 		
-		radioPagoEnActo = new JRadioButton("Pago en el acto");
-		radioPagoEnActo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		radioPagoEnActo.setBounds(502, 614, 140, 23);
-		frame.getContentPane().add(radioPagoEnActo);
+		radioPagoTarjeta = new JRadioButton("Tarjeta");
+		radioPagoTarjeta.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		radioPagoTarjeta.setBounds(262, 614, 89, 23);
+		frame.getContentPane().add(radioPagoTarjeta);
 		
 		radioPagoMensual = new JRadioButton("Mensualidad");
 		radioPagoMensual.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		radioPagoMensual.setBounds(252, 614, 125, 23);
+		radioPagoMensual.setBounds(488, 614, 125, 23);
 		frame.getContentPane().add(radioPagoMensual);
 		
 		JLabel lblNewLabel_2 = new JLabel("Método de Pago");
@@ -125,10 +126,7 @@ public class InscribirAdminView {
 		lblNewLabel_2.setBounds(90, 609, 156, 31);
 		frame.getContentPane().add(lblNewLabel_2);
 		
-		grupoRadio = new ButtonGroup();
-		grupoRadio.add(radioPagoEnActo);
-		grupoRadio.add(radioPagoMensual);
-		radioPagoMensual.setSelected(true);
+		
 		
 		comboSocios = new JComboBox();
 		comboSocios.setBounds(117, 20, 198, 34);
@@ -141,7 +139,7 @@ public class InscribirAdminView {
 		
 		radioNoSocio = new JRadioButton("NO SOCIO");
 		radioNoSocio.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		radioNoSocio.setBounds(344, 24, 109, 23);
+		radioNoSocio.setBounds(437, 24, 109, 23);
 		frame.getContentPane().add(radioNoSocio);
 		
 		grupoSocio = new ButtonGroup();
@@ -149,58 +147,83 @@ public class InscribirAdminView {
 		grupoSocio.add(radioNoSocio);
 		radioSocio.setSelected(true);
 		
-		textField = new JTextField();
-		textField.setBounds(512, 27, 112, 20);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		tNombre = new JTextField();
+		tNombre.setBounds(603, 17, 112, 20);
+		frame.getContentPane().add(tNombre);
+		tNombre.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(510, 58, 114, 20);
-		frame.getContentPane().add(textField_1);
-		textField_1.setColumns(10);
+		tTelefono = new JTextField();
+		tTelefono.setBounds(601, 48, 114, 20);
+		frame.getContentPane().add(tTelefono);
+		tTelefono.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Nombre");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel.setBounds(461, 30, 51, 14);
+		lblNewLabel.setBounds(552, 20, 51, 14);
 		frame.getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_3 = new JLabel("DNI");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_3.setBounds(634, 29, 29, 14);
+		lblNewLabel_3.setBounds(759, 22, 29, 14);
 		frame.getContentPane().add(lblNewLabel_3);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(672, 27, 112, 20);
-		frame.getContentPane().add(textField_2);
-		textField_2.setColumns(10);
+		tDNI = new JTextField();
+		tDNI.setBounds(797, 20, 112, 20);
+		frame.getContentPane().add(tDNI);
+		tDNI.setColumns(10);
 		
 		JLabel lblNewLabel_4 = new JLabel("Telefono");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_4.setBounds(456, 60, 56, 14);
+		lblNewLabel_4.setBounds(547, 50, 56, 14);
 		frame.getContentPane().add(lblNewLabel_4);
 		
-		JLabel lblNewLabel_5 = new JLabel("correo");
+		JLabel lblNewLabel_5 = new JLabel("Email");
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_5.setBounds(634, 61, 40, 14);
+		lblNewLabel_5.setBounds(759, 54, 40, 14);
 		frame.getContentPane().add(lblNewLabel_5);
 		
-		textField_3 = new JTextField();
-		textField_3.setBounds(672, 58, 112, 20);
-		frame.getContentPane().add(textField_3);
-		textField_3.setColumns(10);
+		tCorreo = new JTextField();
+		tCorreo.setBounds(797, 51, 112, 20);
+		frame.getContentPane().add(tCorreo);
+		tCorreo.setColumns(10);
+		
+		radioPagoEfectivo = new JRadioButton("Efectivo");
+		radioPagoEfectivo.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		radioPagoEfectivo.setBounds(374, 614, 95, 23);
+		frame.getContentPane().add(radioPagoEfectivo);
+		
+		grupoRadio = new ButtonGroup();
+		grupoRadio.add(radioPagoTarjeta);
+		grupoRadio.add(radioPagoMensual);
+		grupoRadio.add(radioPagoEfectivo);
+		radioPagoMensual.setSelected(true);
 		
 	}
 	
 	public JFrame getFrame() {return this.frame;}
+	//Tabla donde se listan las actividades
 	public JTable getTable() {return this.tablaActividades;}
+	//Botones
 	public JButton getBotonVolver() {return this.bVolver ;}
 	public JButton getBotonInscribir() {return this.bInscribir ;}
 	public JButton getBotonListarActividades() {return this.bListarActividades ;}
+	//Date choosers
 	public JDateChooser getFechaInicio() {return this.dFechaInicio;}
 	public JDateChooser getFechaFin() {return this.dFechaFin;}
+	//Radios Button
 	public JRadioButton getRadioMensual() {return this.radioPagoMensual;}
-	public JRadioButton getRadioEfectivo() {return this.radioPagoEnActo;}
+	public JRadioButton getRadioEfectivo() {return this.radioPagoEfectivo;}
+	public JRadioButton getRadioTarjeta() {return this.radioPagoTarjeta;}
+	public JRadioButton getRadioSocio() {return this.radioSocio;}
+	public JRadioButton getRadioNoSocio() {return this.radioNoSocio;}
+	//ButtonGroup (agrupan los radios para que sen excluyentes)
 	public ButtonGroup getGrupoRadio() {return this.grupoRadio;}
 	public ButtonGroup getGrupoSocio() {return this.grupoSocio;}
+	//ComboBox de los socios
 	public JComboBox getComboSocio() {return this.comboSocios;}
+	//JText del no socio
+	public JTextField getNombre() {return this.tNombre;}
+	public JTextField getDNI() {return this.tDNI;}
+	public JTextField getCorreo() {return this.tCorreo;}
+	public JTextField getTelefono() {return this.tTelefono;}
 }
