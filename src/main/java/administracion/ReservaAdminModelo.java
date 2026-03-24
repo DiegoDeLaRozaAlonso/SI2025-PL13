@@ -50,9 +50,9 @@ public class ReservaAdminModelo {
         "insert into Reservas(id_socio,id_instalacion,fecha_hora_inicio,duracion,costo,pagado,estado) " +
         "values(?,?,?,?,?,0,'activa')";
 
-    // ==========================================================
+
+
     // CALCULAR PRECIO
-    // ==========================================================
     public double calcularPrecio(String nombreInstalacion, int horas) {
         try (Connection conn = db.getConnection()) {
             QueryRunner qr = new QueryRunner();
@@ -72,9 +72,7 @@ public class ReservaAdminModelo {
         }
     }
 
-    // ==========================================================
     // GUARDAR RESERVA
-    // ==========================================================
     public boolean guardarReserva(
             String socioInput,
             String nombreInstalacion,
@@ -87,37 +85,38 @@ public class ReservaAdminModelo {
             QueryRunner qr = new QueryRunner();
 
             // Validaciones
+            //Entre 1 y 3 horas
             if (horas < 1 || horas > 3)
                 throw new ApplicationException("Solo se permiten 1, 2 o 3 horas");
-
+            //No es en horas intermedias
             if (horaInicio.getMinute() != 0)
                 throw new ApplicationException("La hora debe ser en punto");
-
+            //Fijamos variable para las horas de apertura y de cierre
             LocalTime apertura = LocalTime.of(8, 0);
             LocalTime cierre   = LocalTime.of(20, 0);
-
+            //Comprobamos que no sea ni antes ni despues de lo anterior
             if (horaInicio.isBefore(apertura) || horaInicio.isAfter(cierre))
                 throw new ApplicationException("Las reservas solo pueden empezar entre 08:00 y 20:00");
             
-            // Comprobamos para no permitir reservar más de 3 meses desde hoy
+            // Comprobamos para no permitir reservar mas de 3 meses desde hoy
             LocalDate limite = LocalDate.now().plusMonths(3);
             if (fecha.isAfter(limite)) {
                 throw new ApplicationException(
                     "No se pueden hacer reservas más de 3 meses después de hoy (límite: " + limite + ")"
                 );
             }
-
+            // Mioramos que no se reserve en el pasado
             LocalDateTime inicio = LocalDateTime.of(fecha, horaInicio);
             if (inicio.isBefore(LocalDateTime.now()))
                 throw new ApplicationException("No se puede reservar en el pasado");
-
+            //Miramos que no acabe despues de que cierre
             int duracionMin = horas * 60;
             LocalDateTime fin = inicio.plusMinutes(duracionMin);
 
             if (fin.toLocalTime().isAfter(cierre))
                 throw new ApplicationException("La reserva no puede terminar después de las 20:00");
 
-            // Buscar socio (id + nombre)
+            // Buscar socio (id , nombre)
             int idSocio;
             String nombreSocio;
             Object[] socio = new QueryRunner().query(
@@ -148,11 +147,11 @@ public class ReservaAdminModelo {
             String inicioStr = inicio.format(FMT);
             String finStr    = fin.format(FMT);
 
-            // Transacción
+            // Lo pasamos
             boolean oldAutoCommit = conn.getAutoCommit();
             conn.setAutoCommit(false);
             try {
-                // Chequeo de conflicto (reservas + sesiones + planificaciones)
+                // Chequeo de que no choque (reservas + sesiones + planificaciones)
                 boolean conflicto = hayConflicto(conn,
                         idInst.intValue(),
                         inicioStr,
@@ -208,12 +207,9 @@ public class ReservaAdminModelo {
         }
     }
 
-    // ==========================================================
-    // COMPROBAR SOLAPAMIENTO (Reservas + Sesiones + Planificación)
-    // ==========================================================
-    private boolean hayConflicto(Connection conn,
-                                 int idInstalacion,
-                                 String inicioStr,  // yyyy-MM-dd HH:mm:ss
+
+    // COMPROBAR CHOQUES (Reservas + Sesiones + Planificación)
+    private boolean hayConflicto(Connection conn, int idInstalacion, String inicioStr,  // yyyy-MM-dd HH:mm:ss
                                  String finStr)     // yyyy-MM-dd HH:mm:ss
             throws SQLException {
 
@@ -270,7 +266,8 @@ public class ReservaAdminModelo {
          double precio,
          boolean pagado) {
 
-     // Crear carpeta si no existe
+    	// Crear carpeta si no existe y mete los resgurados en PDF
+    	//NO TOCAR
      File carpeta = new File("resguardos");
      if (!carpeta.exists())
          carpeta.mkdirs();
@@ -324,8 +321,8 @@ public class ReservaAdminModelo {
 
          doc.save(ruta);
 
-         // (Opcional) abrir automáticamente el PDF en el escritorio
-         // try { java.awt.Desktop.getDesktop().open(new File(ruta)); } catch (Exception ignore) {}
+         // (PRUEBA) abrir automáticamente el PDF en el escritorio (NO FUNCA)
+         // java.awt.Desktop.getDesktop().open(new File(ruta));
      } catch (IOException e) {
          throw new ApplicationException("Error creando PDF: " + e.getMessage());
      }

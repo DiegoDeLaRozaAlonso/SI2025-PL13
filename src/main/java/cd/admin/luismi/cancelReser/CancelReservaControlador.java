@@ -28,7 +28,6 @@ public class CancelReservaControlador {
 
                 if (col == 3) { // Botón "Cancelar"
 
-                    // El ID está en la columna oculta
                     int idReserva = (int) vista.modeloTabla.getValueAt(fila, 4);
 
                     String motivo = JOptionPane.showInputDialog(
@@ -69,11 +68,11 @@ public class CancelReservaControlador {
             String fin = modelo.calcularFin(r[2].toString(), (int) r[3]);
 
             vista.modeloTabla.addRow(new Object[] {
-                    r[1],                              // instalación
-                    fecha,                             // fecha
-                    inicio + " / " + fin,              // horas
+                    r[1],                             // instalación
+                    fecha,                            // fecha
+                    inicio + " / " + fin,             // horas
                     "Cancelar",                       // botón
-                    r[0]                               // id (oculto)
+                    r[0]                              // id (oculto)
             });
         }
     }

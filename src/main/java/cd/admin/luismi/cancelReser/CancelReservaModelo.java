@@ -12,12 +12,10 @@ public class CancelReservaModelo {
 
     private final Database db = new Database();
 
-    // SQLite devuelve "yyyy-MM-dd HH:mm:ss", normalizamos a "yyyy-MM-dd HH:mm"
+    // SQLite devuelve "yyyy-MM-dd HH:mm:ss", lo ponemos como "yyyy-MM-dd HH:mm" pa no chocar con la bbdd
     private final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    // ==========================================================
     // LISTA DE SOCIOS
-    // ==========================================================
     public List<String> getNombresSocios() {
         List<String> lista = new ArrayList<>();
 
@@ -36,9 +34,8 @@ public class CancelReservaModelo {
         }
     }
 
-    // ==========================================================
+
     // RESERVAS ACTIVAS DE UN SOCIO
-    // ==========================================================
     public List<Object[]> getReservasSocio(String nombre) {
 
         String sql = """
@@ -73,18 +70,15 @@ public class CancelReservaModelo {
         }
     }
 
-    // ==========================================================
-    // NORMALIZAR FECHA: QUITAR SEGUNDOS
-    // ==========================================================
+    // QUITAR SEGUNDOS DC LA FECHA
     private String normalizarFecha(String fecha) {
         if (fecha.length() >= 16)
             return fecha.substring(0, 16);
         return fecha;
     }
 
-    // ==========================================================
+
     // CALCULAR FIN DE RESERVA
-    // ==========================================================
     public String calcularFin(String inicio, int duracionMin) {
 
         inicio = normalizarFecha(inicio);
@@ -115,14 +109,14 @@ public class CancelReservaModelo {
             String fechaBD = rs.getString("fecha_hora_inicio");
             double costo = rs.getDouble("costo");
 
-            // Normalizar: quitar segundos si los hay
+            // quitar segundos si los hay, como los datos de la bbdd de ejemplo que tenmios 
             if (fechaBD.length() > 16)
                 fechaBD = fechaBD.substring(0, 16);
 
             LocalDateTime inicio = LocalDateTime.parse(fechaBD, FMT);
             LocalDateTime ahora  = LocalDateTime.now().withSecond(0).withNano(0);
 
-            // ✅ Primero descartamos pasado y presente
+            // PORFIN FUNCA NO TOCAR BAJO PENA DE MUERTE
             if (!inicio.isAfter(ahora)) {
                 throw new ApplicationException(
                     "No se puede cancelar una reserva que ya ha comenzado o pertenece a una fecha/hora pasada."

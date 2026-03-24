@@ -50,9 +50,7 @@ public class ReservaClienteModelo {
         "insert into Reservas(id_socio,id_instalacion,fecha_hora_inicio,duracion,costo,pagado,estado) " +
         "values(?,?,?,?,?,0,'activa')";
 
-    // ==========================================================
     // CALCULAR PRECIO
-    // ==========================================================
     public double calcularPrecio(String nombreInstalacion, int horas) {
         try (Connection conn = db.getConnection()) {
             QueryRunner qr = new QueryRunner();
@@ -72,9 +70,8 @@ public class ReservaClienteModelo {
         }
     }
 
-    // ==========================================================
+
     // GUARDAR RESERVA
-    // ==========================================================
     public boolean guardarReserva(
             String socioInput,
             String nombreInstalacion,
@@ -190,7 +187,7 @@ public class ReservaClienteModelo {
                         horaInicio.toString(),
                         horas,
                         precio,
-                        false // pagado (lo gestionas aparte)
+                        false 
                 );
 
                 conn.commit();
@@ -252,7 +249,7 @@ public class ReservaClienteModelo {
             ps.setString(9, finStr);
 
             ResultSet rs = ps.executeQuery();
-            return rs.next(); // true → hay conflicto
+            return rs.next(); 
         }
     }
 
@@ -321,8 +318,6 @@ public class ReservaClienteModelo {
 
          doc.save(ruta);
 
-         // (Opcional) abrir automáticamente el PDF en el escritorio
-         // try { java.awt.Desktop.getDesktop().open(new File(ruta)); } catch (Exception ignore) {}
      } catch (IOException e) {
          throw new ApplicationException("Error creando PDF: " + e.getMessage());
      }
