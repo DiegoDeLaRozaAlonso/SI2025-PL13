@@ -1,6 +1,7 @@
 package cd.admin.diego.planact;
 
 public class PeriodoInscripcionDTO {
+
 	private int idPeriodo;
 	private String nombre;
 	private String descripcion;

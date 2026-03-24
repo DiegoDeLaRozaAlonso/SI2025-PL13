@@ -34,11 +34,14 @@ public class PlanActCrearActividadController {
 		horarioModel = new WeeklyScheduleTableModel();
 		view.setHorarioModel(horarioModel);
 
-		var instalaciones = model.getInstalaciones();
-		var cm = SwingUtil.getComboModelFromList(instalaciones.stream().map(i -> new Object[] { i.toString() }).toList());
-		view.getCbInstalacion().setModel(cm);
+		// ✅ CAMBIO: el combo guarda InstalacionDTO (no Strings)
+		List<InstalacionDTO> instalaciones = model.getInstalaciones();
+		view.getCbInstalacion().setModel(new DefaultComboBoxModel<>(
+				instalaciones.toArray(new InstalacionDTO[0])
+		));
 
-		var periodos = model.getPeriodosInscripcion();
+		// Periodos (ya era correcto, guarda DTO)
+		List<PeriodoInscripcionDTO> periodos = model.getPeriodosInscripcion();
 		view.getCbPeriodoInscripcion().setModel(new DefaultComboBoxModel<>(
 				periodos.toArray(new PeriodoInscripcionDTO[0])
 		));
@@ -61,7 +64,9 @@ public class PlanActCrearActividadController {
 		String nombre = view.getNombreActividad();
 		String tipo = view.getTipoActividad();
 
-		int idInstalacion = parseIdInstalacionSeleccionada();
+		// ✅ CAMBIO: leer id desde el DTO seleccionado (no parsear strings)
+		int idInstalacion = getIdInstalacionSeleccionada();
+
 		int aforo = view.getAforo();
 		double pSocio = view.getPrecioSocio();
 		double pNoSocio = view.getPrecioNoSocio();
@@ -100,13 +105,12 @@ public class PlanActCrearActividadController {
 		if (periodo == null) throw new giis.demo.util.ApplicationException("Debes seleccionar un periodo de inscripción.");
 		int idPeriodo = periodo.getIdPeriodo();
 
-		// CAMBIO: fechas desde calendario
+		// Fechas desde calendario
 		Date ini = view.getFechaInicioDate();
 		Date fin = view.getFechaFinDate();
 		if (ini == null || fin == null) {
 			throw new giis.demo.util.ApplicationException("Debes seleccionar la fecha de inicio y la fecha de fin.");
 		}
-
 		LocalDate fechaInicio = toLocalDate(ini);
 		LocalDate fechaFin = toLocalDate(fin);
 
@@ -125,31 +129,25 @@ public class PlanActCrearActividadController {
 		throw new giis.demo.util.ApplicationException("Actividad creada correctamente. id_actividad=" + id);
 	}
 
+	private int getIdInstalacionSeleccionada() {
+		InstalacionDTO inst = (InstalacionDTO) view.getCbInstalacion().getSelectedItem();
+		if (inst == null) throw new giis.demo.util.ApplicationException("Debes seleccionar una instalación.");
+		return inst.getIdInstalacion();
+	}
+
 	private void limpiarFormulario() {
 		view.setNombreActividad("");
 		view.setTipoActividad("");
 		view.setAforo(1);
 		view.setPrecioSocio(0.0);
 		view.setPrecioNoSocio(0.0);
-
-		// CAMBIO: limpiar calendarios
 		view.setFechaInicioDate(null);
 		view.setFechaFinDate(null);
-
 		horarioModel.clearAll();
 	}
 
 	private void cerrar() {
 		view.getFrame().dispose();
-	}
-
-	private int parseIdInstalacionSeleccionada() {
-		Object item = view.getCbInstalacion().getSelectedItem();
-		if (item == null) return -1;
-		String s = item.toString().trim();
-		int idx = s.indexOf(" - ");
-		if (idx <= 0) return -1;
-		return Integer.parseInt(s.substring(0, idx).trim());
 	}
 
 	private LocalDate toLocalDate(Date d) {
