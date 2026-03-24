@@ -299,10 +299,20 @@ public class SwingMain {
 				    if (!sesion.isAdmin()) {
 				        JOptionPane.showMessageDialog(
 				                frame,
-				                "No tienes permisos para acceder a esta funcionalidad.\n" +
-				                "Esta ventana es solo para administración.",
-				
-				//Mis reservas socio
+				                "No tienes permisos para acceder a esta funcionalidad.\n"
+				                + "Esta ventana es solo para administración.",
+				                "Acceso denegado",
+				                JOptionPane.WARNING_MESSAGE
+				        );
+				        return;
+				    }
+
+				    new cd.admin.luismi.cancelReser.CancelReservaControlador();
+				});
+
+				panelCentro.add(cancelReservaAdmin);
+
+				// Mis reservas socio
 				JButton misReservas = new JButton("Mis reservas (socio)");
 				misReservas.addActionListener(e -> {
 
@@ -317,17 +327,12 @@ public class SwingMain {
 				        return;
 				    }
 
-				    // El controlador crea y muestra la vista, no hace falta nada más
-				    new cd.admin.luismi.cancelReser.CancelReservaControlador();
-
-				});
-
-				panelCentro.add(cancelReservaAdmin);
 				    cd.socio.diego.misReservas.MisReservasView vista = new cd.socio.diego.misReservas.MisReservasView();
 				    cd.socio.diego.misReservas.MisReservasModel modelo = new cd.socio.diego.misReservas.MisReservasModel();
 
 				    cd.socio.diego.misReservas.MisReservasController controller =
 				            new cd.socio.diego.misReservas.MisReservasController(modelo, vista, sesion.getId());
+				    controller.initController();
 				});
 				panelCentro.add(misReservas);
 
