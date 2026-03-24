@@ -39,6 +39,9 @@ import cd.socio.pablo.inscripcionActividad.InscribirSocioView;
 import cd.socio.pablo.listaActividades.ListaPeriodoController;
 import cd.socio.pablo.listaActividades.ListaPeriodoModel;
 import cd.socio.pablo.listaActividades.ListaPeriodoView;
+import cd.admin.diego.resact.ResActController;
+import cd.admin.diego.resact.ResActModel;
+import cd.admin.diego.resact.ResActView;
 
 public class SwingMain {
 
@@ -164,6 +167,29 @@ public class SwingMain {
 		});
 		panelCentro.add(planificarActividad);
 		
+		JButton btnReservaParaActividad = new JButton("Reserva para actividad (Administracion)");
+		btnReservaParaActividad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if (!sesion.isAdmin()) {
+					JOptionPane.showMessageDialog(
+							frame,
+							"No tienes permisos para acceder a esta funcionalidad.\n"
+							+ "Solo un administrador puede acceder.",
+							"Acceso denegado",
+							JOptionPane.WARNING_MESSAGE
+					);
+					return;
+				}
+
+				ResActController controller = new ResActController(
+						new ResActModel(),
+						new ResActView()
+				);
+				controller.initController();
+			}
+		});
+		panelCentro.add(btnReservaParaActividad);
 		
 		/*
 		 * Ejecuta la lista de actividades	
@@ -297,7 +323,89 @@ public class SwingMain {
 				    reservaFrame.setVisible(true);
 				});
 				panelCentro.add(crearReservaSocio);
+		
+				// Botón Cancelar Reserva Admin
+				JButton cancelReservaAdmin = new JButton("Cancelar Reserva Admin");
 
+				cancelReservaAdmin.addActionListener(e -> {
+
+				    if (!sesion.isAdmin()) {
+				        JOptionPane.showMessageDialog(
+				                frame,
+				                "No tienes permisos para acceder a esta funcionalidad.\n"
+				                + "Esta ventana es solo para administración.",
+				                "Acceso denegado",
+				                JOptionPane.WARNING_MESSAGE
+				        );
+				        return;
+				    }
+
+				    new cd.admin.luismi.cancelReser.CancelReservaControlador();
+				});
+
+				panelCentro.add(cancelReservaAdmin);
+
+				// Mis reservas socio
+				JButton misReservas = new JButton("Mis reservas (socio)");
+				misReservas.addActionListener(e -> {
+
+				    if (sesion.isAdmin()) {
+				        JOptionPane.showMessageDialog(
+				                frame,
+				                "No tienes permisos para acceder a esta funcionalidad.\n"
+				                + "Esta ventana es para socios.",
+				                "Acceso denegado",
+				                JOptionPane.WARNING_MESSAGE
+				        );
+				        return;
+				    }
+
+				    cd.socio.diego.misReservas.MisReservasView vista = new cd.socio.diego.misReservas.MisReservasView();
+				    cd.socio.diego.misReservas.MisReservasModel modelo = new cd.socio.diego.misReservas.MisReservasModel();
+
+				    cd.socio.diego.misReservas.MisReservasController controller =
+				            new cd.socio.diego.misReservas.MisReservasController(modelo, vista, sesion.getId());
+				    controller.initController();
+				});
+				panelCentro.add(misReservas);
+
+				// Cancelar reserva socio
+				JButton cancelarReservaSocio = new JButton("Cancelar Mis Reservas");
+
+				cancelarReservaSocio.addActionListener(e -> {
+
+				    // Solo SOCIOS pueden cancelar sus propias reservas
+				    if (sesion.isAdmin()) {
+				        JOptionPane.showMessageDialog(
+				                frame,
+				                "Esta funcionalidad es solo para socios.\nUn administrador no puede cancelar aquí.",
+				                "Acceso denegado",
+				                JOptionPane.WARNING_MESSAGE
+				        );
+				        return;
+				    }
+
+				    // Obtener id del socio logueado
+				    int idSocio = sesion.getId();  // ⚠️ ASEGÚRATE DE QUE TU SESION TIENE getId()
+
+				    // Crear modelo y vista para SOCIO
+				    cd.socio.luismi.cancelReser.CancelReservaModeloSocio modelo =
+				            new cd.socio.luismi.cancelReser.CancelReservaModeloSocio();
+
+				    cd.socio.luismi.cancelReser.CancelarReservaSocioVista vista =
+				            new cd.socio.luismi.cancelReser.CancelarReservaSocioVista();
+
+				    // Controlador
+				    new cd.socio.luismi.cancelReser.CancelarReservaSocioControlador(
+				            idSocio, modelo, vista
+				    );
+
+				    // Mostrar ventana
+				    vista.setLocationRelativeTo(frame);
+				    vista.setVisible(true);
+				});
+
+				panelCentro.add(cancelarReservaSocio);
 		// =========================
 		// Gestionar Periodos (Administracion) (NUEVO botón + bloqueo)
 		// =========================
@@ -369,7 +477,8 @@ public class SwingMain {
 		    }
 		});
 		panelCentro.add(btnVisualizacionReservas);
-		// BOTÓN PAGOS PENDIENTES
+
+    // BOTÓN PAGOS PENDIENTES
 		JButton btnPagosPendientes = new JButton("Mis Pagos Pendientes");
 		btnPagosPendientes.addActionListener(new ActionListener() { //NOSONAR __codigo__ __autogenerado__
 		    public void actionPerformed(ActionEvent e) {

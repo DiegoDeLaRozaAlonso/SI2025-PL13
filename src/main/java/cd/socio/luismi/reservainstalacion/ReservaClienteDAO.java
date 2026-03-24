@@ -16,9 +16,8 @@ public class ReservaClienteDAO {
     }
 
     
- // ---------------------------------------------------
-    // 1️⃣ Calcular coste según precio de Instalacion
-    // ---------------------------------------------------
+
+    // Calcular coste según precio de Instalacion
     public double calcularCosto(int idInstalacion, int duracionMinutos) {
 
         String sql = "SELECT precioInstalacion FROM Instalaciones WHERE id_instalacion = ?";
@@ -41,9 +40,7 @@ public class ReservaClienteDAO {
         return 0;
     }
 
-    // ---------------------------------------------------
-    // 2️⃣ Comprobar solapamiento con RESERVAS
-    // ---------------------------------------------------
+    // Comprobar solapamiento con RESERVAS
     private boolean existeSolapamientoReservas(int idInstalacion,
                                                LocalDateTime inicioNueva,
                                                int duracionNueva) {
@@ -78,9 +75,8 @@ public class ReservaClienteDAO {
         return false;
     }
 
-    // ---------------------------------------------------
-    // 3️⃣ Comprobar solapamiento con SESIONES ACTIVIDAD
-    // ---------------------------------------------------
+
+    // Comprobar solapamiento con SESIONES ACTIVIDAD
     private boolean existeSolapamientoSesiones(int idInstalacion,
                                                LocalDateTime inicioNueva,
                                                int duracionNueva) {
@@ -114,9 +110,8 @@ public class ReservaClienteDAO {
         return false;
     }
 
-    // ---------------------------------------------------
-    // 4️⃣ Comprobar solapamiento con PLANIFICACION
-    // ---------------------------------------------------
+
+    // Comprobar solapamiento con PLANIFICACION
     private boolean existeSolapamientoPlanificacion(int idInstalacion,
                                                     LocalDateTime inicioNueva,
                                                     int duracionNueva) {
@@ -150,9 +145,8 @@ public class ReservaClienteDAO {
         return false;
     }
 
-    // ---------------------------------------------------
-    // 5️⃣ Método público que lo comprueba TODO
-    // ---------------------------------------------------
+
+    // Método público que lo comprueba TODO
     public boolean existeSolapamiento(int idInstalacion,
                                       LocalDateTime inicioNueva,
                                       int duracionNueva) {
@@ -162,9 +156,8 @@ public class ReservaClienteDAO {
                 || existeSolapamientoPlanificacion(idInstalacion, inicioNueva, duracionNueva);
     }
 
-    // ---------------------------------------------------
-    // 6️⃣ Insertar reserva
-    // ---------------------------------------------------
+
+    // Insertar reserva
     public boolean insertar(int idSocio,
                             int idInstalacion,
                             LocalDateTime inicio,

@@ -15,10 +15,9 @@ public class ReservaAdminDAO {
         this.conexion = conexion;
     }
 
-    
- // ---------------------------------------------------
-    // 1️⃣ Calcular coste según precio de Instalacion
-    // ---------------------------------------------------
+
+
+    // Calcula el coste según precio de Instalacion
     public double calcularCosto(int idInstalacion, int duracionMinutos) {
 
         String sql = "SELECT precioInstalacion FROM Instalaciones WHERE id_instalacion = ?";
@@ -41,9 +40,8 @@ public class ReservaAdminDAO {
         return 0;
     }
 
-    // ---------------------------------------------------
-    // 2️⃣ Comprobar solapamiento con RESERVAS
-    // ---------------------------------------------------
+
+    // Comprobar que no choca nada con RESERVAS
     private boolean existeSolapamientoReservas(int idInstalacion,
                                                LocalDateTime inicioNueva,
                                                int duracionNueva) {
@@ -78,9 +76,8 @@ public class ReservaAdminDAO {
         return false;
     }
 
-    // ---------------------------------------------------
-    // 3️⃣ Comprobar solapamiento con SESIONES ACTIVIDAD
-    // ---------------------------------------------------
+
+    // Comprobar que no choquenb SESIONES ACTIVIDAD
     private boolean existeSolapamientoSesiones(int idInstalacion,
                                                LocalDateTime inicioNueva,
                                                int duracionNueva) {
@@ -114,9 +111,8 @@ public class ReservaAdminDAO {
         return false;
     }
 
-    // ---------------------------------------------------
-    // 4️⃣ Comprobar solapamiento con PLANIFICACION
-    // ---------------------------------------------------
+
+    // Comprobar no choque con PLANIFICACION
     private boolean existeSolapamientoPlanificacion(int idInstalacion,
                                                     LocalDateTime inicioNueva,
                                                     int duracionNueva) {
@@ -150,9 +146,8 @@ public class ReservaAdminDAO {
         return false;
     }
 
-    // ---------------------------------------------------
-    // 5️⃣ Método público que lo comprueba TODO
-    // ---------------------------------------------------
+
+    // Método que lo comprueba TODO, no tocar
     public boolean existeSolapamiento(int idInstalacion,
                                       LocalDateTime inicioNueva,
                                       int duracionNueva) {
@@ -162,13 +157,10 @@ public class ReservaAdminDAO {
                 || existeSolapamientoPlanificacion(idInstalacion, inicioNueva, duracionNueva);
     }
 
-    // ---------------------------------------------------
-    // 6️⃣ Insertar reserva
-    // ---------------------------------------------------
-    public boolean insertar(int idSocio,
-                            int idInstalacion,
-                            LocalDateTime inicio,
-                            int duracionMinutos) {
+
+
+    // Insertar reserva
+    public boolean insertar(int idSocio, int idInstalacion, LocalDateTime inicio, int duracionMinutos) {
 
         double costo = calcularCosto(idInstalacion, duracionMinutos);
 

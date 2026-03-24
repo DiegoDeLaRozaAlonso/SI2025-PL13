@@ -92,12 +92,12 @@ INSERT INTO HorariosInstalacion (id_horario, id_instalacion, tipo_horario, hora_
 -- PERIODOS INSCRIPCION (6)
 ------------------------------------------------------------
 INSERT INTO PeriodosInscripcion (id_periodo, nombre, descripcion, fecha_inicio_socio, fecha_fin_socio, fecha_fin_noSocio) VALUES
-(1, 'Socios Feb-Mar', 'Inscripción para (Aquagym).',        '2026-01-20', '2026-02-10', '2026-02-28'),
-(2, 'Socios Primavera Tenis', 'Inscripción para (Tenis).',  '2026-02-01', '2026-02-20', '2026-03-10'),
-(3, 'Liga Padel', 'Inscripción para (Liga Pádel).',         '2026-02-15', '2026-03-05', '2026-03-25'),
-(4, 'Clase Pilates', 'Inscripción (Pilates).',              '2026-01-30', '2026-02-12', '2026-02-25'),
-(5, 'Sesiones Yoga', 'Inscripción (Yoga).',                 '2026-01-25', '2026-02-08', '2026-02-17'),
-(6, 'Entreno Fútbol', 'Inscripción para (Tecnificación).',  '2026-02-01', '2026-02-25', '2026-03-10');
+(1, 'Socios Feb-Mar', 'Inscripción para (Aquagym).',        '2026-03-20', '2026-03-28', '2026-04-05'),
+(2, 'Socios Primavera Tenis', 'Inscripción para (Tenis).',  '2026-03-22', '2026-03-30', '2026-04-08'),
+(3, 'Liga Padel', 'Inscripción para (Liga Pádel).',         '2026-03-10', '2026-03-20', '2026-03-28'),
+(4, 'Clase Pilates', 'Inscripción (Pilates).',              '2026-03-12', '2026-03-24', '2026-03-31'),
+(5, 'Sesiones Yoga', 'Inscripción (Yoga).',                 '2026-03-01', '2026-03-10', '2026-03-18'),
+(6, 'Entreno Fútbol', 'Inscripción para (Tecnificación).',  '2026-03-28', '2026-04-05', '2026-04-12');
 
 ------------------------------------------------------------
 -- ACTIVIDADES (9)
@@ -227,44 +227,48 @@ INSERT INTO Reservas (id_reserva, id_socio, id_instalacion, fecha_hora_inicio, d
 (53, 7, 1, '2026-03-10 09:00', 60, 8.00, 1, 'completada', NULL),
 (54, 12, 1, '2026-03-10 12:00', 60, 8.00, 1, 'activa', NULL),
 (55, 6, 3, '2026-03-10 19:00', 60, 16.00, 1, 'activa', NULL),
-(56, 10, 3, '2026-03-10 21:00', 60, 16.00, 1, 'activa', NULL);
+(56, 10, 3, '2026-03-10 21:00', 60, 16.00, 1, 'activa', NULL),
+(57, 12, 1, '2026-03-30 12:00', 60, 8.00, 1, 'activa', NULL),
+(58, 6, 3, '2026-04-10 19:00', 60, 16.00, 1, 'activa', NULL),
+(59, 10, 3, '2026-04-12 21:00', 60, 16.00, 1, 'activa', NULL),
+(60, 10, 3, '2026-03-23 19:00', 60, 16.00, 1, 'activa', NULL);
 
 ------------------------------------------------------------
 -- INSCRIPCIONES (25) - TODO EN PUNTO
 ------------------------------------------------------------
-INSERT INTO Inscripciones (id_inscripcion, id_actividad, id_socio, nombre_no_socio, fecha_inscripcion, estado, pagado, tipo) VALUES
-(1, 1, 1, NULL, '2026-01-22 12:00', 'admitido', 1, 'socio'),
-(2, 1, 2, NULL, '2026-01-23 10:00', 'admitido', 1, 'socio'),
-(3, 1, 3, NULL, '2026-01-24 16:00', 'lista_espera', 0, 'socio'),
-(4, 1, 4, NULL, '2026-01-25 09:00', 'admitido', 1, 'socio'),
-(5, 1, 5, NULL, '2026-01-25 11:00', 'admitido', 0, 'socio'),
+INSERT INTO Inscripciones (id_inscripcion, id_actividad, id_socio, nombre_no_socio, dni, fecha_inscripcion, estado, pagado, tipo) VALUES
+(1, 1, 1, NULL, NULL, '2026-01-22 12:00', 'admitido', 1, 'socio'),
+(2, 1, 2, NULL, NULL, '2026-01-23 10:00', 'admitido', 1, 'socio'),
+(3, 1, 3, NULL, NULL, '2026-01-24 16:00', 'lista_espera', 0, 'socio'),
+(4, 1, 4, NULL, NULL, '2026-01-25 09:00', 'admitido', 1, 'socio'),
+(5, 1, 5, NULL, NULL, '2026-01-25 11:00', 'admitido', 0, 'socio'),
 
-(6, 2, 6, NULL, '2026-02-06 09:00', 'admitido', 0, 'socio'),
-(7, 2, 7, NULL, '2026-02-07 12:00', 'lista_espera', 0, 'socio'),
-(8, 2, 8, NULL, '2026-02-08 18:00', 'admitido', 1, 'socio'),
-(9, 2, 9, NULL, '2026-02-09 13:00', 'admitido', 1, 'socio'),
+(6, 2, 6, NULL, NULL, '2026-02-06 09:00', 'admitido', 0, 'socio'),
+(7, 2, 7, NULL, NULL, '2026-02-07 12:00', 'lista_espera', 0, 'socio'),
+(8, 2, 8, NULL, NULL, '2026-02-08 18:00', 'admitido', 1, 'socio'),
+(9, 2, 9, NULL, NULL, '2026-02-09 13:00', 'admitido', 1, 'socio'),
 
-(10, 3, 10, NULL, '2026-02-25 16:00', 'admitido', 0, 'socio'),
-(11, 3, 11, NULL, '2026-02-26 09:00', 'admitido', 1, 'socio'),
-(12, 3, 12, NULL, '2026-02-26 20:00', 'lista_espera', 0, 'socio'),
+(10, 3, 10, NULL, NULL, '2026-02-25 16:00', 'admitido', 0, 'socio'),
+(11, 3, 11, NULL, NULL, '2026-02-26 09:00', 'admitido', 1, 'socio'),
+(12, 3, 12, NULL, NULL, '2026-02-26 20:00', 'lista_espera', 0, 'socio'),
 
-(13, 4, 13, NULL, '2026-02-03 10:00', 'admitido', 1, 'socio'),
-(14, 4, 14, NULL, '2026-02-04 11:00', 'admitido', 1, 'socio'),
-(15, 4, 15, NULL, '2026-02-05 18:00', 'lista_espera', 0, 'socio'),
+(13, 4, 13, NULL, NULL, '2026-02-03 10:00', 'admitido', 1, 'socio'),
+(14, 4, 14, NULL, NULL, '2026-02-04 11:00', 'admitido', 1, 'socio'),
+(15, 4, 15, NULL, NULL, '2026-02-05 18:00', 'lista_espera', 0, 'socio'),
 
-(16, 5, 1, NULL, '2026-01-29 19:00', 'admitido', 1, 'socio'),
-(17, 5, 2, NULL, '2026-01-30 09:00', 'admitido', 0, 'socio'),
+(16, 5, 1, NULL, NULL, '2026-01-29 19:00', 'admitido', 1, 'socio'),
+(17, 5, 2, NULL, NULL, '2026-01-30 09:00', 'admitido', 0, 'socio'),
 
-(18, 6, 3, NULL, '2026-02-10 08:00', 'admitido', 0, 'socio'),
-(19, 6, 4, NULL, '2026-02-12 12:00', 'admitido', 1, 'socio'),
+(18, 6, 3, NULL, NULL, '2026-02-10 08:00', 'admitido', 0, 'socio'),
+(19, 6, 4, NULL, NULL, '2026-02-12 12:00', 'admitido', 1, 'socio'),
 
--- No socios
-(20, 1, NULL, 'Javier Santos', '2026-01-27 18:00', 'admitido', 1, 'no_socio'),
-(21, 1, NULL, 'Marta Díaz', '2026-01-28 11:00', 'admitido', 1, 'no_socio'),
-(22, 2, NULL, 'Lucía Herrera', '2026-02-10 10:00', 'admitido', 1, 'no_socio'),
-(23, 4, NULL, 'Óscar Núñez', '2026-02-08 09:00', 'lista_espera', 0, 'no_socio'),
-(24, 5, NULL, 'Paula Rivas', '2026-02-02 20:00', 'admitido', 1, 'no_socio'),
-(25, 6, NULL, 'Diego Torres', '2026-02-18 17:00', 'admitido', 1, 'no_socio');
+-- No socios (con DNI)
+(20, 1, NULL, 'Javier Santos', '66778899P', '2026-01-27 18:00', 'admitido', 1, 'no_socio'),
+(21, 1, NULL, 'Marta Díaz', '77889900Q', '2026-01-28 11:00', 'admitido', 1, 'no_socio'),
+(22, 2, NULL, 'Lucía Herrera', '88990011R', '2026-02-10 10:00', 'admitido', 1, 'no_socio'),
+(23, 4, NULL, 'Óscar Núñez', '99001122S', '2026-02-08 09:00', 'lista_espera', 0, 'no_socio'),
+(24, 5, NULL, 'Paula Rivas', '10111213T', '2026-02-02 20:00', 'admitido', 1, 'no_socio'),
+(25, 6, NULL, 'Diego Torres', '12131415U', '2026-02-18 17:00', 'admitido', 1, 'no_socio');
 
 ------------------------------------------------------------
 -- RECIBOS (24)
@@ -352,3 +356,22 @@ INSERT INTO Reduccion (id_credito, id_socio, nombre_no_socio, monto, fecha_gener
 (6, NULL, 'Óscar Núñez', 12.00, '2026-02-09', NULL, 'Crédito por no admisión (lista de espera)'),
 (7, 7, NULL, 18.00, '2026-02-20', '2026-03-01', 'Crédito por incidencia en pista (pádel)'),
 (8, 2, NULL, 6.00, '2026-02-11', NULL, 'Ajuste por error de cobro (diferencia)');
+
+
+
+
+------------------------------------------------------------
+-- CASOS EXTRA HU 34013 - RESACT
+------------------------------------------------------------
+
+INSERT INTO Actividades
+(id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo)
+VALUES
+(101, 'Prueba1resact', 'Actividad de prueba con conflicto solo con otra actividad.', 7, 18, 12.00, 20.00, '2026-03-10', '2026-03-20', 4),
+(102, 'Prueba2resact', 'Actividad de prueba con conflicto con actividad y con reserva de socio.', 7, 18, 12.00, 20.00, '2026-03-01', '2026-03-15', 4);
+
+INSERT INTO SesionesActividad
+(id_sesion, id_actividad, fecha, hora_inicio, hora_fin, id_instalacion)
+VALUES
+(101, 101, '2026-03-12', '18:00', '19:00', 7),
+(102, 102, '2026-03-05', '17:00', '19:00', 7);
