@@ -23,11 +23,12 @@ public class InscribirAdminModel {
 				db.executeQueryPojo(InscripcionDTO.class, sql, actividad.getId());
 		
 		return (lista.size() < actividad.getAforo()) ? "admitido" : "lista_espera";
-		
 	}
 	
+	
+	
 	/**
-	 * Añade a la BBDD la inscripcion a una actividad del usuario
+	 * Añade a la BBDD la inscripcion a una actividad del socio
 	 * @param socio
 	 * @param actividad
 	 * @param ins
@@ -43,6 +44,27 @@ public class InscribirAdminModel {
 		
 		return (ins.getEstado().equals("admitido")) ? 1 : 0;
 	}
+	
+	
+	
+	/**
+	 * Añade a la BBDD la inscripcion a una actividad del no socio
+	 * @param socio
+	 * @param actividad
+	 * @param ins
+	 * @return devuelve 1 si hay aforo y 0 si va a lista_espera
+	 */
+	public int inscribirNoSocioActividad(String nombre, String dni, ActividadDTO actividad, InscripcionDTO ins) {
+				
+		String sql = "INSERT INTO Inscripciones "
+				+ "(id_actividad, id_socio, nombre_no_socio, dni, fecha_inscripcion, estado, pagado, tipo) "
+				+ "VALUES (?, NULL, ?, ?, ?, ?, ?, 'no_socio')";
+		db.executeUpdate(sql, nombre, dni, ins.getFecha_inscripcion(), ins.getEstado(), ins.isPagado());
+		
+		return (ins.getEstado().equals("admitido")) ? 1 : 0;
+	}
+	
+	
 	
 	/**
 	 * Obtiene la lista de carreras activas en forma objetos para una fecha de inscripcion dada
@@ -65,6 +87,8 @@ public class InscribirAdminModel {
 		return db.executeQueryPojo(ActividadDTO.class, sql, fechaFin, fechaInicio);
 	}
 	
+	
+	
 	/**
 	 * Para listar a los socios
 	 * @return
@@ -75,17 +99,25 @@ public class InscribirAdminModel {
 		return db.executeQueryPojo(SocioDTO.class, sql);
 	}
 	
+	
+	
 	/**
 	 * Comprueba que el socio no tiene deudas pendientes
 	 * @param socio
 	 * @return true si es moroso y false si está al corriente de pago
 	 */
 	public boolean tieneDeudas(SocioDTO socio) {
-		String sql = "SELECT id_socio AS id, nombre, debe_dinero AS debeDinero from Socios WHERE id_socio = ?";
+		String sql = "SELECT id_socio, nombre, debe_dinero AS debeDinero from Socios WHERE id_socio = ?";
 		List<SocioDTO> lista = db.executeQueryPojo(SocioDTO.class, sql, socio.getId_socio());
+		
+		if (lista.isEmpty()) {
+			return false;
+		}
 		
 		return (lista.get(0).isDebeDinero()) ? true : false;
 	}
+	
+	
 	
 	/**
 	 * Comprueba que el socio no estuviera ya inscrito en dicha actividad
@@ -100,6 +132,8 @@ public class InscribirAdminModel {
 		return (inscripciones.size() == 0) ? false : true;
 	}
 	
+	
+	
 	/**
 	 * Comprueba que el no socio no estuviera ya inscrito en dicha actividad
 	 * @param socio
@@ -112,6 +146,8 @@ public class InscribirAdminModel {
 		
 		return (inscripciones.size() == 0) ? false : true;
 	}
+	
+	
 	
 	/**
 	 * Comprueba que el socio cumple con los periodos de inscripcion
@@ -130,6 +166,8 @@ public class InscribirAdminModel {
 		}
 	}
 	
+	
+	
 	/**
 	 * Comprueba que las fechas no son nulas o que la de fin ocurra antes que la de inicio
 	 * @param fechaInicio
@@ -143,10 +181,13 @@ public class InscribirAdminModel {
 	}
 	
 	
+	
 	private void validaFecha(boolean condition, String message) {
 		if (!condition)
 			throw new ApplicationException(message);
 	}
+	
+	
 	
 	/* De uso general para validacion de objetos */
 	private void validateNotNull(Object obj, String msg) {

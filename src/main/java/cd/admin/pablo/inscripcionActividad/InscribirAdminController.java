@@ -54,6 +54,7 @@ public class InscribirAdminController {
 	    }
 	}
 	
+	
 	/**
 	 * Se encarga de listar las actividades en la tabla según la fecha seleccionada
 	 */
@@ -87,6 +88,8 @@ public class InscribirAdminController {
 		SwingUtil.autoAdjustColumns(vista.getTable());
 	}
 	
+	
+	
 	/**
 	 * Comprueba si está seleccionada la opción de socio o no socio
 	 * @return
@@ -96,12 +99,14 @@ public class InscribirAdminController {
 	}
 	
 	
+	
+	
 	/**
 	 * Método que inscribe al Usuario generando una inscripcion
 	 */
 	//TODO pillar el usuario que se logea en el main
 	private void crearInscripcion() {
-		
+		String nombre ="", dni="", correo, telefono;
 		boolean esSocio = esSocio();
 
 		//Comprobamos si está seleccionado socio
@@ -115,14 +120,11 @@ public class InscribirAdminController {
 				return;
 			}
 		} else {
-			String nombre, dni, correo, telefono;
-			
 			nombre = vista.getNombre().getText();
 			dni = vista.getDNI().getText();
 			correo = vista.getCorreo().getText();
-			telefono = vista.getTelefono().toString();
+			telefono = vista.getTelefono().getText();
 		}
-		
 		
 		int filaSeleccionada = vista.getTable().getSelectedRow();
 		
@@ -137,15 +139,29 @@ public class InscribirAdminController {
 		String estado = model.compruebaAforo(actividad);//comprueba que queda aforo disponible
 		boolean estaPagado = false;
 		
-		model.enPlazo(actividad, esSocio); //comprueba que esté dentro del plazo
+		//comprueba que esté dentro del plazo tanto socio como no socio
+		model.enPlazo(actividad, esSocio); 
 		
-		if (model.inscripcionRepetida(usuario, actividad) == true) {
-			JOptionPane.showMessageDialog(vista.getFrame(),
-					"El usuario ya está inscrito", "Inscripcion ya hecha", JOptionPane.ERROR_MESSAGE);
-			return;
+		
+		if (esSocio) {
+			if (model.inscripcionRepetida(usuario, actividad) == true) {
+				JOptionPane.showMessageDialog(vista.getFrame(),
+						"El usuario ya está inscrito", "Inscripcion ya hecha", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		}
+		else {
+			if (model.inscripcionRepetidaNS(dni, actividad) == true) {
+				JOptionPane.showMessageDialog(vista.getFrame(),
+						"El usuario ya está inscrito", "Inscripcion ya hecha", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 		}
 		
-		if (vista.getRadioEfectivo().isSelected()) {
+		
+		
+		//Si se selecciona pago con tarjeta nos pide que la introduzcamos
+		if (vista.getRadioTarjeta().isSelected()) {
 			String tarjeta = JOptionPane.showInputDialog(
 					vista.getFrame(), "Introduzca una tarjeta de crédito", "Procesar pago", JOptionPane.QUESTION_MESSAGE);
 			
@@ -156,23 +172,43 @@ public class InscribirAdminController {
 			//Si llegamos aqui es que se ha introducido una tarjeta
 			estaPagado = true;
 		}
-		if (vista.getRadioTarjeta().isSelected()) {
+		
+		//Si se selecciona efectivo se da como pagado
+		if (vista.getRadioEfectivo().isSelected()) {
 			estaPagado = true;
 		}
 		
-		InscripcionDTO ins = new InscripcionDTO(
-				actividad.getId(), this.usuario.getId_socio(), fechaActual,
-				estado, estaPagado, "socio");
-		
-		if(model.inscribirSocioActividad(usuario, actividad, ins) == 1) {
-			JOptionPane.showMessageDialog(
-					vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
-		}
-		else {
-			JOptionPane.showMessageDialog(
-					vista.getFrame(), ""+actividad.getNombre() +" tiene aforo completo seras añadido a lista de espera");
+		//Si es socio
+		if (esSocio) {
+			InscripcionDTO ins = new InscripcionDTO(
+					actividad.getId(), this.usuario.getId_socio(), fechaActual,
+					estado, estaPagado, "socio");
+			
+			if(model.inscribirSocioActividad(usuario, actividad, ins) == 1) {
+				JOptionPane.showMessageDialog(
+						vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
+			}
+			else {
+				JOptionPane.showMessageDialog(
+						vista.getFrame(), ""+actividad.getNombre() +" tiene aforo completo seras añadido a lista de espera");
+			}
+		} else {
+			InscripcionDTO ins = new InscripcionDTO(
+					actividad.getId(), nombre, dni, fechaActual,
+					estado, estaPagado, "no_socio");
+			
+			if(model.inscribirNoSocioActividad(nombre, dni, actividad, ins) == 1) {
+				JOptionPane.showMessageDialog(
+						vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
+			}
+			else {
+				JOptionPane.showMessageDialog(
+						vista.getFrame(), ""+actividad.getNombre() +" tiene aforo completo seras añadido a lista de espera");
+			}
 		}
 	}
+	
+	
 	
 	/**
 	 * Lo que se ve nada más se abre la página
