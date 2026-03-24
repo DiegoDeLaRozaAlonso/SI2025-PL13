@@ -59,7 +59,7 @@ public class InscribirAdminModel {
 		String sql = "INSERT INTO Inscripciones "
 				+ "(id_actividad, id_socio, nombre_no_socio, dni, fecha_inscripcion, estado, pagado, tipo) "
 				+ "VALUES (?, NULL, ?, ?, ?, ?, ?, 'no_socio')";
-		db.executeUpdate(sql, nombre, dni, ins.getFecha_inscripcion(), ins.getEstado(), ins.isPagado());
+		db.executeUpdate(sql, actividad.getId(), nombre, dni, ins.getFecha_inscripcion(), ins.getEstado(), ins.isPagado());
 		
 		return (ins.getEstado().equals("admitido")) ? 1 : 0;
 	}
