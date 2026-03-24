@@ -57,8 +57,7 @@ CREATE TABLE Socios (
     debe_dinero BOOLEAN DEFAULT 0,
     telefono TEXT,
     direccion TEXT,
-    es_admin BOOLEAN DEFAULT 0,
-    dni TEXT NOT NULL UNIQUE
+    es_admin BOOLEAN DEFAULT 0
 );
 
 -- Tabla de Instalaciones
@@ -152,6 +151,7 @@ CREATE TABLE Inscripciones (
     id_actividad INTEGER NOT NULL,
     id_socio INTEGER, 
     nombre_no_socio TEXT, 
+    dni TEXT,
     fecha_inscripcion DATETIME NOT NULL,
     estado TEXT NOT NULL CHECK(estado IN ('admitido', 'lista_espera')),
     pagado BOOLEAN DEFAULT 0,

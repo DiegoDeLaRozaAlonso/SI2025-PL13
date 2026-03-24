@@ -25,24 +25,24 @@ INSERT INTO PeriodosGlobales (id_periodo_global, nombre, fecha_inicio, fecha_fin
 ------------------------------------------------------------
 -- SOCIOS (17)
 ------------------------------------------------------------
-INSERT INTO Socios (id_socio, nombre, email, contrasena, fecha_registro, debe_dinero, telefono, direccion, es_admin, dni) VALUES
-(1, 'Laura Martín', 'laura.martin@mail.com', 'hash_laura', '2025-09-10', 0, '600111222', 'C/ Alcalá 120, Madrid', 0, '12345678A'),
-(2, 'Carlos Pérez', 'carlos.perez@mail.com', 'hash_carlos', '2025-10-02', 0, '611222333', 'Av. América 45, Madrid', 0, '23456789B'),
-(3, 'Ana Gómez', 'ana.gomez@mail.com', 'hash_ana', '2025-11-15', 1, '622333444', 'C/ Goya 17, Madrid', 0, '34567890C'),
-(4, 'Miguel Ruiz', 'miguel.ruiz@mail.com', 'hash_miguel', '2026-01-05', 0, '633444555', 'C/ Serrano 200, Madrid', 0, '45678901D'),
-(5, 'Sofía López', 'sofia.lopez@mail.com', 'hash_sofia', '2026-02-01', 0, '644555666', 'C/ Princesa 8, Madrid', 0, '56789012E'),
-(6, 'Javier Ortega', 'javier.ortega@mail.com', 'hash_javier', '2025-08-21', 0, '655666777', 'C/ Atocha 30, Madrid', 0, '67890123F'),
-(7, 'Elena Navarro', 'elena.navarro@mail.com', 'hash_elena', '2025-07-13', 0, '666777888', 'C/ Bravo Murillo 91, Madrid', 0, '78901234G'),
-(8, 'Daniel Torres', 'daniel.torres@mail.com', 'hash_daniel', '2025-12-20', 0, '677888999', 'C/ Fuencarral 55, Madrid', 0, '89012345H'),
-(9, 'Paula Romero', 'paula.romero@mail.com', 'hash_paula', '2025-10-28', 0, '688999000', 'C/ Ibiza 14, Madrid', 0, '90123456I'),
-(10, 'Hugo Sánchez', 'hugo.sanchez@mail.com', 'hash_hugo', '2025-09-30', 0, '699000111', 'C/ Ferraz 40, Madrid', 0, '01234567J'),
-(11, 'Nerea Castillo', 'nerea.castillo@mail.com', 'hash_nerea', '2026-01-20', 0, '610123456', 'C/ Donnell 77, Madrid', 0, '11223344K'),
-(12, 'Alberto Molina', 'alberto.molina@mail.com', 'hash_alberto', '2025-06-18', 0, '620234567', 'C/ Toledo 12, Madrid', 0, '22334455L'),
-(13, 'Claudia Vega', 'claudia.vega@mail.com', 'hash_claudia', '2025-11-02', 0, '630345678', 'C/ Arturo Soria 210, Madrid', 0, '33445566M'),
-(14, 'Iván Ramos', 'ivan.ramos@mail.com', 'hash_ivan', '2025-12-05', 0, '640456789', 'C/ Menéndez Pelayo 60, Madrid', 0, '44556677N'),
-(15, 'Marina Gil', 'marina.gil@mail.com', 'hash_marina', '2026-02-10', 0, '650567890', 'C/ Velázquez 25, Madrid', 0, '55667788O'),
-(16, 'admin', 'admin@mail.com', '123', '2026-02-27', 0, NULL, NULL, 1, '99999999Z'),
-(17, 'socio1', 'socio1@mail.com', 'socio', '2026-02-28', 0, NULL, NULL, 0, '88888888Y');
+INSERT INTO Socios (id_socio, nombre, email, contrasena, fecha_registro, debe_dinero, telefono, direccion, es_admin) VALUES
+(1, 'Laura Martín', 'laura.martin@mail.com', 'hash_laura', '2025-09-10', 0, '600111222', 'C/ Alcalá 120, Madrid', 0),
+(2, 'Carlos Pérez', 'carlos.perez@mail.com', 'hash_carlos', '2025-10-02', 0, '611222333', 'Av. América 45, Madrid', 0),
+(3, 'Ana Gómez', 'ana.gomez@mail.com', 'hash_ana', '2025-11-15', 1, '622333444', 'C/ Goya 17, Madrid', 0),
+(4, 'Miguel Ruiz', 'miguel.ruiz@mail.com', 'hash_miguel', '2026-01-05', 0, '633444555', 'C/ Serrano 200, Madrid', 0),
+(5, 'Sofía López', 'sofia.lopez@mail.com', 'hash_sofia', '2026-02-01', 0, '644555666', 'C/ Princesa 8, Madrid', 0),
+(6, 'Javier Ortega', 'javier.ortega@mail.com', 'hash_javier', '2025-08-21', 0, '655666777', 'C/ Atocha 30, Madrid', 0),
+(7, 'Elena Navarro', 'elena.navarro@mail.com', 'hash_elena', '2025-07-13', 0, '666777888', 'C/ Bravo Murillo 91, Madrid', 0),
+(8, 'Daniel Torres', 'daniel.torres@mail.com', 'hash_daniel', '2025-12-20', 0, '677888999', 'C/ Fuencarral 55, Madrid', 0),
+(9, 'Paula Romero', 'paula.romero@mail.com', 'hash_paula', '2025-10-28', 0, '688999000', 'C/ Ibiza 14, Madrid', 0),
+(10, 'Hugo Sánchez', 'hugo.sanchez@mail.com', 'hash_hugo', '2025-09-30', 0, '699000111', 'C/ Ferraz 40, Madrid', 0),
+(11, 'Nerea Castillo', 'nerea.castillo@mail.com', 'hash_nerea', '2026-01-20', 0, '610123456', 'C/ Donnell 77, Madrid', 0),
+(12, 'Alberto Molina', 'alberto.molina@mail.com', 'hash_alberto', '2025-06-18', 0, '620234567', 'C/ Toledo 12, Madrid', 0),
+(13, 'Claudia Vega', 'claudia.vega@mail.com', 'hash_claudia', '2025-11-02', 0, '630345678', 'C/ Arturo Soria 210, Madrid', 0),
+(14, 'Iván Ramos', 'ivan.ramos@mail.com', 'hash_ivan', '2025-12-05', 0, '640456789', 'C/ Menéndez Pelayo 60, Madrid', 0),
+(15, 'Marina Gil', 'marina.gil@mail.com', 'hash_marina', '2026-02-10', 0, '650567890', 'C/ Velázquez 25, Madrid', 0),
+(16, 'admin', 'admin@mail.com', '123', '2026-02-27', 0, NULL, NULL, 1),
+(17, 'socio1', 'socio1@mail.com', 'socio', '2026-02-28', 0, NULL, NULL, 0);
 
 ------------------------------------------------------------
 -- INSTALACIONES (8)  (incluye precioInstalacion)
@@ -236,39 +236,39 @@ INSERT INTO Reservas (id_reserva, id_socio, id_instalacion, fecha_hora_inicio, d
 ------------------------------------------------------------
 -- INSCRIPCIONES (25) - TODO EN PUNTO
 ------------------------------------------------------------
-INSERT INTO Inscripciones (id_inscripcion, id_actividad, id_socio, nombre_no_socio, fecha_inscripcion, estado, pagado, tipo) VALUES
-(1, 1, 1, NULL, '2026-01-22 12:00', 'admitido', 1, 'socio'),
-(2, 1, 2, NULL, '2026-01-23 10:00', 'admitido', 1, 'socio'),
-(3, 1, 3, NULL, '2026-01-24 16:00', 'lista_espera', 0, 'socio'),
-(4, 1, 4, NULL, '2026-01-25 09:00', 'admitido', 1, 'socio'),
-(5, 1, 5, NULL, '2026-01-25 11:00', 'admitido', 0, 'socio'),
+INSERT INTO Inscripciones (id_inscripcion, id_actividad, id_socio, nombre_no_socio, dni, fecha_inscripcion, estado, pagado, tipo) VALUES
+(1, 1, 1, NULL, NULL, '2026-01-22 12:00', 'admitido', 1, 'socio'),
+(2, 1, 2, NULL, NULL, '2026-01-23 10:00', 'admitido', 1, 'socio'),
+(3, 1, 3, NULL, NULL, '2026-01-24 16:00', 'lista_espera', 0, 'socio'),
+(4, 1, 4, NULL, NULL, '2026-01-25 09:00', 'admitido', 1, 'socio'),
+(5, 1, 5, NULL, NULL, '2026-01-25 11:00', 'admitido', 0, 'socio'),
 
-(6, 2, 6, NULL, '2026-02-06 09:00', 'admitido', 0, 'socio'),
-(7, 2, 7, NULL, '2026-02-07 12:00', 'lista_espera', 0, 'socio'),
-(8, 2, 8, NULL, '2026-02-08 18:00', 'admitido', 1, 'socio'),
-(9, 2, 9, NULL, '2026-02-09 13:00', 'admitido', 1, 'socio'),
+(6, 2, 6, NULL, NULL, '2026-02-06 09:00', 'admitido', 0, 'socio'),
+(7, 2, 7, NULL, NULL, '2026-02-07 12:00', 'lista_espera', 0, 'socio'),
+(8, 2, 8, NULL, NULL, '2026-02-08 18:00', 'admitido', 1, 'socio'),
+(9, 2, 9, NULL, NULL, '2026-02-09 13:00', 'admitido', 1, 'socio'),
 
-(10, 3, 10, NULL, '2026-02-25 16:00', 'admitido', 0, 'socio'),
-(11, 3, 11, NULL, '2026-02-26 09:00', 'admitido', 1, 'socio'),
-(12, 3, 12, NULL, '2026-02-26 20:00', 'lista_espera', 0, 'socio'),
+(10, 3, 10, NULL, NULL, '2026-02-25 16:00', 'admitido', 0, 'socio'),
+(11, 3, 11, NULL, NULL, '2026-02-26 09:00', 'admitido', 1, 'socio'),
+(12, 3, 12, NULL, NULL, '2026-02-26 20:00', 'lista_espera', 0, 'socio'),
 
-(13, 4, 13, NULL, '2026-02-03 10:00', 'admitido', 1, 'socio'),
-(14, 4, 14, NULL, '2026-02-04 11:00', 'admitido', 1, 'socio'),
-(15, 4, 15, NULL, '2026-02-05 18:00', 'lista_espera', 0, 'socio'),
+(13, 4, 13, NULL, NULL, '2026-02-03 10:00', 'admitido', 1, 'socio'),
+(14, 4, 14, NULL, NULL, '2026-02-04 11:00', 'admitido', 1, 'socio'),
+(15, 4, 15, NULL, NULL, '2026-02-05 18:00', 'lista_espera', 0, 'socio'),
 
-(16, 5, 1, NULL, '2026-01-29 19:00', 'admitido', 1, 'socio'),
-(17, 5, 2, NULL, '2026-01-30 09:00', 'admitido', 0, 'socio'),
+(16, 5, 1, NULL, NULL, '2026-01-29 19:00', 'admitido', 1, 'socio'),
+(17, 5, 2, NULL, NULL, '2026-01-30 09:00', 'admitido', 0, 'socio'),
 
-(18, 6, 3, NULL, '2026-02-10 08:00', 'admitido', 0, 'socio'),
-(19, 6, 4, NULL, '2026-02-12 12:00', 'admitido', 1, 'socio'),
+(18, 6, 3, NULL, NULL, '2026-02-10 08:00', 'admitido', 0, 'socio'),
+(19, 6, 4, NULL, NULL, '2026-02-12 12:00', 'admitido', 1, 'socio'),
 
--- No socios
-(20, 1, NULL, 'Javier Santos', '2026-01-27 18:00', 'admitido', 1, 'no_socio'),
-(21, 1, NULL, 'Marta Díaz', '2026-01-28 11:00', 'admitido', 1, 'no_socio'),
-(22, 2, NULL, 'Lucía Herrera', '2026-02-10 10:00', 'admitido', 1, 'no_socio'),
-(23, 4, NULL, 'Óscar Núñez', '2026-02-08 09:00', 'lista_espera', 0, 'no_socio'),
-(24, 5, NULL, 'Paula Rivas', '2026-02-02 20:00', 'admitido', 1, 'no_socio'),
-(25, 6, NULL, 'Diego Torres', '2026-02-18 17:00', 'admitido', 1, 'no_socio');
+-- No socios (con DNI)
+(20, 1, NULL, 'Javier Santos', '66778899P', '2026-01-27 18:00', 'admitido', 1, 'no_socio'),
+(21, 1, NULL, 'Marta Díaz', '77889900Q', '2026-01-28 11:00', 'admitido', 1, 'no_socio'),
+(22, 2, NULL, 'Lucía Herrera', '88990011R', '2026-02-10 10:00', 'admitido', 1, 'no_socio'),
+(23, 4, NULL, 'Óscar Núñez', '99001122S', '2026-02-08 09:00', 'lista_espera', 0, 'no_socio'),
+(24, 5, NULL, 'Paula Rivas', '10111213T', '2026-02-02 20:00', 'admitido', 1, 'no_socio'),
+(25, 6, NULL, 'Diego Torres', '12131415U', '2026-02-18 17:00', 'admitido', 1, 'no_socio');
 
 ------------------------------------------------------------
 -- RECIBOS (24)
