@@ -32,9 +32,8 @@ public class InstalacionDAO {
         return -1;
     }
 
-    // ==============================
+
     // OBTENER HORARIO
-    // ==============================
 
     public LocalTime[] obtenerHorario(int idInstalacion, String tipoHorario) {
 
@@ -67,9 +66,7 @@ public class InstalacionDAO {
         return null;
     }
 
-    // ==============================
     // SOLAPE RESERVAS
-    // ==============================
 
     public boolean haySolapeReserva(int idInstalacion,
                                     String nuevaInicio,
@@ -103,9 +100,7 @@ public class InstalacionDAO {
         return true; // si falla, mejor bloquear
     }
 
-    // ==============================
-    // SOLAPE SESIONES
-    // ==============================
+    // PONE LAS SESIONES
 
     public boolean haySolapeSesion(int idInstalacion,
                                    String fecha,
@@ -141,9 +136,7 @@ public class InstalacionDAO {
         return true;
     }
 
-    // ==============================
-    // SOLAPE PLANIFICACION
-    // ==============================
+    // PONE LAS SESIONES PLANIFICADAS
 
     public boolean haySolapePlanificacion(int idInstalacion,
                                           String fecha,

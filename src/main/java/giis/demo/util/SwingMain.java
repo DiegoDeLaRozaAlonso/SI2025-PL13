@@ -290,6 +290,17 @@ public class SwingMain {
 				    reservaFrame.setVisible(true);
 				});
 				panelCentro.add(crearReservaSocio);
+		
+				// Botón Cancelar Reserva Admin
+				JButton cancelReservaAdmin = new JButton("Cancelar Reserva Admin");
+
+				cancelReservaAdmin.addActionListener(e -> {
+
+				    if (!sesion.isAdmin()) {
+				        JOptionPane.showMessageDialog(
+				                frame,
+				                "No tienes permisos para acceder a esta funcionalidad.\n" +
+				                "Esta ventana es solo para administración.",
 				
 				//Mis reservas socio
 				JButton misReservas = new JButton("Mis reservas (socio)");
@@ -306,6 +317,12 @@ public class SwingMain {
 				        return;
 				    }
 
+				    // El controlador crea y muestra la vista, no hace falta nada más
+				    new cd.admin.luismi.cancelReser.CancelReservaControlador();
+
+				});
+
+				panelCentro.add(cancelReservaAdmin);
 				    cd.socio.diego.misReservas.MisReservasView vista = new cd.socio.diego.misReservas.MisReservasView();
 				    cd.socio.diego.misReservas.MisReservasModel modelo = new cd.socio.diego.misReservas.MisReservasModel();
 
