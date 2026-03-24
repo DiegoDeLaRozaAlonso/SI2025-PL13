@@ -10,6 +10,8 @@ public class InscripcionDTO {
 	private String estado;
 	private boolean pagado;
 	private String tipo;
+	private String nombre_no_socio;
+	private String dni;
 	
 	public InscripcionDTO() {}
 
@@ -17,6 +19,16 @@ public class InscripcionDTO {
 			String estado, boolean pagado, String tipo) {
 		this.id_actividad = id_actividad;
 		this.id_socio = id_socio;
+		this.fecha_inscripcion = fecha_inscripcion;
+		this.estado = estado;
+		this.pagado = pagado;
+		this.tipo = tipo;
+	}
+	
+	public InscripcionDTO(int id_actividad, String nombre_no_socio, String dni, String fecha_inscripcion,
+			String estado, boolean pagado, String tipo) {
+		this.id_actividad = id_actividad;
+		this.nombre_no_socio = nombre_no_socio;
 		this.fecha_inscripcion = fecha_inscripcion;
 		this.estado = estado;
 		this.pagado = pagado;
