@@ -57,7 +57,8 @@ CREATE TABLE Socios (
     debe_dinero BOOLEAN DEFAULT 0,
     telefono TEXT,
     direccion TEXT,
-    es_admin BOOLEAN DEFAULT 0
+    es_admin BOOLEAN DEFAULT 0,
+    dni TEXT NOT NULL UNIQUE
 );
 
 -- Tabla de Instalaciones
