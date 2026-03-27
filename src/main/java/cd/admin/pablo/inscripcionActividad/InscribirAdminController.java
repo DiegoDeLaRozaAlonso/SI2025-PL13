@@ -124,6 +124,8 @@ public class InscribirAdminController {
 			dni = vista.getDNI().getText();
 			correo = vista.getCorreo().getText();
 			telefono = vista.getTelefono().getText();
+			
+			model.validaDatos(nombre, dni, correo, telefono);
 		}
 		
 		int filaSeleccionada = vista.getTable().getSelectedRow();

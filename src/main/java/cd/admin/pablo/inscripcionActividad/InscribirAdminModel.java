@@ -182,6 +182,21 @@ public class InscribirAdminModel {
 	
 	
 	
+	/**
+	 * Comprueba que los campos del no socio estén rellenados
+	 * @param datos
+	 */
+	public void validaDatos(String... datos) {
+		
+		for (String dato : datos) {
+			if(dato.isEmpty()) {
+				throw new ApplicationException("Faltan uno o varios datos del no socio");
+			}
+		}
+	}
+	
+	
+	
 	private void validaFecha(boolean condition, String message) {
 		if (!condition)
 			throw new ApplicationException(message);
