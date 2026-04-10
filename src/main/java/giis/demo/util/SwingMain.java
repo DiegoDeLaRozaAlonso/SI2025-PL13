@@ -37,6 +37,10 @@ import cd.socio.pablo.listaActividades.ListaPeriodoController;
 import cd.socio.pablo.listaActividades.ListaPeriodoModel;
 import cd.socio.pablo.listaActividades.ListaPeriodoView;
 
+import cd.admin.Alejandro.InformeOcupacion.InformeOcupacionController;
+import cd.admin.Alejandro.InformeOcupacion.InformeOcupacionModel;
+import cd.admin.Alejandro.InformeOcupacion.InformeOcupacionView;
+
 public class SwingMain {
 
 	private JFrame frame;
@@ -369,6 +373,30 @@ public class SwingMain {
 		});
 		panelCentro.add(btnContabilidad);
 		
+		// =========================
+		// Informe de Ocupación (Administracion)
+		// =========================
+		JButton btnInformeOcupacion = new JButton("Informe de Ocupación");
+		btnInformeOcupacion.addActionListener(e -> {
+
+		    if (!sesion.isAdmin()) {
+		        JOptionPane.showMessageDialog(
+		                frame,
+		                "No tienes permisos para acceder a esta funcionalidad.\n"
+		                + "Solo un administrador puede acceder.",
+		                "Acceso denegado",
+		                JOptionPane.WARNING_MESSAGE
+		        );
+		        return;
+		    }
+
+		    InformeOcupacionController controller = new InformeOcupacionController(
+		            new InformeOcupacionModel(),
+		            new InformeOcupacionView()
+		    );
+		    controller.initController();
+		});
+		panelCentro.add(btnInformeOcupacion);
 		
 		// =========================
 		// Panel inferior: Cambiar de usuario (abajo derecha)
