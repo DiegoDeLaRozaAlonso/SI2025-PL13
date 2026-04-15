@@ -6,7 +6,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -28,32 +27,33 @@ import cd.admin.Alejandro.Visualizacion.InstalacionEntity;
 
 /**
  * Vista del informe de ocupacion de instalaciones (administracion).
- * Incluye filtros por instalacion, actividad, socio, fechas y estado de ocupacion,
- * un panel de 4 KPIs resumen y una tabla detallada con columna de estado coloreada.
+ * Paleta limpia: fondo gris, titulos negros, sin codigos de color.
  */
 public class InformeOcupacionView {
 
-	// ── Paleta de colores ─────────────────────────────────────────────────────
-	static final Color COLOR_CABECERA  = new Color( 37,  99, 235);
+	// ── Paleta ────────────────────────────────────────────────────────────────
+	static final Color COLOR_BG        = new Color(240, 240, 240);
+	static final Color COLOR_SURFACE   = Color.WHITE;
+	static final Color COLOR_BORDER    = new Color(200, 200, 200);
+	static final Color COLOR_HEADER_BG = new Color( 60,  60,  60);
 	static final Color COLOR_HEADER_FG = Color.WHITE;
-	static final Color COLOR_ALTO      = new Color(254, 226, 226);
-	static final Color COLOR_ALTO_FG   = new Color(185,  28,  28);
-	static final Color COLOR_MEDIO     = new Color(254, 243, 199);
-	static final Color COLOR_MEDIO_FG  = new Color(161, 100,   0);
-	static final Color COLOR_BAJO      = new Color(220, 252, 231);
-	static final Color COLOR_BAJO_FG   = new Color( 22, 163,  74);
-	static final Color COLOR_BG        = new Color(249, 250, 251);
+	static final Color COLOR_TEXT      = new Color( 30,  30,  30);
+	static final Color COLOR_MUTED     = new Color(100, 100, 100);
+	static final Color COLOR_SEL       = new Color(220, 220, 220);
+	static final Color COLOR_BTN_MAIN  = new Color( 60,  60,  60);
+	static final Color COLOR_BTN_TXT   = new Color( 80, 120,  80);
+	static final Color COLOR_BTN_CLEAR = new Color(130, 130, 130);
 
-	// ── Opciones del combo Estado ─────────────────────────────────────────────
+	// ── Opciones Estado ───────────────────────────────────────────────────────
 	static final String ESTADO_TODOS = "Todos";
 	static final String ESTADO_ALTO  = "Alta ocupacion (>80%)";
 	static final String ESTADO_MEDIO = "Ocupacion media (40-80%)";
 	static final String ESTADO_BAJO  = "Baja ocupacion (<40%)";
 
-	// ── Columnas de la tabla ──────────────────────────────────────────────────
+	// ── Columnas ─────────────────────────────────────────────────────────────
 	static final String[] COLUMNAS = {
 		"Instalacion", "Actividad",
-		"Ocup. por actividad", "Ocup. por socio",
+		"Ocup. actividad (%)", "Ocup. socio (%)",
 		"Reservas activas", "Plazas libres", "Estado"
 	};
 
@@ -61,7 +61,6 @@ public class InformeOcupacionView {
 	private JFrame            frame;
 	private JComboBox<String> cmbInstalacion;
 	private JComboBox<String> cmbActividad;
-	private JTextField        txtSocio;
 	private JTextField        txtFechaInicio;
 	private JTextField        txtFechaFin;
 	private JComboBox<String> cmbEstado;
@@ -70,17 +69,11 @@ public class InformeOcupacionView {
 	private JButton           btnExportar;
 	private JTable            tabResultados;
 	private JLabel            lblPeriodo;
-	private JPanel            panelKpis;
-	private JLabel            lblKpiInstalaciones;
-	private JLabel            lblKpiReservas;
-	private JLabel            lblKpiPlazas;
-	private JLabel            lblKpiOcupacion;
+	private JLabel            lblKpis;
 
-	public InformeOcupacionView() {
-		initialize();
-	}
+	public InformeOcupacionView() { initialize(); }
 
-	// ── Construccion de la UI ─────────────────────────────────────────────────
+	// ── Construccion ─────────────────────────────────────────────────────────
 
 	private void initialize() {
 		frame = new JFrame("Informe de Ocupacion de Instalaciones - Administracion");
@@ -91,62 +84,49 @@ public class InformeOcupacionView {
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().setBackground(COLOR_BG);
 
-		frame.getContentPane().add(buildPanelNorth(),  BorderLayout.NORTH);
-		frame.getContentPane().add(buildPanelCenter(), BorderLayout.CENTER);
-		frame.getContentPane().add(buildPanelSouth(),  BorderLayout.SOUTH);
+		frame.getContentPane().add(buildNorth(),  BorderLayout.NORTH);
+		frame.getContentPane().add(buildCenter(), BorderLayout.CENTER);
+		frame.getContentPane().add(buildSouth(),  BorderLayout.SOUTH);
 	}
 
-	/** Panel superior: titulo + dos filas de filtros */
-	private JPanel buildPanelNorth() {
+	private JPanel buildNorth() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBackground(Color.WHITE);
+		panel.setBackground(COLOR_SURFACE);
 		panel.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(229, 231, 235)),
+				BorderFactory.createMatteBorder(0, 0, 1, 0, COLOR_BORDER),
 				BorderFactory.createEmptyBorder(10, 16, 10, 16)));
 
 		JLabel lblTitulo = new JLabel("Informe de Ocupacion de Instalaciones");
 		lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 17));
-		lblTitulo.setForeground(new Color(31, 41, 55));
+		lblTitulo.setForeground(COLOR_TEXT);
 		panel.add(lblTitulo);
 		panel.add(Box.createVerticalStrut(8));
 
 		// Fila 1: Instalacion | Actividad | Socio
 		JPanel fila1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 2));
-		fila1.setBackground(Color.WHITE);
-
+		fila1.setBackground(COLOR_SURFACE);
 		fila1.add(makeLabel("Instalacion:"));
 		cmbInstalacion = makeCombo("cmbInstalacion", 185);
 		fila1.add(cmbInstalacion);
-
 		fila1.add(makeLabel("Actividad:"));
 		cmbActividad = makeCombo("cmbActividad", 185);
 		fila1.add(cmbActividad);
-
-		fila1.add(makeLabel("Socio:"));
-		txtSocio = new JTextField(14);
-		txtSocio.setName("txtSocio");
-		txtSocio.setFont(new Font("SansSerif", Font.PLAIN, 13));
-		fila1.add(txtSocio);
-
 		panel.add(fila1);
 
-		// Fila 2: Fecha inicio | Fecha fin | Estado | Botones
+		// Fila 2: Fechas | Estado | Botones
 		JPanel fila2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 2));
-		fila2.setBackground(Color.WHITE);
-
+		fila2.setBackground(COLOR_SURFACE);
 		fila2.add(makeLabel("Fecha inicio (yyyy-MM-dd):"));
 		txtFechaInicio = new JTextField(10);
 		txtFechaInicio.setName("txtFechaInicio");
 		txtFechaInicio.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		fila2.add(txtFechaInicio);
-
 		fila2.add(makeLabel("Fecha fin (yyyy-MM-dd):"));
 		txtFechaFin = new JTextField(10);
 		txtFechaFin.setName("txtFechaFin");
 		txtFechaFin.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		fila2.add(txtFechaFin);
-
 		fila2.add(makeLabel("Estado:"));
 		cmbEstado = new JComboBox<>(new String[] {
 				ESTADO_TODOS, ESTADO_ALTO, ESTADO_MEDIO, ESTADO_BAJO });
@@ -154,210 +134,142 @@ public class InformeOcupacionView {
 		cmbEstado.setPreferredSize(new Dimension(205, 28));
 		cmbEstado.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		fila2.add(cmbEstado);
-
 		btnGenerar = new JButton("Generar informe");
 		btnGenerar.setName("btnGenerar");
-		styleBoton(btnGenerar, COLOR_CABECERA);
+		styleBoton(btnGenerar, COLOR_BTN_MAIN);
 		fila2.add(btnGenerar);
-
 		btnLimpiar = new JButton("Limpiar filtros");
 		btnLimpiar.setName("btnLimpiar");
-		styleBoton(btnLimpiar, new Color(107, 114, 128));
+		styleBoton(btnLimpiar, COLOR_BTN_CLEAR);
 		fila2.add(btnLimpiar);
-
 		panel.add(fila2);
 		return panel;
 	}
 
-	/** Panel central: KPIs + tabla + boton exportar */
-	private JPanel buildPanelCenter() {
+	private JPanel buildCenter() {
 		JPanel panel = new JPanel(new BorderLayout(0, 8));
 		panel.setBackground(COLOR_BG);
 		panel.setBorder(BorderFactory.createEmptyBorder(10, 12, 4, 12));
 
-		// -- KPIs (4 cajas en fila, ocultas hasta generar) --
-		panelKpis = new JPanel(new GridLayout(1, 4, 12, 0));
-		panelKpis.setBackground(COLOR_BG);
-		panelKpis.setVisible(false);
+		// KPIs como texto plano (oculto hasta generar)
+		lblKpis = new JLabel(" ");
+		lblKpis.setName("lblKpis");
+		lblKpis.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		lblKpis.setForeground(COLOR_MUTED);
+		lblKpis.setBorder(BorderFactory.createEmptyBorder(0, 2, 6, 0));
+		lblKpis.setVisible(false);
+		panel.add(lblKpis, BorderLayout.NORTH);
 
-		lblKpiInstalaciones = new JLabel("—", SwingConstants.CENTER);
-		lblKpiReservas       = new JLabel("—", SwingConstants.CENTER);
-		lblKpiPlazas         = new JLabel("—", SwingConstants.CENTER);
-		lblKpiOcupacion      = new JLabel("—", SwingConstants.CENTER);
-
-		panelKpis.add(buildKpiBox(lblKpiInstalaciones, "Instalaciones"));
-		panelKpis.add(buildKpiBox(lblKpiReservas,       "Reservas activas"));
-		panelKpis.add(buildKpiBox(lblKpiPlazas,         "Plazas libres totales"));
-		panelKpis.add(buildKpiBox(lblKpiOcupacion,      "Ocupacion media"));
-
-		panel.add(panelKpis, BorderLayout.NORTH);
-
-		// -- Tabla --
+		// Tabla
 		tabResultados = new JTable();
 		tabResultados.setName("tabResultados");
-		tabResultados.setRowHeight(30);
+		tabResultados.setRowHeight(26);
 		tabResultados.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		tabResultados.setDefaultEditor(Object.class, null);
 		tabResultados.setShowGrid(true);
-		tabResultados.setGridColor(new Color(229, 231, 235));
-		tabResultados.setDefaultRenderer(Object.class, new OcupacionCellRenderer());
+		tabResultados.setGridColor(COLOR_BORDER);
+		tabResultados.setBackground(COLOR_SURFACE);
+		tabResultados.setDefaultRenderer(Object.class, new OcupacionRenderer());
 		tabResultados.setFillsViewportHeight(true);
-		tabResultados.getTableHeader().setBackground(COLOR_CABECERA);
+		tabResultados.getTableHeader().setBackground(COLOR_HEADER_BG);
 		tabResultados.getTableHeader().setForeground(COLOR_HEADER_FG);
 		tabResultados.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
-		tabResultados.getTableHeader().setPreferredSize(new Dimension(0, 36));
+		tabResultados.getTableHeader().setPreferredSize(new Dimension(0, 30));
 		tabResultados.getTableHeader().setReorderingAllowed(false);
 
 		JScrollPane scroll = new JScrollPane(tabResultados);
-		scroll.setBorder(BorderFactory.createLineBorder(new Color(209, 213, 219)));
-		scroll.getViewport().setBackground(Color.WHITE);
+		scroll.setBorder(BorderFactory.createLineBorder(COLOR_BORDER));
+		scroll.getViewport().setBackground(COLOR_SURFACE);
 		panel.add(scroll, BorderLayout.CENTER);
 
-		// -- Boton exportar (bajo la tabla, alineado a la derecha) --
+		// Boton exportar
 		JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 4));
 		panelAcciones.setBackground(COLOR_BG);
 		btnExportar = new JButton("Descargar .txt");
 		btnExportar.setName("btnExportar");
-		styleBoton(btnExportar, new Color(22, 163, 74));
+		styleBoton(btnExportar, COLOR_BTN_TXT);
 		btnExportar.setEnabled(false);
 		panelAcciones.add(btnExportar);
 		panel.add(panelAcciones, BorderLayout.SOUTH);
-
 		return panel;
 	}
 
-	/** Panel inferior: etiqueta de periodo */
-	private JPanel buildPanelSouth() {
+	private JPanel buildSouth() {
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBackground(Color.WHITE);
+		panel.setBackground(COLOR_SURFACE);
 		panel.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(229, 231, 235)),
+				BorderFactory.createMatteBorder(1, 0, 0, 0, COLOR_BORDER),
 				BorderFactory.createEmptyBorder(6, 16, 6, 16)));
 		lblPeriodo = new JLabel(" ");
 		lblPeriodo.setName("lblPeriodo");
 		lblPeriodo.setFont(new Font("SansSerif", Font.ITALIC, 12));
-		lblPeriodo.setForeground(new Color(107, 114, 128));
+		lblPeriodo.setForeground(COLOR_MUTED);
 		panel.add(lblPeriodo, BorderLayout.WEST);
 		return panel;
 	}
 
-	/** Caja KPI individual: valor grande + etiqueta pequena */
-	private JPanel buildKpiBox(JLabel lblValor, String etiqueta) {
-		JPanel box = new JPanel();
-		box.setLayout(new BoxLayout(box, BoxLayout.Y_AXIS));
-		box.setBackground(Color.WHITE);
-		box.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(new Color(229, 231, 235)),
-				BorderFactory.createEmptyBorder(10, 14, 10, 14)));
+	// ── Renderer limpio ───────────────────────────────────────────────────────
 
-		lblValor.setFont(new Font("SansSerif", Font.BOLD, 26));
-		lblValor.setForeground(new Color(31, 41, 55));
-		lblValor.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-		JLabel lbl = new JLabel(etiqueta, SwingConstants.CENTER);
-		lbl.setFont(new Font("SansSerif", Font.PLAIN, 12));
-		lbl.setForeground(new Color(107, 114, 128));
-		lbl.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-		box.add(lblValor);
-		box.add(Box.createVerticalStrut(2));
-		box.add(lbl);
-		return box;
-	}
-
-	// ── Renderer de celdas ────────────────────────────────────────────────────
-
-	static class OcupacionCellRenderer extends DefaultTableCellRenderer {
-
+	/**
+	 * Filas alternadas blanco/gris muy claro.
+	 * Columnas de porcentaje y Estado: monoespaciadas y centradas, sin colores.
+	 */
+	static class OcupacionRenderer extends DefaultTableCellRenderer {
 		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value,
-				boolean isSelected, boolean hasFocus, int row, int col) {
-
+		public Component getTableCellRendererComponent(JTable t, Object v,
+				boolean sel, boolean foc, int row, int col) {
 			JLabel lbl = (JLabel) super.getTableCellRendererComponent(
-					table, value, isSelected, hasFocus, row, col);
+					t, v, sel, foc, row, col);
 			lbl.setOpaque(true);
 			lbl.setFont(new Font("SansSerif", Font.PLAIN, 12));
 			lbl.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
+			lbl.setForeground(COLOR_TEXT);
+			lbl.setBackground(sel ? COLOR_SEL
+					: row % 2 == 0 ? COLOR_SURFACE : new Color(248, 248, 248));
 
-			String texto = value != null ? value.toString().trim() : "";
-
-			if (col == 2 || col == 3) {
-				int pct = parsePct(texto);
-				colorearNivel(lbl, pct, isSelected);
-				lbl.setHorizontalAlignment(SwingConstants.CENTER);
-				lbl.setFont(new Font("SansSerif", Font.BOLD, 12));
-
-			} else if (col == 6) {
-				// Columna Estado: pill
-				lbl.setHorizontalAlignment(SwingConstants.CENTER);
-				lbl.setFont(new Font("SansSerif", Font.BOLD, 11));
-				if ("Alta".equals(texto)) {
-					lbl.setBackground(isSelected ? COLOR_ALTO_FG : COLOR_ALTO);
-					lbl.setForeground(COLOR_ALTO_FG);
-				} else if ("Media".equals(texto)) {
-					lbl.setBackground(isSelected ? COLOR_MEDIO_FG : COLOR_MEDIO);
-					lbl.setForeground(COLOR_MEDIO_FG);
-				} else {
-					lbl.setBackground(isSelected ? COLOR_BAJO_FG : COLOR_BAJO);
-					lbl.setForeground(COLOR_BAJO_FG);
-				}
-
-			} else if (col == 4 || col == 5) {
-				lbl.setHorizontalAlignment(SwingConstants.CENTER);
-				resetDefault(lbl, isSelected);
-
-			} else {
-				lbl.setHorizontalAlignment(SwingConstants.LEFT);
-				resetDefault(lbl, isSelected);
+			switch (col) {
+				case 2: case 3: // porcentajes
+					lbl.setHorizontalAlignment(SwingConstants.CENTER);
+					lbl.setFont(new Font("Monospaced", Font.PLAIN, 12));
+					break;
+				case 4: // reservas activas
+					lbl.setHorizontalAlignment(SwingConstants.CENTER);
+					break;
+				case 5: // plazas libres
+					lbl.setHorizontalAlignment(SwingConstants.CENTER);
+					break;
+				case 6: // estado
+					lbl.setHorizontalAlignment(SwingConstants.CENTER);
+					lbl.setFont(new Font("SansSerif", Font.PLAIN, 11));
+					break;
+				default:
+					lbl.setHorizontalAlignment(SwingConstants.LEFT);
 			}
 			return lbl;
-		}
-
-		private void colorearNivel(JLabel lbl, int pct, boolean sel) {
-			if (pct >= 80) {
-				lbl.setBackground(sel ? COLOR_ALTO_FG  : COLOR_ALTO);
-				lbl.setForeground(COLOR_ALTO_FG);
-			} else if (pct >= 40) {
-				lbl.setBackground(sel ? COLOR_MEDIO_FG : COLOR_MEDIO);
-				lbl.setForeground(COLOR_MEDIO_FG);
-			} else {
-				lbl.setBackground(sel ? COLOR_BAJO_FG  : COLOR_BAJO);
-				lbl.setForeground(COLOR_BAJO_FG);
-			}
-		}
-
-		private void resetDefault(JLabel lbl, boolean sel) {
-			lbl.setBackground(sel ? new Color(219, 234, 254) : Color.WHITE);
-			lbl.setForeground(new Color(31, 41, 55));
-		}
-
-		private int parsePct(String s) {
-			try { return Integer.parseInt(s.replace("%", "").trim()); }
-			catch (NumberFormatException e) { return 0; }
 		}
 	}
 
 	// ── Utilidades privadas ───────────────────────────────────────────────────
 
-	private JLabel makeLabel(String texto) {
-		JLabel l = new JLabel(texto);
-		l.setFont(new Font("SansSerif", Font.BOLD, 12));
-		l.setForeground(new Color(55, 65, 81));
+	private JLabel makeLabel(String t) {
+		JLabel l = new JLabel(t);
+		l.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		l.setForeground(COLOR_TEXT);
 		return l;
 	}
 
 	private JComboBox<String> makeCombo(String name, int width) {
-		JComboBox<String> cmb = new JComboBox<>();
-		cmb.setName(name);
-		cmb.setPreferredSize(new Dimension(width, 28));
-		cmb.setFont(new Font("SansSerif", Font.PLAIN, 13));
-		return cmb;
+		JComboBox<String> c = new JComboBox<>();
+		c.setName(name);
+		c.setPreferredSize(new Dimension(width, 28));
+		c.setFont(new Font("SansSerif", Font.PLAIN, 13));
+		return c;
 	}
 
 	private void styleBoton(JButton btn, Color bg) {
 		btn.setBackground(bg);
 		btn.setForeground(Color.WHITE);
-		btn.setFont(new Font("SansSerif", Font.BOLD, 13));
+		btn.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		btn.setFocusPainted(false);
 		btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		btn.setBorder(BorderFactory.createEmptyBorder(5, 14, 5, 14));
@@ -368,7 +280,6 @@ public class InformeOcupacionView {
 	public JFrame             getFrame()           { return frame;          }
 	public JComboBox<String>  getCmbInstalacion()  { return cmbInstalacion; }
 	public JComboBox<String>  getCmbActividad()    { return cmbActividad;   }
-	public JTextField         getTxtSocio()        { return txtSocio;       }
 	public JTextField         getTxtFechaInicio()  { return txtFechaInicio; }
 	public JTextField         getTxtFechaFin()     { return txtFechaFin;    }
 	public JComboBox<String>  getCmbEstado()       { return cmbEstado;      }
@@ -380,90 +291,78 @@ public class InformeOcupacionView {
 	public void setInstalaciones(List<InstalacionEntity> instalaciones) {
 		cmbInstalacion.removeAllItems();
 		cmbInstalacion.addItem("Todas");
-		for (InstalacionEntity inst : instalaciones)
-			cmbInstalacion.addItem(inst.getNombre());
+		for (InstalacionEntity i : instalaciones) cmbInstalacion.addItem(i.getNombre());
 	}
 
 	public void setActividades(List<ActividadEntity> actividades) {
 		cmbActividad.removeAllItems();
 		cmbActividad.addItem("Todas");
-		for (ActividadEntity act : actividades)
-			cmbActividad.addItem(act.getNombre());
+		for (ActividadEntity a : actividades) cmbActividad.addItem(a.getNombre());
 	}
 
-	/**
-	 * Carga las filas filtradas en la tabla.
-	 * Plazas libres con formato "N / aforo". Columna Estado: "Alta"/"Media"/"Baja".
-	 */
 	public void setFilas(List<OcupacionFilaDTO> filas) {
-		DefaultTableModel modelo = new DefaultTableModel(COLUMNAS, 0) {
+		DefaultTableModel m = new DefaultTableModel(COLUMNAS, 0) {
 			@Override public boolean isCellEditable(int r, int c) { return false; }
 			@Override public Class<?> getColumnClass(int c)        { return String.class; }
 		};
 		for (OcupacionFilaDTO f : filas) {
-			int    pctAct = f.getPorcentajeActividad();
-			String estado = pctAct >= 80 ? "Alta" : pctAct >= 40 ? "Media" : "Baja";
-			modelo.addRow(new Object[] {
+			int    pct    = f.getPorcentajeActividad();
+			String estado = pct >= 80 ? "Alta" : pct >= 40 ? "Media" : "Baja";
+			m.addRow(new Object[] {
 				f.getNombreInstalacion(),
 				f.getNombreActividad(),
-				pctAct + "%",
+				pct + "%",
 				f.getPorcentajeSocio() + "%",
 				f.getReservasActivas(),
 				f.getPlazasLibres() + " / " + f.getAforoActividad(),
 				estado
 			});
 		}
-		tabResultados.setModel(modelo);
-		int[] anchos = { 165, 155, 115, 105, 95, 85, 65 };
+		tabResultados.setModel(m);
+		int[] anchos = { 155, 145, 115, 105, 95, 85, 65 };
 		for (int i = 0; i < anchos.length && i < tabResultados.getColumnCount(); i++)
 			tabResultados.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
 		tabResultados.revalidate();
 		tabResultados.repaint();
 	}
 
-	/** Actualiza los 4 KPIs y muestra el panel */
-	public void setKpis(int numInstalaciones, int totalReservas,
-			int totalPlazasLibres, int mediaOcupacion) {
-		lblKpiInstalaciones.setText(String.valueOf(numInstalaciones));
-		lblKpiReservas.setText(String.valueOf(totalReservas));
-		lblKpiPlazas.setText(String.valueOf(totalPlazasLibres));
-		lblKpiOcupacion.setText(mediaOcupacion + "%");
-		panelKpis.setVisible(true);
-		panelKpis.revalidate();
+	public void setKpis(int numInst, int totalRes, int totalLibres, int mediaOcup) {
+		lblKpis.setText("Instalaciones: " + numInst
+				+ "   |   Reservas activas: " + totalRes
+				+ "   |   Plazas libres totales: " + totalLibres
+				+ "   |   Ocupacion media: " + mediaOcup + "%");
+		lblKpis.setVisible(true);
 	}
 
-	public void setPeriodo(String fechaInicio, String fechaFin) {
-		lblPeriodo.setText("Periodo consultado: " + fechaInicio + "  ->  " + fechaFin);
-		lblPeriodo.setForeground(new Color(107, 114, 128));
+	public void setPeriodo(String inicio, String fin) {
+		lblPeriodo.setText("Periodo consultado: " + inicio + "  ->  " + fin);
+		lblPeriodo.setForeground(COLOR_MUTED);
 	}
 
-	public void setError(String mensaje) {
-		lblPeriodo.setText("Error: " + mensaje);
-		lblPeriodo.setForeground(COLOR_ALTO_FG);
+	public void setError(String msg) {
+		lblPeriodo.setText("Error: " + msg);
+		lblPeriodo.setForeground(new Color(180, 0, 0));
 	}
 
-	/** Limpia filtros, oculta KPIs y vacia la tabla */
-	public void limpiarFiltros(String fechaInicioDefecto, String fechaFinDefecto) {
+	public void limpiarFiltros(String inicioDefecto, String finDefecto) {
 		cmbInstalacion.setSelectedIndex(0);
 		cmbActividad.setSelectedIndex(0);
 		cmbEstado.setSelectedIndex(0);
-		txtSocio.setText("");
-		txtFechaInicio.setText(fechaInicioDefecto);
-		txtFechaFin.setText(fechaFinDefecto);
+		txtFechaInicio.setText(inicioDefecto);
+		txtFechaFin.setText(finDefecto);
 		tabResultados.setModel(new DefaultTableModel());
-		panelKpis.setVisible(false);
+		lblKpis.setText(" ");
+		lblKpis.setVisible(false);
 		lblPeriodo.setText(" ");
 		btnExportar.setEnabled(false);
 	}
 
-	// getters de filtros
 	public String getInstalacionSeleccionada() {
 		Object s = cmbInstalacion.getSelectedItem(); return s != null ? s.toString() : "Todas";
 	}
 	public String getActividadSeleccionada() {
 		Object s = cmbActividad.getSelectedItem(); return s != null ? s.toString() : "Todas";
 	}
-	public String getSocioFiltro()     { return txtSocio.getText().trim(); }
 	public String getEstadoSeleccionado() {
 		Object s = cmbEstado.getSelectedItem(); return s != null ? s.toString() : ESTADO_TODOS;
 	}

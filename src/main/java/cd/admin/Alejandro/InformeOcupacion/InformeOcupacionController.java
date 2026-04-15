@@ -17,26 +17,21 @@ import cd.admin.Alejandro.Visualizacion.InstalacionEntity;
  * Controlador del informe de ocupacion de instalaciones (administracion).
  * Punto de entrada: instanciar y llamar a initController().
  *
- * Flujo:
- *   1. initView()      -> carga combos y fechas por defecto.
- *   2. generarInforme()-> consulta modelo, aplica filtros de Estado y Socio
- *                         en memoria, actualiza tabla y KPIs.
- *   3. exportarTXT()   -> genera y guarda el fichero .txt con el ultimo resultado.
- *   4. limpiarFiltros()-> resetea la vista al estado inicial.
+ * CORRECCION: las fechas por defecto ahora van desde el 01/01 del año en curso
+ * hasta hoy, para que al abrir la ventana ya haya datos visibles con los datos
+ * de prueba (actividades de enero-abril 2026).
  */
 public class InformeOcupacionController {
 
 	private static final String SEP_DOBLE  = repeatChar('=', 90);
 	private static final String SEP_SIMPLE = repeatChar('-', 90);
 
-	// Fechas por defecto (inicio del mes actual y hoy)
 	private final String fechaInicioDefecto;
 	private final String fechaFinDefecto;
 
 	private InformeOcupacionModel model;
 	private InformeOcupacionView  view;
 
-	/** Cache del ultimo resultado para la exportacion TXT */
 	private List<OcupacionFilaDTO> ultimasFilas      = null;
 	private String                 ultimaFechaInicio = "";
 	private String                 ultimaFechaFin    = "";
@@ -44,32 +39,28 @@ public class InformeOcupacionController {
 	public InformeOcupacionController(InformeOcupacionModel m, InformeOcupacionView v) {
 		this.model = m;
 		this.view  = v;
-		String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String hoy  = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		// Desde el 1 de enero del año en curso hasta hoy -> cubre todos los datos de prueba
+		this.fechaInicioDefecto = hoy.substring(0, 4) + "-01-01";
 		this.fechaFinDefecto    = hoy;
-		this.fechaInicioDefecto = hoy.substring(0, 7) + "-01";
 		initView();
 	}
 
-	/** Instala los manejadores de eventos */
 	public void initController() {
 		view.getBtnGenerar().addActionListener(
 				e -> SwingUtil.exceptionWrapper(() -> generarInforme()));
-
 		view.getBtnLimpiar().addActionListener(
 				e -> SwingUtil.exceptionWrapper(() -> limpiarFiltros()));
-
 		view.getBtnExportar().addActionListener(
 				e -> SwingUtil.exceptionWrapper(() -> exportarTXT()));
 	}
 
-	/** Carga los combos, pone las fechas por defecto y muestra la ventana */
 	public void initView() {
 		List<InstalacionEntity> instalaciones = model.getInstalaciones();
 		if (instalaciones.isEmpty())
 			throw new ApplicationException(
 					"No hay instalaciones activas. "
 					+ "Pulse 'Inicializar BD' y 'Cargar Datos Iniciales' en la pantalla principal.");
-
 		view.setInstalaciones(instalaciones);
 		view.setActividades(model.getActividades());
 		view.getTxtFechaInicio().setText(fechaInicioDefecto);
@@ -79,10 +70,6 @@ public class InformeOcupacionController {
 
 	// ── Manejadores ──────────────────────────────────────────────────────────
 
-	/**
-	 * Lee los filtros, consulta el modelo y aplica el filtrado adicional
-	 * de Estado y texto de Socio en memoria antes de mostrar los resultados.
-	 */
 	private void generarInforme() {
 		String fechaInicio = view.getTxtFechaInicio().getText().trim();
 		String fechaFin    = view.getTxtFechaFin().getText().trim();
@@ -91,11 +78,10 @@ public class InformeOcupacionController {
 		int idInstalacion = resolverIdInstalacion(view.getInstalacionSeleccionada());
 		int idActividad   = resolverIdActividad(view.getActividadSeleccionada());
 
-		// 1. Obtener datos del modelo (filtro por instalacion y actividad en SQL)
 		List<OcupacionFilaDTO> filas = model.getFilasInforme(
 				fechaInicio, fechaFin, idInstalacion, idActividad);
 
-		// 2. Filtro por Estado (en memoria: sobre el porcentaje de actividad)
+		// Filtro Estado en memoria
 		String estado = view.getEstadoSeleccionado();
 		if (!InformeOcupacionView.ESTADO_TODOS.equals(estado)) {
 			filas = filas.stream()
@@ -103,44 +89,28 @@ public class InformeOcupacionController {
 					.collect(Collectors.toList());
 		}
 
-		// 3. Filtro por Socio (en memoria: coincidencia de texto en nombre instalacion
-		//    o actividad, ya que el informe es por instalacion/actividad, no por socio
-		//    individual; un filtro mas preciso requeriria una query adicional)
-		String socioTexto = view.getSocioFiltro();
-		if (!socioTexto.isEmpty()) {
-			String lower = socioTexto.toLowerCase();
-			filas = filas.stream()
-					.filter(f -> f.getNombreInstalacion().toLowerCase().contains(lower)
-							  || f.getNombreActividad().toLowerCase().contains(lower))
-					.collect(Collectors.toList());
-		}
-
-		// 4. Calcular KPIs
-		Set<String> instalacionesDistintas = filas.stream()
-				.map(OcupacionFilaDTO::getNombreInstalacion)
-				.collect(Collectors.toSet());
+		// KPIs
+		Set<String> instDistintas = filas.stream()
+				.map(OcupacionFilaDTO::getNombreInstalacion).collect(Collectors.toSet());
 		int totalReservas     = filas.stream().mapToInt(f -> parseIntSafe(f.getReservasActivas())).sum();
 		int totalPlazasLibres = filas.stream().mapToInt(OcupacionFilaDTO::getPlazasLibres).sum();
 		int mediaOcupacion    = filas.isEmpty() ? 0
 				: (int) filas.stream().mapToInt(OcupacionFilaDTO::getPorcentajeActividad).average().orElse(0);
 
-		// 5. Actualizar vista
 		view.setFilas(filas);
 		view.setPeriodo(fechaInicio, fechaFin);
-		view.setKpis(instalacionesDistintas.size(), totalReservas, totalPlazasLibres, mediaOcupacion);
+		view.setKpis(instDistintas.size(), totalReservas, totalPlazasLibres, mediaOcupacion);
 		view.getBtnExportar().setEnabled(!filas.isEmpty());
 
-		// Guardar para exportacion
 		ultimasFilas      = filas;
 		ultimaFechaInicio = fechaInicio;
 		ultimaFechaFin    = fechaFin;
 	}
 
-	/** Exporta el ultimo resultado a un fichero .txt en el directorio de trabajo */
 	private void exportarTXT() {
 		if (ultimasFilas == null || ultimasFilas.isEmpty())
 			throw new ApplicationException(
-					"No hay datos en el informe. Pulse 'Generar informe' primero.");
+					"No hay datos. Pulse 'Generar informe' primero.");
 
 		String ts     = new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date());
 		String nombre = "informe_ocupacion_" + ts + ".txt";
@@ -158,16 +128,15 @@ public class InformeOcupacionController {
 				javax.swing.JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	/** Resetea todos los filtros y limpia la tabla y KPIs */
 	private void limpiarFiltros() {
 		ultimasFilas = null;
 		view.limpiarFiltros(fechaInicioDefecto, fechaFinDefecto);
 	}
 
-	// ── Generacion del TXT ────────────────────────────────────────────────────
+	// ── Generacion TXT ────────────────────────────────────────────────────────
 
 	String generarContenidoTXT() {
-		StringBuilder sb   = new StringBuilder();
+		StringBuilder sb    = new StringBuilder();
 		String        ahora = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
 
 		sb.append(SEP_DOBLE).append("\n");
@@ -177,39 +146,34 @@ public class InformeOcupacionController {
 		  .append("  ->  ").append(ultimaFechaFin).append("\n");
 		sb.append(SEP_DOBLE).append("\n\n");
 
-		// Resumen
-		Set<String> instDistintas = ultimasFilas.stream()
+		Set<String> inst    = ultimasFilas.stream()
 				.map(OcupacionFilaDTO::getNombreInstalacion).collect(Collectors.toSet());
-		int totalRes   = ultimasFilas.stream().mapToInt(f -> parseIntSafe(f.getReservasActivas())).sum();
-		int totalLibres = ultimasFilas.stream().mapToInt(OcupacionFilaDTO::getPlazasLibres).sum();
-		double media    = ultimasFilas.stream().mapToInt(OcupacionFilaDTO::getPorcentajeActividad)
+		int    totalRes     = ultimasFilas.stream().mapToInt(f -> parseIntSafe(f.getReservasActivas())).sum();
+		int    totalLibres  = ultimasFilas.stream().mapToInt(OcupacionFilaDTO::getPlazasLibres).sum();
+		double media        = ultimasFilas.stream().mapToInt(OcupacionFilaDTO::getPorcentajeActividad)
 				.average().orElse(0.0);
 
 		sb.append("RESUMEN\n");
-		sb.append(String.format("  Instalaciones consultadas : %d%n",  instDistintas.size()));
+		sb.append(String.format("  Instalaciones consultadas : %d%n",  inst.size()));
 		sb.append(String.format("  Reservas activas (total)  : %d%n",  totalRes));
 		sb.append(String.format("  Plazas libres (total)     : %d%n",  totalLibres));
 		sb.append(String.format("  Ocupacion media actividad : %.1f%%%n", media));
 		sb.append("\n").append(SEP_DOBLE).append("\n\n");
 
-		// Cabecera de la tabla
 		sb.append(String.format("%-22s %-20s %10s %10s %10s %12s %6s%n",
 				"INSTALACION", "ACTIVIDAD",
 				"OC.ACT(%)", "OC.SOC(%)", "RESERVAS", "PLAZAS", "ESTADO"));
 		sb.append(SEP_SIMPLE).append("\n");
 
-		// Filas
 		for (OcupacionFilaDTO f : ultimasFilas) {
-			int    pctAct = f.getPorcentajeActividad();
-			String estado = pctAct >= 80 ? "Alta" : pctAct >= 40 ? "Media" : "Baja";
-			String plazas = f.getPlazasLibres() + " / " + f.getAforoActividad();
+			int    pct    = f.getPorcentajeActividad();
+			String estado = pct >= 80 ? "Alta" : pct >= 40 ? "Media" : "Baja";
 			sb.append(String.format("%-22s %-20s %9d%% %9d%% %10s %12s %6s%n",
 					truncar(f.getNombreInstalacion(), 21),
 					truncar(f.getNombreActividad(),   19),
-					pctAct,
-					f.getPorcentajeSocio(),
+					pct, f.getPorcentajeSocio(),
 					f.getReservasActivas(),
-					plazas,
+					f.getPlazasLibres() + " / " + f.getAforoActividad(),
 					estado));
 		}
 		sb.append(SEP_DOBLE).append("\n");
@@ -219,7 +183,6 @@ public class InformeOcupacionController {
 
 	// ── Utilidades ────────────────────────────────────────────────────────────
 
-	/** Comprueba si el porcentaje encaja con la opcion de estado seleccionada */
 	private boolean nivelCoincide(int pct, String estadoFiltro) {
 		switch (estadoFiltro) {
 			case InformeOcupacionView.ESTADO_ALTO:  return pct >= 80;
@@ -229,19 +192,17 @@ public class InformeOcupacionController {
 		}
 	}
 
-	private int resolverIdInstalacion(String nombreSel) {
-		if ("Todas".equals(nombreSel)) return -1;
-		for (InstalacionEntity inst : model.getInstalaciones())
-			if (inst.getNombre().equals(nombreSel))
-				return Integer.parseInt(inst.getId());
+	private int resolverIdInstalacion(String nombre) {
+		if ("Todas".equals(nombre)) return -1;
+		for (InstalacionEntity i : model.getInstalaciones())
+			if (i.getNombre().equals(nombre)) return Integer.parseInt(i.getId());
 		return -1;
 	}
 
-	private int resolverIdActividad(String nombreSel) {
-		if ("Todas".equals(nombreSel)) return -1;
-		for (ActividadEntity act : model.getActividades())
-			if (act.getNombre().equals(nombreSel))
-				return Integer.parseInt(act.getId());
+	private int resolverIdActividad(String nombre) {
+		if ("Todas".equals(nombre)) return -1;
+		for (ActividadEntity a : model.getActividades())
+			if (a.getNombre().equals(nombre)) return Integer.parseInt(a.getId());
 		return -1;
 	}
 
