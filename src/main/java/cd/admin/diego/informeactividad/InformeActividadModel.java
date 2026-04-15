@@ -42,7 +42,7 @@ public class InformeActividadModel {
 
 		sql.append("SELECT ");
 		sql.append(" a.nombre AS nombre, ");
-		sql.append(" a.id_actividad AS edicion, ");
+		sql.append(" a.edicion AS edicion, ");
 		sql.append(" a.aforo AS plazas, ");
 		sql.append(" COALESCE(SUM(CASE WHEN i.estado = 'admitido' THEN 1 ELSE 0 END), 0) AS inscritos, ");
 		sql.append(" CASE ");
@@ -69,7 +69,7 @@ public class InformeActividadModel {
 			params.add(idActividad);
 		}
 
-		sql.append("GROUP BY a.id_actividad, a.nombre, a.aforo ");
+		sql.append("GROUP BY a.id_actividad, a.nombre, a.edicion, a.aforo ");
 		sql.append("ORDER BY a.fecha_inicio ASC, a.id_actividad ASC");
 
 		return db.executeQueryPojo(InformeActividadDTO.class, sql.toString(), params.toArray());
@@ -81,7 +81,7 @@ public class InformeActividadModel {
 
 		sql.append("SELECT ");
 		sql.append(" a.nombre AS nombre, ");
-		sql.append(" a.id_actividad AS edicion, ");
+		sql.append(" a.edicion AS edicion, ");
 		sql.append(" a.aforo AS plazas, ");
 		sql.append(" COALESCE(SUM(CASE WHEN i.estado = 'admitido' THEN 1 ELSE 0 END), 0) AS inscritos, ");
 		sql.append(" CASE ");
@@ -99,7 +99,7 @@ public class InformeActividadModel {
 			params.add(idActividad);
 		}
 
-		sql.append("GROUP BY a.id_actividad, a.nombre, a.aforo ");
+		sql.append("GROUP BY a.id_actividad, a.nombre, a.edicion, a.aforo ");
 		sql.append("ORDER BY a.fecha_inicio ASC, a.id_actividad ASC");
 
 		return db.executeQueryPojo(InformeActividadDTO.class, sql.toString(), params.toArray());
@@ -111,7 +111,7 @@ public class InformeActividadModel {
 
 		sql.append("SELECT ");
 		sql.append(" a.nombre AS nombre, ");
-		sql.append(" a.id_actividad AS edicion, ");
+		sql.append(" a.edicion AS edicion, ");
 		sql.append(" a.aforo AS plazas, ");
 		sql.append(" COALESCE(SUM(CASE WHEN i.estado = 'admitido' THEN 1 ELSE 0 END), 0) AS inscritos, ");
 		sql.append(" CASE ");
@@ -129,7 +129,7 @@ public class InformeActividadModel {
 			params.add(idActividad);
 		}
 
-		sql.append("GROUP BY a.id_actividad, a.nombre, a.aforo ");
+		sql.append("GROUP BY a.id_actividad, a.nombre, a.edicion, a.aforo ");
 		sql.append("ORDER BY a.fecha_inicio ASC, a.id_actividad ASC");
 
 		return db.executeQueryPojo(InformeActividadDTO.class, sql.toString(), params.toArray());
