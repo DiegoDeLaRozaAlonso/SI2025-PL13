@@ -69,6 +69,37 @@ public class ResActModel {
 		return db.executeQueryPojo(ConflictoReservaDto.class, sql, idActividad);
 	}
 
+	public List<NotificacionReservaCanceladaDto> getReservasCanceladasParaNotificar(int idActividadNueva) {
+		String sql =
+			"SELECT DISTINCT "
+			+ "r.id_reserva AS idReserva, "
+			+ "s.id_socio AS idSocio, "
+			+ "s.nombre AS nombreSocio, "
+			+ "i.nombre AS instalacion, "
+			+ "sa.fecha AS fecha, "
+			+ "sa.hora_inicio AS hora, "
+			+ "a.nombre AS actividadNueva, "
+			+ "r.pagado AS pagada, "
+			+ "r.costo AS importe "
+			+ "FROM SesionesActividad sa "
+			+ "INNER JOIN Actividades a "
+			+ "    ON a.id_actividad = sa.id_actividad "
+			+ "INNER JOIN Instalaciones i "
+			+ "    ON i.id_instalacion = sa.id_instalacion "
+			+ "INNER JOIN Reservas r "
+			+ "    ON sa.id_instalacion = r.id_instalacion "
+			+ "    AND date(r.fecha_hora_inicio) = sa.fecha "
+			+ "    AND sa.hora_inicio < time(r.fecha_hora_inicio, '+' || r.duracion || ' minutes') "
+			+ "    AND sa.hora_fin > time(r.fecha_hora_inicio) "
+			+ "INNER JOIN Socios s "
+			+ "    ON s.id_socio = r.id_socio "
+			+ "WHERE sa.id_actividad = ? "
+			+ "  AND r.estado = 'activa' "
+			+ "ORDER BY s.nombre, sa.fecha, sa.hora_inicio";
+
+		return db.executeQueryPojo(NotificacionReservaCanceladaDto.class, sql, idActividadNueva);
+	}
+
 	public void cancelarReservasEnConflicto(int idActividadNueva) {
 		String sql =
 			"UPDATE Reservas "

@@ -1,5 +1,6 @@
 package cd.admin.diego.resact;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,9 +83,12 @@ public class ResActConflictosController {
 			);
 		}
 
-		int reservasCanceladas = model.getConflictosConReservasSocios(
-				actividadSeleccionada.getIdActividad()
-		).size();
+		List<NotificacionReservaCanceladaDto> notificaciones =
+				model.getReservasCanceladasParaNotificar(
+						actividadSeleccionada.getIdActividad()
+				);
+
+		int reservasCanceladas = notificaciones.size();
 
 		model.cancelarReservasEnConflicto(
 				actividadSeleccionada.getIdActividad()
@@ -93,6 +97,22 @@ public class ResActConflictosController {
 		model.crearPlanificacionNuevaActividad(
 				actividadSeleccionada.getIdActividad()
 		);
+
+		int txtGenerados = 0;
+		try {
+			GeneradorTxtNotificaciones generador = new GeneradorTxtNotificaciones();
+			txtGenerados = generador.generarTxtsCancelacion(notificaciones);
+		} catch (IOException ex) {
+			JOptionPane.showMessageDialog(
+					view.getFrame(),
+					"Se ha creado la nueva planificación y se han cancelado las reservas, "
+					+ "pero ha ocurrido un error al generar los archivos TXT:\n"
+					+ ex.getMessage(),
+					"Error al generar notificaciones",
+					JOptionPane.ERROR_MESSAGE
+			);
+			return;
+		}
 
 		String nombresActividades = "";
 
@@ -114,6 +134,8 @@ public class ResActConflictosController {
 		if (reservasCanceladas > 0) {
 			mensaje += "- Reservas de socios canceladas automáticamente: "
 					+ reservasCanceladas + "\n";
+			mensaje += "- Archivos TXT generados para notificación: "
+					+ txtGenerados + "\n";
 		}
 
 		mensaje += "- Nueva planificación creada";
