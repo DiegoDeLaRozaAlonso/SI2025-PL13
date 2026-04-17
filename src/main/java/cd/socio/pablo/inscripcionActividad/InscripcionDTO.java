@@ -7,7 +7,6 @@ public class InscripcionDTO {
 	private int id_actividad;
 	private int id_socio;
 	private String fecha_inscripcion;
-	private String estado;
 	private boolean pagado;
 	private String tipo;
 	private String nombre_no_socio;
@@ -16,21 +15,19 @@ public class InscripcionDTO {
 	public InscripcionDTO() {}
 
 	public InscripcionDTO(int id_actividad, int id_socio, String fecha_inscripcion,
-			String estado, boolean pagado, String tipo) {
+			boolean pagado, String tipo) {
 		this.id_actividad = id_actividad;
 		this.id_socio = id_socio;
 		this.fecha_inscripcion = fecha_inscripcion;
-		this.estado = estado;
 		this.pagado = pagado;
 		this.tipo = tipo;
 	}
 	
 	public InscripcionDTO(int id_actividad, String nombre_no_socio, String dni, String fecha_inscripcion,
-			String estado, boolean pagado, String tipo) {
+			boolean pagado, String tipo) {
 		this.id_actividad = id_actividad;
 		this.nombre_no_socio = nombre_no_socio;
 		this.fecha_inscripcion = fecha_inscripcion;
-		this.estado = estado;
 		this.pagado = pagado;
 		this.tipo = tipo;
 	}
@@ -61,14 +58,6 @@ public class InscripcionDTO {
 		this.fecha_inscripcion = fecha_inscripcion;
 	}
 
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
 	public boolean isPagado() {
 		return pagado;
 	}
@@ -83,6 +72,22 @@ public class InscripcionDTO {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+
+	public String getNombre_no_socio() {
+		return nombre_no_socio;
+	}
+
+	public void setNombre_no_socio(String nombre_no_socio) {
+		this.nombre_no_socio = nombre_no_socio;
+	}
+
+	public String getDni() {
+		return dni;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
 	}
 	
 }

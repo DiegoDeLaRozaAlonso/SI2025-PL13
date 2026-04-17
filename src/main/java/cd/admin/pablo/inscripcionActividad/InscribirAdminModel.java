@@ -15,14 +15,14 @@ public class InscribirAdminModel {
 
 	private Database db = new Database();
 		
-	public String compruebaAforo(ActividadDTO actividad) {
+	public int compruebaAforo(ActividadDTO actividad) {
 		
 		String sql = "SELECT * FROM	INSCRIPCIONES WHERE id_actividad = ?";
 		
 		List<InscripcionDTO> lista = 
 				db.executeQueryPojo(InscripcionDTO.class, sql, actividad.getId());
 		
-		return (lista.size() < actividad.getAforo()) ? "admitido" : "lista_espera";
+		return (lista.size() < actividad.getAforo()) ? 1 : 0;
 	}
 	
 	
@@ -34,15 +34,13 @@ public class InscribirAdminModel {
 	 * @param ins
 	 * @return devuelve 1 si hay aforo y 0 si va a lista_espera
 	 */
-	public int inscribirSocioActividad(SocioDTO socio, ActividadDTO actividad, InscripcionDTO ins) {
+	public void inscribirSocioActividad(SocioDTO socio, ActividadDTO actividad, InscripcionDTO ins) {
 				
 		String sql = "INSERT INTO Inscripciones "
 				+ "(id_actividad, id_socio, nombre_no_socio, fecha_inscripcion, estado, pagado, tipo) "
 				+ "VALUES (?, ?, NULL, ?, ?, ?, 'socio')";
 		db.executeUpdate(sql, actividad.getId(), socio.getId_socio(), 
-				ins.getFecha_inscripcion(), ins.getEstado(), ins.isPagado());
-		
-		return (ins.getEstado().equals("admitido")) ? 1 : 0;
+				ins.getFecha_inscripcion(), ins.isPagado());
 	}
 	
 	
@@ -54,14 +52,12 @@ public class InscribirAdminModel {
 	 * @param ins
 	 * @return devuelve 1 si hay aforo y 0 si va a lista_espera
 	 */
-	public int inscribirNoSocioActividad(String nombre, String dni, ActividadDTO actividad, InscripcionDTO ins) {
+	public void inscribirNoSocioActividad(String nombre, String dni, ActividadDTO actividad, InscripcionDTO ins) {
 				
 		String sql = "INSERT INTO Inscripciones "
 				+ "(id_actividad, id_socio, nombre_no_socio, dni, fecha_inscripcion, estado, pagado, tipo) "
 				+ "VALUES (?, NULL, ?, ?, ?, ?, ?, 'no_socio')";
-		db.executeUpdate(sql, actividad.getId(), nombre, dni, ins.getFecha_inscripcion(), ins.getEstado(), ins.isPagado());
-		
-		return (ins.getEstado().equals("admitido")) ? 1 : 0;
+		db.executeUpdate(sql, actividad.getId(), nombre, dni, ins.getFecha_inscripcion(), ins.isPagado());
 	}
 	
 	
