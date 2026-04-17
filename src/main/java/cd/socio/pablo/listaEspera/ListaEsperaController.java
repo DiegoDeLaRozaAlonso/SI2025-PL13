@@ -30,7 +30,7 @@ public class ListaEsperaController {
 	}
 	
 	private void listarListaEspera() {
-		
+		 
 		/*Lista de actividades de dicho periodo*/
 		listaEspera = model.getListaEspera(actividad);
 			
