@@ -23,7 +23,7 @@ public class PlanActCrearActividadModelTest {
         model = new PlanActCrearActividadModel();
     }
 
-    @Test
+    @Test	//verifica que no se puede crear una actividad si el nombre está vacío o solo contiene espacios
     public void testNombreObligatorio() {
         List<WeeklyScheduleTableModel.Slot> slots =
                 List.of(new WeeklyScheduleTableModel.Slot(0, LocalTime.of(10, 0)));
@@ -46,7 +46,7 @@ public class PlanActCrearActividadModelTest {
         assertEquals("El nombre de la actividad es obligatorio", ex.getMessage());
     }
 
-    @Test
+    @Test	//verifica que no se puede crear una actividad si el tipo o descripción está vacío
     public void testTipoObligatorio() {
         List<WeeklyScheduleTableModel.Slot> slots =
                 List.of(new WeeklyScheduleTableModel.Slot(0, LocalTime.of(10, 0)));
@@ -69,7 +69,7 @@ public class PlanActCrearActividadModelTest {
         assertEquals("El tipo (descripción) es obligatorio", ex.getMessage());
     }
 
-    @Test
+    @Test	//verifica que no se puede crear una actividad si no se indica una instalación válida
     public void testInstalacionObligatoria() {
         List<WeeklyScheduleTableModel.Slot> slots =
                 List.of(new WeeklyScheduleTableModel.Slot(0, LocalTime.of(10, 0)));
@@ -92,7 +92,7 @@ public class PlanActCrearActividadModelTest {
         assertEquals("Debes seleccionar una instalación", ex.getMessage());
     }
 
-    @Test
+    @Test	//verifica que no se puede crear una actividad si no se selecciona ningún hueco horario semanal
     public void testDebeHaberAlMenosUnSlot() {
         ApplicationException ex = assertThrows(ApplicationException.class, () ->
             model.crearActividadCompleta(
@@ -112,7 +112,7 @@ public class PlanActCrearActividadModelTest {
         assertEquals("Debes seleccionar al menos un hueco en el horario semanal", ex.getMessage());
     }
 
-    @Test
+    @Test	//verifica que el precio para socios no puede ser negativo
     public void testPrecioSocioNoPuedeSerNegativo() {
         List<WeeklyScheduleTableModel.Slot> slots =
                 List.of(new WeeklyScheduleTableModel.Slot(0, LocalTime.of(10, 0)));
@@ -135,7 +135,7 @@ public class PlanActCrearActividadModelTest {
         assertEquals("Los precios no pueden ser negativos", ex.getMessage());
     }
 
-    @Test
+    @Test	//verifica lo mismo que el anterior pero para no socios
     public void testPrecioNoSocioNoPuedeSerNegativo() {
         List<WeeklyScheduleTableModel.Slot> slots =
                 List.of(new WeeklyScheduleTableModel.Slot(0, LocalTime.of(10, 0)));
@@ -158,7 +158,7 @@ public class PlanActCrearActividadModelTest {
         assertEquals("Los precios no pueden ser negativos", ex.getMessage());
     }
 
-    @Test
+    @Test	//verifica que no se puede crear una actividad si no se indica un periodo de inscripción válido
     public void testPeriodoObligatorio() {
         List<WeeklyScheduleTableModel.Slot> slots =
                 List.of(new WeeklyScheduleTableModel.Slot(0, LocalTime.of(10, 0)));
@@ -181,7 +181,7 @@ public class PlanActCrearActividadModelTest {
         assertEquals("Debes seleccionar un periodo de inscripción", ex.getMessage());
     }
 
-    @Test
+    @Test	//verifica que la fecha de fin de la actividad no puede ser anterior a la fecha de inicio
     public void testFechaFinNoPuedeSerAnteriorAFechaInicio() {
         List<WeeklyScheduleTableModel.Slot> slots =
                 List.of(new WeeklyScheduleTableModel.Slot(0, LocalTime.of(10, 0)));
