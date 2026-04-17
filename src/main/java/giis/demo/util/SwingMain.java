@@ -255,7 +255,7 @@ public class SwingMain {
 					);
 					return;
 				}
-				InscribirAdminController controller = new InscribirAdminController(new InscribirAdminModel(), new InscribirAdminView());
+				InscribirAdminController controller = new InscribirAdminController(new InscribirAdminModel(), new InscribirAdminView(), new ListaEsperaModel());
 				controller.initController();
 			}
 		});

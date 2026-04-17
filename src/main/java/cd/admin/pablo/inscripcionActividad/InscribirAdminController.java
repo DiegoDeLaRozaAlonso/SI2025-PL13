@@ -9,6 +9,7 @@ import cd.login.diego.UsuarioSesion;
 import cd.socio.pablo.inscripcionActividad.ActividadDTO;
 import cd.socio.pablo.inscripcionActividad.InscripcionDTO;
 import cd.socio.pablo.inscripcionActividad.SocioDTO;
+import cd.socio.pablo.listaEspera.ListaEsperaModel;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
 
@@ -19,10 +20,12 @@ public class InscribirAdminController {
 	private List<ActividadDTO> actividades;
 	private List<SocioDTO> listaSocios;
 	private SocioDTO usuario;
+	private ListaEsperaModel modelEspera;
 	
-	public InscribirAdminController(InscribirAdminModel m, InscribirAdminView v) {
+	public InscribirAdminController(InscribirAdminModel m, InscribirAdminView v, ListaEsperaModel l) {
 		this.model = m;
 		this.vista = v;
+		this.modelEspera = l;
 		//no hay inicializacion especifica del modelo, solo de la vista
 		this.initView();
 	}
@@ -75,7 +78,7 @@ public class InscribirAdminController {
 		
 		/*Lista de actividades de dicho periodo*/
 		actividades = model.getListaActividades(fechaInicio, fechaFin);
-			
+		
 		//Definimos las columnas de la tabla
 		String[] columnas = {"nombre", "descripcion", "aforo", 
 				"fecha_inicio", "fecha_fin", "precioSocio", 
@@ -191,8 +194,17 @@ public class InscribirAdminController {
 						vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
 			}
 			else {
-				JOptionPane.showMessageDialog(
-						vista.getFrame(), ""+actividad.getNombre() +" tiene aforo completo seras añadido a lista de espera");
+				int respuesta = JOptionPane.showConfirmDialog(
+						vista.getFrame(), 
+						""+actividad.getNombre() +" tiene aforo completo, hay " + modelEspera.numeroListaEspera(actividad) + " socios en lista de espera",
+						"Aforo Completo",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE);
+				if (respuesta == JOptionPane.YES_OPTION) {
+					modelEspera.insertarEnListaEspera(usuario, actividad, ins);
+					JOptionPane.showMessageDialog(vista.getFrame(), 
+							"Ha sido añadido a la lista de espera de " + actividad.getNombre());
+				}
 			}
 		} else {
 			InscripcionDTO ins = new InscripcionDTO(
@@ -205,8 +217,17 @@ public class InscribirAdminController {
 						vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
 			}
 			else {
-				JOptionPane.showMessageDialog(
-						vista.getFrame(), ""+actividad.getNombre() +" tiene aforo completo seras añadido a lista de espera");
+				int respuesta = JOptionPane.showConfirmDialog(
+						vista.getFrame(), 
+						""+actividad.getNombre() +" tiene aforo completo, hay " + modelEspera.numeroListaEspera(actividad) + " socios en lista de espera",
+						"Aforo Completo",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE);
+				if (respuesta == JOptionPane.YES_OPTION) {
+					modelEspera.insertarEnListaEspera(usuario, actividad, ins);
+					JOptionPane.showMessageDialog(vista.getFrame(), 
+							"Ha sido añadido a la lista de espera de " + actividad.getNombre());
+				}
 			}
 		}
 	}
