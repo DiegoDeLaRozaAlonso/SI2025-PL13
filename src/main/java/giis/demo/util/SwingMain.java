@@ -39,6 +39,7 @@ import cd.socio.pablo.inscripcionActividad.InscribirSocioView;
 import cd.socio.pablo.listaActividades.ListaPeriodoController;
 import cd.socio.pablo.listaActividades.ListaPeriodoModel;
 import cd.socio.pablo.listaActividades.ListaPeriodoView;
+import cd.socio.pablo.listaEspera.ListaEsperaModel;
 import cd.admin.diego.resact.ResActController;
 import cd.admin.diego.resact.ResActModel;
 import cd.admin.diego.resact.ResActView;
@@ -232,7 +233,7 @@ public class SwingMain {
 					);
 					return;
 				}
-				InscribirSocioController controller = new InscribirSocioController(new InscribirSocioModel(), new InscribirSocioView(), sesion);
+				InscribirSocioController controller = new InscribirSocioController(new InscribirSocioModel(), new InscribirSocioView(), sesion, new ListaEsperaModel());
 				controller.initController();
 			}
 		});
