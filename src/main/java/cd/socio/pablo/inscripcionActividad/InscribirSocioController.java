@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import cd.login.diego.UsuarioSesion;
+import cd.socio.pablo.listaEspera.ListaEsperaDTO;
+import cd.socio.pablo.listaEspera.ListaEsperaModel;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
 
@@ -13,15 +15,21 @@ public class InscribirSocioController {
 	private InscribirSocioView vista;
 	private List<ActividadDTO> actividades;
 	private UsuarioSesion usuario;
+	private ActividadDTO actividad;
+	private ListaEsperaModel modelEspera;
 	
-	public InscribirSocioController(InscribirSocioModel m, InscribirSocioView v, UsuarioSesion usuario) {
+	public InscribirSocioController(InscribirSocioModel m, InscribirSocioView v, UsuarioSesion usuario, ListaEsperaModel l) {
 		this.model = m;
 		this.vista = v;
 		this.usuario = usuario;
+		this.modelEspera = l;
 		//no hay inicializacion especifica del modelo, solo de la vista
 		this.initView();
 	}
 	
+	public ActividadDTO getActividad() {
+		return this.actividad;
+	}
 	
 	public void initController() {
 		
@@ -81,10 +89,9 @@ public class InscribirSocioController {
 	        return;
 	    }
 		
-		ActividadDTO actividad = actividades.get(filaSeleccionada);
+		actividad = actividades.get(filaSeleccionada);
 		Date hoy = new Date();
 		String fechaActual = Util.dateToIsoString(hoy);
-		String estado = model.compruebaAforo(actividad);
 		boolean estaPagado = false;
 		
 		model.enPlazo(actividad); //comprueba que no esté inscrito ya en la actividad
@@ -101,6 +108,7 @@ public class InscribirSocioController {
 			estaPagado = true;
 		}
 		
+		//comprobamos que el usuario no estuviera ya apuntado
 		if (model.inscripcionRepetida(usuario, actividad) == true) {
 			JOptionPane.showMessageDialog(vista.getFrame(), 
 					"El usuario ya está inscrito", "Inscripcion ya hecha", JOptionPane.ERROR_MESSAGE);
@@ -109,25 +117,27 @@ public class InscribirSocioController {
 		
 		InscripcionDTO ins = new InscripcionDTO(
 				actividad.getId(), this.usuario.getId(), fechaActual,
-				estado, estaPagado, "socio");
+				estaPagado, "socio");
 		
-		if(model.inscribirSocioActividad(usuario, actividad, ins) == 1) {
+		if(model.compruebaAforo(actividad) == 1) {
+			//Inscribimos al usuario
+			model.inscribirSocioActividad(usuario, actividad, ins);
 			JOptionPane.showMessageDialog(
 					vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
 		}
 		else {
-			int respuesta = JOptionPane.showConfirmDialog( 
-					null,
+			int respuesta = JOptionPane.showConfirmDialog(
 					vista.getFrame(), 
-					""+actividad.getNombre() +" tiene aforo completo, hay " +  " socios en lista de espera",
+					""+actividad.getNombre() +" tiene aforo completo, hay " + modelEspera.numeroListaEspera(actividad) + " socios en lista de espera",
+					"Aforo Completo",
 					JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
 			if (respuesta == JOptionPane.YES_OPTION) {
-				model.insertarEnListaEspera(usuario, actividad, ins);
+				modelEspera.insertarEnListaEspera(usuario, actividad, ins);
+				JOptionPane.showMessageDialog(vista.getFrame(), 
+						"Ha sido añadido a la lista de espera de " + actividad.getNombre());
 			}
-		
 		}
-
 	}
 	
 	public void initView() {

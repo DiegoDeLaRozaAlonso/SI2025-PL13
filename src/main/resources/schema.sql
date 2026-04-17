@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS SesionesActividad;
 DROP TABLE IF EXISTS PeriodosInscripcion;
 DROP TABLE IF EXISTS Reservas;
 DROP TABLE IF EXISTS PlanificacionActividades;
+DROP TABLE IF EXISTS ListaEspera;
 
 DROP TABLE IF EXISTS Actividades;
 DROP TABLE IF EXISTS HorariosInstalacion;
@@ -165,7 +166,6 @@ CREATE TABLE Inscripciones (
     nombre_no_socio TEXT, 
     dni TEXT,
     fecha_inscripcion DATETIME NOT NULL,
-    estado TEXT NOT NULL CHECK(estado IN ('admitido', 'lista_espera')),
     pagado BOOLEAN DEFAULT 0,
     tipo TEXT NOT NULL CHECK(tipo IN ('socio', 'no_socio')),
     FOREIGN KEY (id_actividad) REFERENCES Actividades(id_actividad),
