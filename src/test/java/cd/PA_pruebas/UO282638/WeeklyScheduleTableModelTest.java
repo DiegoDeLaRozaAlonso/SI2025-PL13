@@ -12,7 +12,7 @@ import cd.admin.diego.planact.WeeklyScheduleTableModel;
 
 public class WeeklyScheduleTableModelTest {
 
-    @Test
+    @Test	//verifica que, si no se marca ningún hueco horario, la lista de slots seleccionados está vacía
     public void testGetSelectedSlotsSinSeleccionDevuelveListaVacia() {
         WeeklyScheduleTableModel model =
                 new WeeklyScheduleTableModel(LocalTime.of(8, 0), LocalTime.of(11, 0));
@@ -22,7 +22,7 @@ public class WeeklyScheduleTableModelTest {
         assertTrue(slots.isEmpty());
     }
 
-    @Test
+    @Test	//verifica que, si se selecciona un único hueco horario, el modelo devuelve exactamente un slot con el día y la hora correctos
     public void testGetSelectedSlotsConUnaSeleccionDevuelveUnSlot() {
         WeeklyScheduleTableModel model =
                 new WeeklyScheduleTableModel(LocalTime.of(8, 0), LocalTime.of(11, 0));
@@ -37,7 +37,7 @@ public class WeeklyScheduleTableModelTest {
         assertEquals(LocalTime.of(8, 0), slots.get(0).start);
     }
 
-    @Test
+    @Test	//verifica que, si se seleccionan varios huecos horarios, el modelo devuelve todos los slots seleccionados correctamente
     public void testGetSelectedSlotsConVariasSeleccionesDevuelveTodosLosSlots() {
         WeeklyScheduleTableModel model =
                 new WeeklyScheduleTableModel(LocalTime.of(8, 0), LocalTime.of(11, 0));
@@ -63,7 +63,7 @@ public class WeeklyScheduleTableModelTest {
         assertEquals(LocalTime.of(10, 0), slots.get(2).start);
     }
 
-    @Test
+    @Test	//verifica que el método clearAll() elimina todas las selecciones realizadas en el horario semanal
     public void testClearAllEliminaTodasLasSelecciones() {
         WeeklyScheduleTableModel model =
                 new WeeklyScheduleTableModel(LocalTime.of(8, 0), LocalTime.of(11, 0));
@@ -78,7 +78,7 @@ public class WeeklyScheduleTableModelTest {
         assertTrue(slots.isEmpty());
     }
 
-    @Test
+    @Test	//verifica que el método endPlus1h() calcula correctamente la hora de fin de un slot sumando una hora a la hora de inicio
     public void testEndPlus1hCalculaCorrectamenteHoraFin() {
         WeeklyScheduleTableModel.Slot slot =
                 new WeeklyScheduleTableModel.Slot(0, LocalTime.of(10, 0));
