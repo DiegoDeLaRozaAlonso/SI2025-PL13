@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import cd.login.diego.UsuarioSesion;
+import cd.socio.pablo.listaEspera.ListaEsperaDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
 import giis.demo.util.Util;
@@ -14,6 +15,11 @@ public class InscribirSocioModel {
 	
 	private int idActividad;
 	
+	/**
+	 * Comprueba si hay aforo disponible para la actividad
+	 * @param actividad
+	 * @return
+	 */
 	public String compruebaAforo(ActividadDTO actividad) {
 		
 		String sql = "SELECT * FROM	INSCRIPCIONES WHERE id_actividad = ?";
@@ -23,6 +29,21 @@ public class InscribirSocioModel {
 		
 		return (lista.size() < actividad.getAforo()) ? "admitido" : "lista_espera";
 		
+	}
+	
+	/**
+	 * Recoge el número de personas que están en lista de espera de una actividad
+	 * @param actividad
+	 * @return número de personas en lista de espera de dicha actividad
+	 */
+	public int numeroListaEspera(ActividadDTO actividad) {
+		
+		String sql = "SELECT * FROM LISTAESPERA WHERE id_actividad = ?";
+		
+		List<InscripcionDTO> lista = 
+				db.executeQueryPojo(InscripcionDTO.class, sql, actividad.getId());
+		
+		return (lista.isEmpty()) ? lista.size() : 0;
 	}
 	
 	/**
@@ -41,6 +62,18 @@ public class InscribirSocioModel {
 				ins.getFecha_inscripcion(), ins.getEstado(), ins.isPagado());
 		
 		return (ins.getEstado().equals("admitido")) ? 1 : 0;
+	}
+	
+	/**
+	 * Añade al socio a la lista de espera
+	 * @return
+	 */
+	public void insertarEnListaEspera(UsuarioSesion socio, ActividadDTO actividad, InscripcionDTO inscripcion) {
+		
+		String sql = "INSERT INTO ListaEspera "
+				+ "(id_actividad, id_socio, nombre, fecha_inscripcion) "
+				+ "VALUES (?, ?, ?, ?, ?)";
+		db.executeUpdate(sql, actividad.getId(), socio.getId(), socio.getNombre(), inscripcion.getFecha_inscripcion());
 	}
 	
 	/**

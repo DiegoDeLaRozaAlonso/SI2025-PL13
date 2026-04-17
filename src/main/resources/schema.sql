@@ -38,6 +38,18 @@ CREATE TABLE Configuracion (
     descripcion TEXT
 );
 
+-- Tabla de Lista de Espera
+CREATE TABLE ListaEspera (
+    id_lista_espera INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_actividad INTEGER NOT NULL,
+    id_socio INTEGER,           
+    dni_no_socio TEXT,          
+    nombre TEXT NOT NULL,
+    fecha_inscripcion DATETIME NOT NULL,
+    FOREIGN KEY (id_actividad) REFERENCES Actividades(id_actividad),
+    FOREIGN KEY (id_socio) REFERENCES Socios(id_socio)
+);
+
 -- Tabla de periodos globales (trimestrales, no solapados)
 CREATE TABLE PeriodosGlobales (
     id_periodo_global INTEGER PRIMARY KEY AUTOINCREMENT,

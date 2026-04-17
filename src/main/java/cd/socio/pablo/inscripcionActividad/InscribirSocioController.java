@@ -116,8 +116,16 @@ public class InscribirSocioController {
 					vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
 		}
 		else {
-			JOptionPane.showMessageDialog(
-					vista.getFrame(), ""+actividad.getNombre() +" tiene aforo completo seras añadido a lista de espera");
+			int respuesta = JOptionPane.showConfirmDialog( 
+					null,
+					vista.getFrame(), 
+					""+actividad.getNombre() +" tiene aforo completo, hay " +  " socios en lista de espera",
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
+			if (respuesta == JOptionPane.YES_OPTION) {
+				model.insertarEnListaEspera(usuario, actividad, ins);
+			}
+		
 		}
 
 	}
