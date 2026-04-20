@@ -24,7 +24,7 @@ public class InformeActividadesModelo {
                 a.aforo AS numeroPlazas,
                 (SELECT COUNT(*) FROM Inscripciones ins WHERE ins.id_actividad = a.id_actividad AND ins.estado='admitido') AS numeroReservas,
                 (SELECT COUNT(*) FROM Inscripciones ins WHERE ins.id_actividad = a.id_actividad AND ins.estado='lista_espera') AS listaEspera,
-                (SELECT COUNT(*) FROM Actividades a2 WHERE a2.nombre = a.nombre) AS ediciones
+                a.edicion AS ediciones
             FROM Actividades a
             JOIN Instalaciones i ON a.id_instalacion = i.id_instalacion
             WHERE 1=1
@@ -49,7 +49,7 @@ public class InformeActividadesModelo {
             params.add(filtroFechaFin.trim());
         }
         if (filtroEdicion != null && !filtroEdicion.trim().isEmpty()) {
-            sql += " AND (SELECT COUNT(*) FROM Actividades a2 WHERE a2.nombre = a.nombre) = ?";
+            sql += " AND a.edicion = ?";
             try {
                 params.add(Integer.parseInt(filtroEdicion.trim()));
             } catch (NumberFormatException e) {

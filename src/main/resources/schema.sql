@@ -119,6 +119,7 @@ CREATE TABLE Actividades (
     fecha_fin DATE NOT NULL,
     id_periodo INTEGER NOT NULL,
     estado TEXT DEFAULT 'abierta',
+    edicion INTEGER NOT NULL DEFAULT 1,
     FOREIGN KEY (id_instalacion) REFERENCES Instalaciones(id_instalacion),
     FOREIGN KEY (id_periodo) REFERENCES PeriodosInscripcion(id_periodo)
 );
