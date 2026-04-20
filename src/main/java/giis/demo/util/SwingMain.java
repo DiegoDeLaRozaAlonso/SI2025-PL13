@@ -311,6 +311,31 @@ public class SwingMain {
 		    }
 		});
 		panelCentro.add(btnVisualizacionReservas);
+		
+		// =========================
+		// Informe Actividades (Administración)
+		// =========================
+		JButton btnInformeActividades = new JButton("Informe de Actividades (Administración)");
+		btnInformeActividades.addActionListener(e -> {
+			if (!sesion.isAdmin()) {
+				JOptionPane.showMessageDialog(
+						frame,
+						"No tienes permisos para acceder a esta funcionalidad.\n"
+						+ "Solo un administrador puede acceder.",
+						"Acceso denegado",
+						JOptionPane.WARNING_MESSAGE
+				);
+				return;
+			}
+			cd.admin.luismi.informeactividades.InformeActividadesVista vista = new cd.admin.luismi.informeactividades.InformeActividadesVista();
+			cd.admin.luismi.informeactividades.InformeActividadesModelo modelo = new cd.admin.luismi.informeactividades.InformeActividadesModelo();
+			cd.admin.luismi.informeactividades.InformeActividadesControlador controller = new cd.admin.luismi.informeactividades.InformeActividadesControlador(vista, modelo);
+					
+			JFrame informeFrame = vista.getFrame();
+			informeFrame.setLocationRelativeTo(frame);
+			informeFrame.setVisible(true);
+		});
+		panelCentro.add(btnInformeActividades);
 	
 		
 		
