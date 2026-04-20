@@ -6,13 +6,13 @@ import java.awt.FlowLayout;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -22,7 +22,7 @@ public class CancelarActividadView {
 	private JTable tablaActividades;
 	private DefaultTableModel modeloTabla;
 
-	private JTextField txtFiltroNombre;
+	private JComboBox<String> cbActividad;
 	private JRadioButton rbActivas;
 	private JRadioButton rbFuturas;
 
@@ -43,9 +43,9 @@ public class CancelarActividadView {
 		JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 		panelSuperior.add(new JLabel("Actividad"));
-		txtFiltroNombre = new JTextField();
-		txtFiltroNombre.setPreferredSize(new Dimension(220, 25));
-		panelSuperior.add(txtFiltroNombre);
+		cbActividad = new JComboBox<>();
+		cbActividad.setPreferredSize(new Dimension(220, 25));
+		panelSuperior.add(cbActividad);
 
 		rbActivas = new JRadioButton("Activas");
 		rbFuturas = new JRadioButton("Futuras");
@@ -65,7 +65,7 @@ public class CancelarActividadView {
 
 		modeloTabla = new DefaultTableModel(
 			new Object[][] {},
-			new String[] { "Id", "Nombre", "Instalación", "Fecha inicio", "Fecha fin", "Aforo", "Inscritos" }
+			new String[] { "Id", "Nombre", "Instalación", "Fecha inicio", "Fecha fin", "Afectados" }
 		) {
 			private static final long serialVersionUID = 1L;
 
@@ -104,8 +104,8 @@ public class CancelarActividadView {
 		return modeloTabla;
 	}
 
-	public JTextField getTxtFiltroNombre() {
-		return txtFiltroNombre;
+	public JComboBox<String> getCbActividad() {
+		return cbActividad;
 	}
 
 	public JRadioButton getRbActivas() {

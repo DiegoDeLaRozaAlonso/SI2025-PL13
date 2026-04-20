@@ -7,8 +7,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 
 import giis.demo.util.SwingUtil;
@@ -25,6 +25,8 @@ public class CancelarActividadController {
 	}
 
 	private void initController() {
+		cargarComboActividades();
+
 		view.getBtnFiltrar().addActionListener(e ->
 			SwingUtil.exceptionWrapper(() -> cargarActividades())
 		);
@@ -54,8 +56,18 @@ public class CancelarActividadController {
 		view.getFrame().setVisible(true);
 	}
 
+	private void cargarComboActividades() {
+		view.getCbActividad().removeAllItems();
+		view.getCbActividad().addItem("Todas");
+
+		List<String> actividades = model.obtenerNombresActividades();
+		for (String nombre : actividades) {
+			view.getCbActividad().addItem(nombre);
+		}
+	}
+
 	private void cargarActividades() {
-		String filtroNombre = view.getTxtFiltroNombre().getText().trim();
+		String filtroNombre = (String) view.getCbActividad().getSelectedItem();
 		String tipoFiltro = view.getRbActivas().isSelected() ? "ACTIVAS" : "FUTURAS";
 
 		List<ActividadCancelDTO> actividades = model.obtenerActividades(filtroNombre, tipoFiltro);
@@ -191,6 +203,7 @@ public class CancelarActividadController {
 		);
 
 		confirmView.getFrame().dispose();
+		cargarComboActividades();
 		cargarActividades();
 	}
 

@@ -10,6 +10,21 @@ public class CancelarActividadModel {
 
 	private Database db = new Database();
 
+	public List<String> obtenerNombresActividades() {
+		String sql = ""
+				+ "SELECT DISTINCT nombre "
+				+ "FROM Actividades "
+				+ "WHERE estado = 'activa' "
+				+ "ORDER BY nombre ASC ";
+
+		List<ActividadNombreDTO> res = db.executeQueryPojo(ActividadNombreDTO.class, sql);
+		List<String> nombres = new ArrayList<>();
+		for (ActividadNombreDTO a : res) {
+			nombres.add(a.getNombre());
+		}
+		return nombres;
+	}
+
 	public List<ActividadCancelDTO> obtenerActividades(String nombreFiltro, String tipoFiltro) {
 		StringBuilder sql = new StringBuilder();
 		List<Object> params = new ArrayList<>();
@@ -41,14 +56,11 @@ public class CancelarActividadModel {
 		} else if ("FUTURAS".equals(tipoFiltro)) {
 			sql.append("AND date(a.fecha_inicio) > date(?) ");
 			params.add(hoy.toString());
-		} else {
-			sql.append("AND date(a.fecha_fin) >= date(?) ");
-			params.add(hoy.toString());
 		}
 
-		if (nombreFiltro != null && !nombreFiltro.trim().isEmpty()) {
-			sql.append("AND lower(a.nombre) LIKE lower(?) ");
-			params.add("%" + nombreFiltro.trim() + "%");
+		if (nombreFiltro != null && !nombreFiltro.trim().isEmpty() && !"Todas".equals(nombreFiltro)) {
+			sql.append("AND a.nombre = ? ");
+			params.add(nombreFiltro);
 		}
 
 		sql.append("GROUP BY ");
@@ -132,33 +144,6 @@ public class CancelarActividadModel {
 	public void borrarSesionesActividad(int idActividad) {
 		String sql = "DELETE FROM SesionesActividad WHERE id_actividad = ? ";
 		db.executeUpdate(sql, idActividad);
-	}
-
-	public void generarReducciones(int idActividad) {
-		List<AfectadoActividadDTO> afectados = obtenerAfectados(idActividad);
-		ActividadCancelDTO actividad = obtenerActividadPorId(idActividad);
-
-		if (actividad == null) {
-			return;
-		}
-
-		String descripcionBase = "Descuento por cancelación de actividad " + actividad.getNombre();
-
-		for (AfectadoActividadDTO a : afectados) {
-			if (a.getPagado() != 1) {
-				continue;
-			}
-
-			String sql = ""
-					+ "INSERT INTO Reduccion "
-					+ " (id_socio, nombre_no_socio, monto, fecha_generacion, fecha_aplicacion, descripcion) "
-					+ "VALUES (?, ?, ?, date('now'), NULL, ?) ";
-
-			Object idSocio = "socio".equals(a.getTipo()) ? a.getIdSocio() : null;
-			Object nombreNoSocio = "no_socio".equals(a.getTipo()) ? a.getNombre() : null;
-
-			db.executeUpdate(sql, idSocio, nombreNoSocio, a.getMontoDescuento(), descripcionBase);
-		}
 	}
 
 	public void ejecutarCancelacionCompleta(int idActividad, String motivo) {
