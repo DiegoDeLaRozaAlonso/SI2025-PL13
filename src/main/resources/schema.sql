@@ -132,6 +132,8 @@ CREATE TABLE Actividades (
     fecha_fin DATE NOT NULL,
     id_periodo INTEGER NOT NULL,
     edicion INTEGER NOT NULL DEFAULT 1,
+    estado TEXT NOT NULL DEFAULT 'activa' CHECK(estado IN ('activa', 'cancelada')),
+    motivo_cancelacion TEXT,
     FOREIGN KEY (id_instalacion) REFERENCES Instalaciones(id_instalacion),
     FOREIGN KEY (id_periodo) REFERENCES PeriodosInscripcion(id_periodo)
 );
@@ -167,6 +169,7 @@ CREATE TABLE Inscripciones (
     nombre_no_socio TEXT, 
     dni TEXT,
     fecha_inscripcion DATETIME NOT NULL,
+    estado TEXT NOT NULL CHECK(estado IN ('admitido', 'lista_espera', 'cancelada')),
     pagado BOOLEAN DEFAULT 0,
     tipo TEXT NOT NULL CHECK(tipo IN ('socio', 'no_socio')),
     FOREIGN KEY (id_actividad) REFERENCES Actividades(id_actividad),
