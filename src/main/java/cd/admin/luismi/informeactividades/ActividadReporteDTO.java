@@ -3,6 +3,7 @@ package cd.admin.luismi.informeactividades;
 public class ActividadReporteDTO {
     private String nombre;
     private String instalacion;
+    private String estado;
     private String fechaInicio;
     private String fechaFin;
     private int numeroPlazas;
@@ -15,6 +16,9 @@ public class ActividadReporteDTO {
 
     public String getInstalacion() { return instalacion; }
     public void setInstalacion(String instalacion) { this.instalacion = instalacion; }
+    
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
     public String getFechaInicio() { return fechaInicio; }
     public void setFechaInicio(String fechaInicio) { this.fechaInicio = fechaInicio; }

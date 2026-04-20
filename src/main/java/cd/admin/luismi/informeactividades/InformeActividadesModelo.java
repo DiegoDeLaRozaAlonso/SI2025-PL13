@@ -13,11 +13,12 @@ public class InformeActividadesModelo {
 
     private final Database db = new Database();
 
-    public List<ActividadReporteDTO> obtenerInformeActividades(String filtroActividad) {
+    public List<ActividadReporteDTO> obtenerInformeActividades(String filtroActividad, String filtroEstado, String filtroEdicion, String filtroFechaInicio, String filtroFechaFin) {
         String sql = """
             SELECT 
                 a.nombre AS nombre,
                 i.nombre AS instalacion,
+                a.estado AS estado,
                 a.fecha_inicio AS fechaInicio,
                 a.fecha_fin AS fechaFin,
                 a.aforo AS numeroPlazas,
@@ -26,19 +27,40 @@ public class InformeActividadesModelo {
                 (SELECT COUNT(*) FROM Actividades a2 WHERE a2.nombre = a.nombre) AS ediciones
             FROM Actividades a
             JOIN Instalaciones i ON a.id_instalacion = i.id_instalacion
+            WHERE 1=1
         """;
 
+        List<Object> params = new java.util.ArrayList<>();
+
         if (filtroActividad != null && !filtroActividad.trim().isEmpty()) {
-            sql += " WHERE LOWER(a.nombre) LIKE LOWER(?)";
+            sql += " AND LOWER(a.nombre) LIKE LOWER(?)";
+            params.add("%" + filtroActividad.trim() + "%");
+        }
+        if (filtroEstado != null && !filtroEstado.trim().isEmpty()) {
+            sql += " AND LOWER(a.estado) = LOWER(?)";
+            params.add(filtroEstado.trim());
+        }
+        if (filtroFechaInicio != null && !filtroFechaInicio.trim().isEmpty()) {
+            sql += " AND a.fecha_inicio >= ?";
+            params.add(filtroFechaInicio.trim());
+        }
+        if (filtroFechaFin != null && !filtroFechaFin.trim().isEmpty()) {
+            sql += " AND a.fecha_fin <= ?";
+            params.add(filtroFechaFin.trim());
+        }
+        if (filtroEdicion != null && !filtroEdicion.trim().isEmpty()) {
+            sql += " AND (SELECT COUNT(*) FROM Actividades a2 WHERE a2.nombre = a.nombre) = ?";
+            try {
+                params.add(Integer.parseInt(filtroEdicion.trim()));
+            } catch (NumberFormatException e) {
+                // If it's not a number, we add a condition that is always false
+                sql += " AND 1=0";
+            }
         }
 
         try (Connection conn = db.getConnection()) {
             QueryRunner qr = new QueryRunner();
-            if (filtroActividad != null && !filtroActividad.trim().isEmpty()) {
-                return qr.query(conn, sql, new BeanListHandler<>(ActividadReporteDTO.class), "%" + filtroActividad.trim() + "%");
-            } else {
-                return qr.query(conn, sql, new BeanListHandler<>(ActividadReporteDTO.class));
-            }
+            return qr.query(conn, sql, new BeanListHandler<>(ActividadReporteDTO.class), params.toArray());
         } catch (SQLException e) {
             throw new ApplicationException(e);
         }

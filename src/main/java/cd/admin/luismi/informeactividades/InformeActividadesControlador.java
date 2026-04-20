@@ -25,7 +25,12 @@ public class InformeActividadesControlador {
     private void generarInforme() {
         try {
             String filtro = vista.getTxtFiltroActividad().getText();
-            List<ActividadReporteDTO> reporte = modelo.obtenerInformeActividades(filtro);
+            String estado = vista.getTxtFiltroEstado().getText();
+            String edicion = vista.getTxtFiltroEdicion().getText();
+            String fInicio = vista.getTxtFiltroFechaInicio().getText();
+            String fFin = vista.getTxtFiltroFechaFin().getText();
+
+            List<ActividadReporteDTO> reporte = modelo.obtenerInformeActividades(filtro, estado, edicion, fInicio, fFin);
             
             DefaultTableModel tableModel = vista.getTableModel();
             tableModel.setRowCount(0); // Limpiar tabla
@@ -34,6 +39,7 @@ public class InformeActividadesControlador {
                 tableModel.addRow(new Object[]{
                         r.getNombre(),
                         r.getInstalacion(),
+                        r.getEstado(),
                         r.getFechaInicio(),
                         r.getFechaFin(),
                         r.getNumeroPlazas(),
@@ -61,7 +67,7 @@ public class InformeActividadesControlador {
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Exportar Informe");
-        fileChooser.setSelectedFile(new File("informe_actividades.csv"));
+        fileChooser.setSelectedFile(new File("informe_actividades.txt"));
 
         int userSelection = fileChooser.showSaveDialog(vista.getFrame());
 
@@ -74,7 +80,7 @@ public class InformeActividadesControlador {
                 for (int i = 0; i < tableModel.getColumnCount(); i++) {
                     bw.write(tableModel.getColumnName(i));
                     if (i < tableModel.getColumnCount() - 1) {
-                        bw.write(",");
+                        bw.write("\t");
                     }
                 }
                 bw.newLine();
@@ -85,7 +91,7 @@ public class InformeActividadesControlador {
                         Object val = tableModel.getValueAt(i, j);
                         bw.write(val != null ? val.toString() : "");
                         if (j < tableModel.getColumnCount() - 1) {
-                            bw.write(",");
+                            bw.write("\t");
                         }
                     }
                     bw.newLine();

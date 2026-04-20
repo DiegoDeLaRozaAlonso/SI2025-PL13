@@ -102,16 +102,16 @@ INSERT INTO PeriodosInscripcion (id_periodo, nombre, descripcion, fecha_inicio_s
 ------------------------------------------------------------
 -- ACTIVIDADES (9)
 ------------------------------------------------------------
-INSERT INTO Actividades (id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo) VALUES
-(1, 'Aquagym',              'Clase dirigida en piscina (nivel básico).',        1, 20, 15.00, 25.00, '2026-02-01', '2026-03-31', 1),
-(2, 'Escuela de Tenis',     'Iniciación y técnica para adultos.',               2,  8, 20.00, 35.00, '2026-02-15', '2026-05-15', 2),
-(3, 'Liga de Pádel',        'Partidos semanales por parejas.',                  6, 16, 10.00, 18.00, '2026-03-01', '2026-04-30', 3),
-(4, 'Pilates',              'Fortalecimiento y movilidad (nivel intermedio).',  7, 18, 12.00, 20.00, '2026-02-10', '2026-04-10', 4),
-(5, 'Yoga',                 'Yoga suave para todos los niveles.',               3, 22, 10.00, 18.00, '2026-02-05', '2026-04-05', 5),
-(6, 'Clase de Padel',       'Clase Padel principiantes.',            			4, 14, 18.00, 30.00, '2026-08-20', '2026-12-20', 6),
-(7, 'Escuela Fútbol',       'Entrenamiento fútbol para niños.',            		4, 23, 15.00, 25.00, '2026-10-20', '2026-11-20', 6),
-(8, 'Cursillos Natación',   'Cursillos de natación.',            				3, 14, 12.00, 16.00, '2026-02-20', '2026-05-20', 6),
-(9, 'Tecnificación Fútbol', 'Entrenamiento técnico veraniego.',            		4, 14, 20.00, 25.00, '2026-06-20', '2026-08-20', 6);
+INSERT INTO Actividades (id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo, estado) VALUES
+(1, 'Aquagym',              'Clase dirigida en piscina (nivel básico).',        1, 20, 15.00, 25.00, '2026-02-01', '2026-03-31', 1, 'abierta'),
+(2, 'Escuela de Tenis',     'Iniciación y técnica para adultos.',               2,  8, 20.00, 35.00, '2026-02-15', '2026-05-15', 2, 'abierta'),
+(3, 'Liga de Pádel',        'Partidos semanales por parejas.',                  6, 16, 10.00, 18.00, '2026-03-01', '2026-04-30', 3, 'abierta'),
+(4, 'Pilates',              'Fortalecimiento y movilidad (nivel intermedio).',  7, 18, 12.00, 20.00, '2026-02-10', '2026-04-10', 4, 'abierta'),
+(5, 'Yoga',                 'Yoga suave para todos los niveles.',               3, 22, 10.00, 18.00, '2026-02-05', '2026-04-05', 5, 'cerrada'),
+(6, 'Clase de Padel',       'Clase Padel principiantes.',            			4, 14, 18.00, 30.00, '2026-08-20', '2026-12-20', 6, 'abierta'),
+(7, 'Escuela Fútbol',       'Entrenamiento fútbol para niños.',            		4, 23, 15.00, 25.00, '2026-10-20', '2026-11-20', 6, 'abierta'),
+(8, 'Cursillos Natación',   'Cursillos de natación.',            				3, 14, 12.00, 16.00, '2026-02-20', '2026-05-20', 6, 'abierta'),
+(9, 'Tecnificación Fútbol', 'Entrenamiento técnico veraniego.',            		4, 14, 20.00, 25.00, '2026-06-20', '2026-08-20', 6, 'cancelada');
 
 ------------------------------------------------------------
 -- SESIONES ACTIVIDAD (20) - TODO EN PUNTO

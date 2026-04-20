@@ -19,6 +19,10 @@ public class InformeActividadesVista {
     private JButton btnGenerarInforme;
     private JButton btnExportar;
     private JTextField txtFiltroActividad;
+    private JTextField txtFiltroEstado;
+    private JTextField txtFiltroEdicion;
+    private JTextField txtFiltroFechaInicio;
+    private JTextField txtFiltroFechaFin;
 
     public InformeActividadesVista() {
         initialize();
@@ -31,22 +35,40 @@ public class InformeActividadesVista {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
-        JPanel panelFiltros = new JPanel();
-        frame.getContentPane().add(panelFiltros, BorderLayout.NORTH);
-        panelFiltros.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel panelTop = new JPanel(new java.awt.GridLayout(2, 1));
+        frame.getContentPane().add(panelTop, BorderLayout.NORTH);
 
-        JLabel lblActividad = new JLabel("Filtro Actividad (opcional):");
-        panelFiltros.add(lblActividad);
+        JPanel panelFiltros1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        panelTop.add(panelFiltros1);
 
-        txtFiltroActividad = new JTextField();
-        panelFiltros.add(txtFiltroActividad);
-        txtFiltroActividad.setColumns(15);
+        panelFiltros1.add(new JLabel("Actividad:"));
+        txtFiltroActividad = new JTextField(10);
+        panelFiltros1.add(txtFiltroActividad);
+
+        panelFiltros1.add(new JLabel("Estado:"));
+        txtFiltroEstado = new JTextField(8);
+        panelFiltros1.add(txtFiltroEstado);
+
+        panelFiltros1.add(new JLabel("Edición:"));
+        txtFiltroEdicion = new JTextField(5);
+        panelFiltros1.add(txtFiltroEdicion);
+
+        JPanel panelFiltros2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        panelTop.add(panelFiltros2);
+
+        panelFiltros2.add(new JLabel("Fecha Inicio:"));
+        txtFiltroFechaInicio = new JTextField(8);
+        panelFiltros2.add(txtFiltroFechaInicio);
+
+        panelFiltros2.add(new JLabel("Fecha Fin:"));
+        txtFiltroFechaFin = new JTextField(8);
+        panelFiltros2.add(txtFiltroFechaFin);
 
         btnGenerarInforme = new JButton("Generar informe");
-        panelFiltros.add(btnGenerarInforme);
+        panelFiltros2.add(btnGenerarInforme);
 
         btnExportar = new JButton("Exportar");
-        panelFiltros.add(btnExportar);
+        panelFiltros2.add(btnExportar);
 
         JScrollPane scrollPane = new JScrollPane();
         frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
@@ -54,7 +76,7 @@ public class InformeActividadesVista {
         tableModel = new DefaultTableModel(
                 new Object[][] {},
                 new String[] {
-                        "Actividad", "Instalación", "Fecha Ini", "Fecha Fin",
+                        "Actividad", "Instalación", "Estado", "Fecha Ini", "Fecha Fin",
                         "Plazas", "Reservas", "% Ocupación", "Lista Espera", "Ediciones"
                 }
         ) {
@@ -73,4 +95,8 @@ public class InformeActividadesVista {
     public JButton getBtnGenerarInforme() { return btnGenerarInforme; }
     public JButton getBtnExportar() { return btnExportar; }
     public JTextField getTxtFiltroActividad() { return txtFiltroActividad; }
+    public JTextField getTxtFiltroEstado() { return txtFiltroEstado; }
+    public JTextField getTxtFiltroEdicion() { return txtFiltroEdicion; }
+    public JTextField getTxtFiltroFechaInicio() { return txtFiltroFechaInicio; }
+    public JTextField getTxtFiltroFechaFin() { return txtFiltroFechaFin; }
 }
