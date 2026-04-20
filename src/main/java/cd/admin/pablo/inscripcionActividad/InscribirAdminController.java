@@ -162,61 +162,83 @@ public class InscribirAdminController {
 			}
 		}
 		
-		
-		
-		//Si se selecciona pago con tarjeta nos pide que la introduzcamos
-		if (vista.getRadioTarjeta().isSelected()) {
-			String tarjeta = JOptionPane.showInputDialog(
-					vista.getFrame(), "Introduzca una tarjeta de crédito", "Procesar pago", JOptionPane.QUESTION_MESSAGE);
-			
-			//Comprobamos que se ha introducido una tarjeta de crédito
-			if(tarjeta == null || tarjeta.trim().isEmpty()) {
-				return; //Si se ha dejado el campo vació se cancela la operación
-			}
-			//Si llegamos aqui es que se ha introducido una tarjeta
-			estaPagado = true;
-		}
-		
-		//Si se selecciona efectivo se da como pagado
-		if (vista.getRadioEfectivo().isSelected()) {
-			estaPagado = true;
-		}
-		
 		//Si es socio
 		if (esSocio) {
-			InscripcionDTO ins = new InscripcionDTO(
-					actividad.getId(), this.usuario.getId_socio(), fechaActual,
-					estaPagado, "socio");
-			
+			//Hay aforo disponible
 			if(model.compruebaAforo(actividad) == 1) {
+				//Si se selecciona pago con tarjeta nos pide que la introduzcamos
+				if (vista.getRadioTarjeta().isSelected()) {
+					String tarjeta = JOptionPane.showInputDialog(
+							vista.getFrame(), "Introduzca una tarjeta de crédito", "Procesar pago", JOptionPane.QUESTION_MESSAGE);
+					
+					//Comprobamos que se ha introducido una tarjeta de crédito
+					if(tarjeta == null || tarjeta.trim().isEmpty()) {
+						return; //Si se ha dejado el campo vació se cancela la operación
+					}
+					//Si llegamos aqui es que se ha introducido una tarjeta
+					estaPagado = true;
+				}
+				//Si se selecciona efectivo se da como pagado
+				if (vista.getRadioEfectivo().isSelected()) {
+					estaPagado = true;
+				}	
+				InscripcionDTO ins = new InscripcionDTO(
+						actividad.getId(), this.usuario.getId_socio(), fechaActual,
+						estaPagado, "socio");
 				model.inscribirSocioActividad(usuario, actividad, ins);
 				JOptionPane.showMessageDialog(
 						vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
 			}
+			//No hay aforo disponible
 			else {
 				int respuesta = JOptionPane.showConfirmDialog(
 						vista.getFrame(), 
 						""+actividad.getNombre() +" tiene aforo completo, hay " + modelEspera.numeroListaEspera(actividad) + " socios en lista de espera",
 						"Aforo Completo",
 						JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE);
+						JOptionPane.QUESTION_MESSAGE
+						);
 				if (respuesta == JOptionPane.YES_OPTION) {
+					InscripcionDTO ins = new InscripcionDTO(
+							actividad.getId(), this.usuario.getId_socio(), fechaActual,
+							estaPagado, "socio");
 					modelEspera.insertarEnListaEspera(usuario, actividad, ins);
 					JOptionPane.showMessageDialog(vista.getFrame(), 
 							"Ha sido añadido a la lista de espera de " + actividad.getNombre());
 				}
 			}
+			//Si es un no socio
 		} else {
-			InscripcionDTO ins = new InscripcionDTO(
-					actividad.getId(), nombre, dni, fechaActual,
-					estaPagado, "no_socio");
-			
+			//Hay aforo
 			if(model.compruebaAforo(actividad) == 1) {
+				//Si se selecciona pago con tarjeta nos pide que la introduzcamos
+				if (vista.getRadioTarjeta().isSelected()) {
+					String tarjeta = JOptionPane.showInputDialog(
+							vista.getFrame(), "Introduzca una tarjeta de crédito", "Procesar pago", JOptionPane.QUESTION_MESSAGE);
+					
+					//Comprobamos que se ha introducido una tarjeta de crédito
+					if(tarjeta == null || tarjeta.trim().isEmpty()) {
+						return; //Si se ha dejado el campo vació se cancela la operación
+					}
+					//Si llegamos aqui es que se ha introducido una tarjeta
+					estaPagado = true;
+				}
+				//Si se selecciona efectivo se da como pagado
+				if (vista.getRadioEfectivo().isSelected()) {
+					estaPagado = true;
+				}	
+				InscripcionDTO ins = new InscripcionDTO(
+						actividad.getId(), nombre, dni, fechaActual,
+						estaPagado, "no_socio");
 				model.inscribirNoSocioActividad(nombre, dni, actividad, ins);
 				JOptionPane.showMessageDialog(
 						vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
 			}
+			//No hay aforo
 			else {
+				InscripcionDTO ins = new InscripcionDTO(
+						actividad.getId(), nombre, dni, fechaActual,
+						estaPagado, "no_socio");
 				int respuesta = JOptionPane.showConfirmDialog(
 						vista.getFrame(), 
 						""+actividad.getNombre() +" tiene aforo completo, hay " + modelEspera.numeroListaEspera(actividad) + " socios en lista de espera",
@@ -231,7 +253,6 @@ public class InscribirAdminController {
 			}
 		}
 	}
-	
 	
 	
 	/**
