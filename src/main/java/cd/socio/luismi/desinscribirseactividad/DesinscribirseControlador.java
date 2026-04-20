@@ -38,10 +38,10 @@ public class DesinscribirseControlador {
 
         for (InscripcionActivaDTO dto : inscripcionesActuales) {
             vista.getTableModel().addRow(new Object[]{
-                "Cancelar",
                 dto.getNombreActividad(),
                 dto.getEstado(),
-                dto.getPrecio()
+                dto.getPrecio(),
+                "Cancelar"
             });
         }
     }

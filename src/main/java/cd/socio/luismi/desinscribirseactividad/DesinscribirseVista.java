@@ -25,11 +25,11 @@ public class DesinscribirseVista extends JFrame {
         panelSuperior.add(new JLabel("Tus Inscripciones a Actividades"));
         add(panelSuperior, BorderLayout.NORTH);
 
-        tableModel = new DefaultTableModel(new Object[]{"Cancelar", "Nombre Actividad", "Estado", "Precio"}, 0) {
+        tableModel = new DefaultTableModel(new Object[]{"Nombre Actividad", "Estado", "Precio", "Cancelar"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 // Solo la columna del botón es editable
-                return column == 0;
+                return column == 3;
             }
         };
 

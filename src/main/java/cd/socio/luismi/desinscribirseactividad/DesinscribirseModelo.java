@@ -56,10 +56,10 @@ public class DesinscribirseModelo {
             }
 
             String estadoInsc = (String) info.get("estadoInscripcion");
-            boolean pagado = (int) info.get("pagado") == 1;
+            boolean pagado = ((Number) info.get("pagado")).intValue() == 1;
             String fechaInicioStr = (String) info.get("fecha_inicio");
-            double costoSocio = (double) info.get("costo_socio");
-            int idActividad = (int) info.get("id_actividad");
+            double costoSocio = ((Number) info.get("costo_socio")).doubleValue();
+            int idActividad = ((Number) info.get("id_actividad")).intValue();
 
             LocalDate fechaInicio = LocalDate.parse(fechaInicioStr);
             LocalDate hoy = LocalDate.now();
