@@ -102,7 +102,7 @@ INSERT INTO PeriodosInscripcion (id_periodo, nombre, descripcion, fecha_inicio_s
 ------------------------------------------------------------
 -- ACTIVIDADES (9)
 ------------------------------------------------------------
-INSERT INTO Actividades (id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo, edicion) VALUES
+INSERT INTO Actividades (id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo, edicion, estado, motivo_cancelacion) VALUES
 (1, 'Aquagym',              'Clase dirigida en piscina (nivel básico).',        1, 20, 15.00, 25.00, '2026-02-01', '2026-03-31', 1, 1, 'activa', NULL),
 (2, 'Escuela de Tenis',     'Iniciación y técnica para adultos.',               2,  8, 20.00, 35.00, '2026-02-15', '2026-05-15', 2, 1, 'activa', NULL),
 (3, 'Liga de Pádel',        'Partidos semanales por parejas.',                  6, 16, 10.00, 18.00, '2026-03-01', '2026-04-30', 3, 1, 'activa', NULL),
