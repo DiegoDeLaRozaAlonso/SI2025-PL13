@@ -364,10 +364,10 @@ INSERT INTO Reduccion (id_credito, id_socio, nombre_no_socio, monto, fecha_gener
 ------------------------------------------------------------
 
 INSERT INTO Actividades
-(id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo)
+(id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo, edicion, estado, motivo_cancelacion)
 VALUES
-(101, 'Prueba1resact', 'Actividad de prueba con conflicto solo con otra actividad.', 7, 18, 12.00, 20.00, '2026-03-10', '2026-03-20', 4),
-(102, 'Prueba2resact', 'Actividad de prueba con conflicto con actividad y con reserva de socio.', 7, 18, 12.00, 20.00, '2026-03-01', '2026-03-15', 4);
+(101, 'Prueba1resact', 'Actividad de prueba con conflicto solo con otra actividad.', 7, 18, 12.00, 20.00, '2026-03-10', '2026-03-20', 4, 1, 'activa', NULL),
+(102, 'Prueba2resact', 'Actividad de prueba con conflicto con actividad y con reserva de socio.', 7, 18, 12.00, 20.00, '2026-03-01', '2026-03-15', 4, 1, 'activa', NULL);
 
 INSERT INTO SesionesActividad
 (id_sesion, id_actividad, fecha, hora_inicio, hora_fin, id_instalacion)
@@ -388,16 +388,16 @@ VALUES
 
 -- 2. Crear la actividad vinculada a ese periodo con AFORO = 2
 INSERT INTO Actividades 
-(id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo) 
+(id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo, edicion, estado, motivo_cancelacion) 
 VALUES
-(103, 'Test Aforo JTable', 'Actividad para probar la lista de espera.', 7, 2, 10.00, 15.00, '2026-04-25', '2026-05-31', 7);
+(103, 'Test Aforo JTable', 'Actividad para probar la lista de espera.', 7, 2, 10.00, 15.00, '2026-04-25', '2026-05-31', 7, 1, 'activa', NULL);
 
 -- 3. Llenar el aforo (2 personas) para que la actividad ya figure como "llena" en tu sistema
 INSERT INTO Inscripciones 
-(id_inscripcion, id_actividad, id_socio, nombre_no_socio, dni, fecha_inscripcion, pagado, tipo) 
+(id_inscripcion, id_actividad, id_socio, nombre_no_socio, dni, fecha_inscripcion, estado, pagado, tipo) 
 VALUES
-(50, 103, 1, NULL, NULL, '2026-04-15 09:00', 1, 'socio'),
-(51, 103, 2, NULL, NULL, '2026-04-15 10:00', 1, 'socio');
+(50, 103, 1, NULL, NULL, '2026-04-15 09:00', 'admitido', 1, 'socio'),
+(51, 103, 2, NULL, NULL, '2026-04-15 10:00', 'admitido', 1, 'socio');
 
 -- 4. Generar datos en la tabla ListaEspera para que tu vista los muestre
 INSERT INTO ListaEspera 
