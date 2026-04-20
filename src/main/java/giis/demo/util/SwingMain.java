@@ -311,6 +311,30 @@ public class SwingMain {
 		    }
 		});
 		panelCentro.add(btnVisualizacionReservas);
+		
+		// =========================
+		// Desinscribirse de Actividades (Socio)
+		// =========================
+		JButton btnDesinscribirseActividades = new JButton("Desinscribirse de Actividades");
+		btnDesinscribirseActividades.addActionListener(e -> {
+			if (sesion.isAdmin()) {
+				JOptionPane.showMessageDialog(
+						frame,
+						"No tienes permisos para acceder a esta funcionalidad.\n"
+						+ "Solo un socio puede acceder.",
+						"Acceso denegado",
+						JOptionPane.WARNING_MESSAGE
+				);
+				return;
+			}
+			cd.socio.luismi.desinscribirseactividad.DesinscribirseVista vista = new cd.socio.luismi.desinscribirseactividad.DesinscribirseVista();
+			cd.socio.luismi.desinscribirseactividad.DesinscribirseModelo modelo = new cd.socio.luismi.desinscribirseactividad.DesinscribirseModelo();
+			cd.socio.luismi.desinscribirseactividad.DesinscribirseControlador controller = new cd.socio.luismi.desinscribirseactividad.DesinscribirseControlador(modelo, vista, sesion.getId());
+					
+			controller.initController();
+			vista.setLocationRelativeTo(frame);
+		});
+		panelCentro.add(btnDesinscribirseActividades);
 	
 		
 		
