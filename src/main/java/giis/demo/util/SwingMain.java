@@ -43,6 +43,10 @@ import cd.admin.diego.resact.ResActController;
 import cd.admin.diego.resact.ResActModel;
 import cd.admin.diego.resact.ResActView;
 
+import cd.admin.diego.cancelAct.CancelarActividadController;
+import cd.admin.diego.cancelAct.CancelarActividadModel;
+import cd.admin.diego.cancelAct.CancelarActividadView;
+
 public class SwingMain {
 
 	private JFrame frame;
@@ -510,6 +514,29 @@ public class SwingMain {
 		});
 		panelCentro.add(btnContabilidad);
 		
+		//Boton cancelarActividad
+		JButton btnCancelarActividad = new JButton("Cancelar actividad (Administracion)");
+		btnCancelarActividad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if (!sesion.isAdmin()) {
+					JOptionPane.showMessageDialog(
+							frame,
+							"No tienes permisos para acceder a esta funcionalidad.\n"
+							+ "Solo un administrador puede acceder.",
+							"Acceso denegado",
+							JOptionPane.WARNING_MESSAGE
+					);
+					return;
+				}
+
+				CancelarActividadController controller = new CancelarActividadController(
+						new CancelarActividadModel(),
+						new CancelarActividadView()
+				);
+			}
+		});
+		panelCentro.add(btnCancelarActividad);
 		
 		// =========================
 		// Panel inferior: Cambiar de usuario (abajo derecha)
