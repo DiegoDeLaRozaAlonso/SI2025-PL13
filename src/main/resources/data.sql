@@ -230,7 +230,7 @@ INSERT INTO Reservas (id_reserva, id_socio, id_instalacion, fecha_hora_inicio, d
 (57, 12, 1, '2026-03-30 12:00', 60, 8.00, 1, 'activa', NULL),
 (58, 6, 3, '2026-04-10 19:00', 60, 16.00, 1, 'activa', NULL),
 (59, 10, 3, '2026-04-12 21:00', 60, 16.00, 1, 'activa', NULL),
-(60, 10, 3, '2026-03-23 19:00', 60, 16.00, 1, 'activa', NULL);
+(60, 10, 3, '2026-03-23 19:00', 60, 16.00, 1, 'activa', NULL); 
 
 ------------------------------------------------------------
 -- INSCRIPCIONES (25) - TODO EN PUNTO
