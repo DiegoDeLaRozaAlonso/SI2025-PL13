@@ -397,11 +397,11 @@ VALUES
 INSERT INTO Inscripciones 
 (id_inscripcion, id_actividad, id_socio, nombre_no_socio, dni, fecha_inscripcion, estado, pagado, tipo) 
 VALUES
-(50, 103, 1, NULL, NULL, '2026-04-15 09:00', 'admitido',  1, 'socio'),
-(51, 103, 2, NULL, NULL, '2026-04-15 10:00', 'admitido',  1, 'socio');
+(50, 103, 1, NULL, NULL, '2026-04-15 09:00', 'admitido', 1, 'socio'),
+(51, 103, 2, NULL, NULL, '2026-04-15 10:00', 'admitido', 1, 'socio');
 
 -- 4. Generar datos en la tabla ListaEspera para que tu vista los muestre
-INSERT INTO ListaEspera 
+INSERT INTO ListaEspera
 (id_actividad, id_socio, dni_no_socio, nombre, fecha_inscripcion) 
 VALUES
 (103, 3, NULL, 'Ana Gómez', '2026-04-16 11:00'),
