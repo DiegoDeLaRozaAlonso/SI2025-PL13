@@ -10,11 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-<<<<<<< feature/Alejandro-34392
-=======
-
->>>>>>> main
 import cd.admin.Alejandro.InformeMorosos.InformeMorososController;
 import cd.admin.Alejandro.InformeMorosos.InformeMorososModel;
 import cd.admin.Alejandro.InformeMorosos.InformeMorososView;
@@ -570,11 +565,14 @@ public class SwingMain {
 		        return;
 		    }
 
-<<<<<<< feature/Alejandro-34392
 		    // aquí iría la lógica del informe de ocupación
-
-		}); // ← CIERRE DEL LAMBDA que faltaba
-		panelCentro.add(btnInformeOcupacion); // ← también faltaba añadirlo al panel
+		    InformeOcupacionController controller = new InformeOcupacionController(
+		            new InformeOcupacionModel(),
+		            new InformeOcupacionView()
+		    );
+		    controller.initController();
+		});
+		panelCentro.add(btnInformeOcupacion);
 
 		// =========================
 		// Informe de Morosos (Administracion)
@@ -600,15 +598,8 @@ public class SwingMain {
 		    controller.initController();
 		});
 		panelCentro.add(btnInformeMorosos);
-=======
-		    InformeOcupacionController controller = new InformeOcupacionController(
-		            new InformeOcupacionModel(),
-		            new InformeOcupacionView()
-		    );
-		    controller.initController();
-		});
-		panelCentro.add(btnInformeOcupacion);
->>>>>>> main
+
+		    
 		
 		
 		// =========================
@@ -622,37 +613,13 @@ public class SwingMain {
 		    frame.repaint();
 		    login();
 		});
-<<<<<<< feature/Alejandro-34392
 		panelInferior.add(btnCambiarUsuario, BorderLayout.EAST);
 		frame.getContentPane().removeAll();
-=======
-panelInferior.add(btnCambiarUsuario, BorderLayout.EAST);
-
-JButton btnInformeMorosos = new JButton("Informe de Morosos");
-btnInformeMorosos.addActionListener(e -> {
-
-    if (!sesion.isAdmin()) {
-        JOptionPane.showMessageDialog(
-                frame,
-                "No tienes permisos para acceder a esta funcionalidad.\n"
-                + "Solo un administrador puede acceder.",
-                "Acceso denegado",
-                JOptionPane.WARNING_MESSAGE
-        );
-        return;
-    }
-
-    InformeMorososController controller = new InformeMorososController(
-            new InformeMorososModel(),
-            new InformeMorososView()
-    );
-    controller.initController();
-});
-panelCentro.add(btnInformeMorosos);
+		panelInferior.add(btnCambiarUsuario, BorderLayout.EAST);
+		
 
 		// Pintar
-		frame.getContentPane().removeAll(); 
->>>>>>> main
+		frame.getContentPane().removeAll();
 		frame.add(panelCentro, BorderLayout.CENTER);
 		frame.add(panelInferior, BorderLayout.SOUTH);
 
