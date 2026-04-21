@@ -1,0 +1,85 @@
+CONTABILIDAD MENSUAL -- Febrero 2026
+============================================================
+
+Socio 1 -- Laura Martín
+  Actividades pendientes: 0,00 EUR
+  Reservas pendientes:    0,00 EUR
+  TOTAL:                  0,00 EUR
+
+Socio 2 -- Carlos Pérez
+  Actividades pendientes: 0,00 EUR
+  Reservas pendientes:    0,00 EUR
+  TOTAL:                  0,00 EUR
+
+Socio 3 -- Ana Gómez
+  Actividades pendientes: 18,00 EUR
+  Reservas pendientes:    0,00 EUR
+  TOTAL:                  18,00 EUR
+
+Socio 4 -- Miguel Ruiz
+  Actividades pendientes: 0,00 EUR
+  Reservas pendientes:    35,00 EUR
+  TOTAL:                  35,00 EUR
+
+Socio 5 -- Sofía López
+  Actividades pendientes: 0,00 EUR
+  Reservas pendientes:    0,00 EUR
+  TOTAL:                  0,00 EUR
+
+Socio 6 -- Javier Ortega
+  Actividades pendientes: 20,00 EUR
+  Reservas pendientes:    0,00 EUR
+  TOTAL:                  20,00 EUR
+
+Socio 7 -- Elena Navarro
+  Actividades pendientes: 0,00 EUR
+  Reservas pendientes:    18,00 EUR
+  TOTAL:                  18,00 EUR
+
+Socio 8 -- Daniel Torres
+  Actividades pendientes: 0,00 EUR
+  Reservas pendientes:    0,00 EUR
+  TOTAL:                  0,00 EUR
+
+Socio 9 -- Paula Romero
+  Actividades pendientes: 0,00 EUR
+  Reservas pendientes:    0,00 EUR
+  TOTAL:                  0,00 EUR
+
+Socio 10 -- Hugo Sánchez
+  Actividades pendientes: 10,00 EUR
+  Reservas pendientes:    0,00 EUR
+  TOTAL:                  10,00 EUR
+
+Socio 11 -- Nerea Castillo
+  Actividades pendientes: 0,00 EUR
+  Reservas pendientes:    0,00 EUR
+  TOTAL:                  0,00 EUR
+
+Socio 12 -- Alberto Molina
+  Actividades pendientes: 0,00 EUR
+  Reservas pendientes:    0,00 EUR
+  TOTAL:                  0,00 EUR
+
+Socio 13 -- Claudia Vega
+  Actividades pendientes: 0,00 EUR
+  Reservas pendientes:    16,00 EUR
+  TOTAL:                  16,00 EUR
+
+Socio 14 -- Iván Ramos
+  Actividades pendientes: 0,00 EUR
+  Reservas pendientes:    0,00 EUR
+  TOTAL:                  0,00 EUR
+
+Socio 15 -- Marina Gil
+  Actividades pendientes: 0,00 EUR
+  Reservas pendientes:    0,00 EUR
+  TOTAL:                  0,00 EUR
+
+Socio 17 -- socio1
+  Actividades pendientes: 0,00 EUR
+  Reservas pendientes:    0,00 EUR
+  TOTAL:                  0,00 EUR
+
+============================================================
+TOTAL GENERAL: 117,00 EUR

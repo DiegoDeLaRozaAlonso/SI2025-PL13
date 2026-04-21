@@ -169,7 +169,7 @@ public class ReservarActividadView {
 		panel.add(Box.createVerticalStrut(4));
 		SpinnerDateModel dateModel = new SpinnerDateModel(
 				new Date(),   // valor inicial: hoy
-				new Date(),   // minimo: hoy (no fechas pasadas)
+				null,
 				null,         // sin maximo
 				java.util.Calendar.DAY_OF_MONTH); // campo que incrementa con las flechas
 		spnFecha = new JSpinner(dateModel);

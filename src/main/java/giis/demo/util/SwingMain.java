@@ -11,12 +11,18 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import cd.Administracion.Alejandro.Contabilidad.ContabilidadMensualController;
+import cd.Administracion.Alejandro.Contabilidad.ContabilidadMensualModel;
+import cd.Administracion.Alejandro.Contabilidad.ContabilidadMensualView;
 import cd.admin.Alejandro.Reserva.ReservarActividadController;
 import cd.admin.Alejandro.Reserva.ReservarActividadModel;
 import cd.admin.Alejandro.Reserva.ReservarActividadView;
 import cd.admin.Alejandro.Visualizacion.VisualizacionReservasController;
 import cd.admin.Alejandro.Visualizacion.VisualizacionReservasModel;
 import cd.admin.Alejandro.Visualizacion.VisualizacionReservasView;
+import cd.admin.pablo.inscripcionActividad.InscribirAdminController;
+import cd.admin.pablo.inscripcionActividad.InscribirAdminModel;
+import cd.admin.pablo.inscripcionActividad.InscribirAdminView;
 import cd.admin.pablo.periodo.PeriodoController;
 import cd.admin.pablo.periodo.PeriodoModel;
 import cd.admin.pablo.periodo.PeriodoView;
@@ -24,9 +30,19 @@ import cd.login.diego.LoginController;
 import cd.login.diego.LoginModel;
 import cd.login.diego.LoginView;
 import cd.login.diego.UsuarioSesion;
+import cd.socio.AlejandroVisualizacionReservas.PagosPendientesController;
+import cd.socio.AlejandroVisualizacionReservas.PagosPendientesModel;
+import cd.socio.AlejandroVisualizacionReservas.PagosPendientesView;
+import cd.socio.pablo.inscripcionActividad.InscribirSocioController;
+import cd.socio.pablo.inscripcionActividad.InscribirSocioModel;
+import cd.socio.pablo.inscripcionActividad.InscribirSocioView;
 import cd.socio.pablo.listaActividades.ListaPeriodoController;
 import cd.socio.pablo.listaActividades.ListaPeriodoModel;
 import cd.socio.pablo.listaActividades.ListaPeriodoView;
+import cd.socio.pablo.listaEspera.ListaEsperaModel;
+import cd.admin.diego.resact.ResActController;
+import cd.admin.diego.resact.ResActModel;
+import cd.admin.diego.resact.ResActView;
 
 public class SwingMain {
 
@@ -152,6 +168,29 @@ public class SwingMain {
 		});
 		panelCentro.add(planificarActividad);
 		
+		JButton btnReservaParaActividad = new JButton("Reserva para actividad (Administracion)");
+		btnReservaParaActividad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if (!sesion.isAdmin()) {
+					JOptionPane.showMessageDialog(
+							frame,
+							"No tienes permisos para acceder a esta funcionalidad.\n"
+							+ "Solo un administrador puede acceder.",
+							"Acceso denegado",
+							JOptionPane.WARNING_MESSAGE
+					);
+					return;
+				}
+
+				ResActController controller = new ResActController(
+						new ResActModel(),
+						new ResActView()
+				);
+				controller.initController();
+			}
+		});
+		panelCentro.add(btnReservaParaActividad);
 		
 		/*
 		 * Ejecuta la lista de actividades	
@@ -176,6 +215,52 @@ public class SwingMain {
 			}
 		});
 		panelCentro.add(btnListaActividades);
+		
+		
+		/*
+		 * Un usuario se inscribe a si mismo
+		 */
+		JButton btnInscribirUsuario = new JButton("Inscripcion Actividad (Socio)");
+		btnInscribirUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (sesion.isAdmin()) {
+					JOptionPane.showMessageDialog(
+							frame,
+							"No tienes permisos para acceder a esta funcionalidad.\n"
+							+ "Solo un socio puede acceder.",
+							"Acceso denegado",
+							JOptionPane.WARNING_MESSAGE
+					);
+					return;
+				}
+				InscribirSocioController controller = new InscribirSocioController(new InscribirSocioModel(), new InscribirSocioView(), sesion, new ListaEsperaModel());
+				controller.initController();
+			}
+		});
+		panelCentro.add(btnInscribirUsuario);
+		
+		/**
+		 * Un Adminitrador incribe a un socio o un no socio
+		 */
+		JButton btnInscribirAdmin = new JButton("Inscripcion Actividad (Admin)");
+		btnInscribirAdmin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!sesion.isAdmin()) {
+					JOptionPane.showMessageDialog(
+							frame,
+							"No tienes permisos para acceder a esta funcionalidad.\n"
+							+ "Solo un administrador puede acceder.",
+							"Acceso denegado",
+							JOptionPane.WARNING_MESSAGE
+					);
+					return;
+				}
+				InscribirAdminController controller = new InscribirAdminController(new InscribirAdminModel(), new InscribirAdminView());
+				controller.initController();
+			}
+		});
+		panelCentro.add(btnInscribirAdmin);	
+		
 		
 		//Crear reserva admin
 				JButton crearReservaAdmin = new JButton("Crear Reserva Admin");
@@ -239,7 +324,89 @@ public class SwingMain {
 				    reservaFrame.setVisible(true);
 				});
 				panelCentro.add(crearReservaSocio);
+		
+				// Botón Cancelar Reserva Admin
+				JButton cancelReservaAdmin = new JButton("Cancelar Reserva Admin");
 
+				cancelReservaAdmin.addActionListener(e -> {
+
+				    if (!sesion.isAdmin()) {
+				        JOptionPane.showMessageDialog(
+				                frame,
+				                "No tienes permisos para acceder a esta funcionalidad.\n"
+				                + "Esta ventana es solo para administración.",
+				                "Acceso denegado",
+				                JOptionPane.WARNING_MESSAGE
+				        );
+				        return;
+				    }
+
+				    new cd.admin.luismi.cancelReser.CancelReservaControlador();
+				});
+
+				panelCentro.add(cancelReservaAdmin);
+
+				// Mis reservas socio
+				JButton misReservas = new JButton("Mis reservas (socio)");
+				misReservas.addActionListener(e -> {
+
+				    if (sesion.isAdmin()) {
+				        JOptionPane.showMessageDialog(
+				                frame,
+				                "No tienes permisos para acceder a esta funcionalidad.\n"
+				                + "Esta ventana es para socios.",
+				                "Acceso denegado",
+				                JOptionPane.WARNING_MESSAGE
+				        );
+				        return;
+				    }
+
+				    cd.socio.diego.misReservas.MisReservasView vista = new cd.socio.diego.misReservas.MisReservasView();
+				    cd.socio.diego.misReservas.MisReservasModel modelo = new cd.socio.diego.misReservas.MisReservasModel();
+
+				    cd.socio.diego.misReservas.MisReservasController controller =
+				            new cd.socio.diego.misReservas.MisReservasController(modelo, vista, sesion.getId());
+				    controller.initController();
+				});
+				panelCentro.add(misReservas);
+
+				// Cancelar reserva socio
+				JButton cancelarReservaSocio = new JButton("Cancelar Mis Reservas");
+
+				cancelarReservaSocio.addActionListener(e -> {
+
+				    // Solo SOCIOS pueden cancelar sus propias reservas
+				    if (sesion.isAdmin()) {
+				        JOptionPane.showMessageDialog(
+				                frame,
+				                "Esta funcionalidad es solo para socios.\nUn administrador no puede cancelar aquí.",
+				                "Acceso denegado",
+				                JOptionPane.WARNING_MESSAGE
+				        );
+				        return;
+				    }
+
+				    // Obtener id del socio logueado
+				    int idSocio = sesion.getId();  // ⚠️ ASEGÚRATE DE QUE TU SESION TIENE getId()
+
+				    // Crear modelo y vista para SOCIO
+				    cd.socio.luismi.cancelReser.CancelReservaModeloSocio modelo =
+				            new cd.socio.luismi.cancelReser.CancelReservaModeloSocio();
+
+				    cd.socio.luismi.cancelReser.CancelarReservaSocioVista vista =
+				            new cd.socio.luismi.cancelReser.CancelarReservaSocioVista();
+
+				    // Controlador
+				    new cd.socio.luismi.cancelReser.CancelarReservaSocioControlador(
+				            idSocio, modelo, vista
+				    );
+
+				    // Mostrar ventana
+				    vista.setLocationRelativeTo(frame);
+				    vista.setVisible(true);
+				});
+
+				panelCentro.add(cancelarReservaSocio);
 		// =========================
 		// Gestionar Periodos (Administracion) (NUEVO botón + bloqueo)
 		// =========================
@@ -337,6 +504,42 @@ public class SwingMain {
 		panelCentro.add(btnDesinscribirseActividades);
 	
 		
+		JButton btnContabilidad = new JButton("Contabilidad Mensual");
+		btnContabilidad.addActionListener(e -> {
+		    if (!sesion.isAdmin()) {
+		        JOptionPane.showMessageDialog(frame, "Solo administradores.", "Acceso denegado", JOptionPane.WARNING_MESSAGE);
+		        return;
+		    }
+		    ContabilidadMensualController controller = new ContabilidadMensualController(
+		        new ContabilidadMensualModel(), new ContabilidadMensualView());
+		    controller.initController();
+		});
+		panelCentro.add(btnContabilidad);
+		
+		
+		// Informe actividades (Administracion)
+		JButton btnInformeActividades = new JButton("Informe Actividades (Admin)");
+		btnInformeActividades.addActionListener(e -> {
+
+		    if (!sesion.isAdmin()) {
+		        JOptionPane.showMessageDialog(
+		                frame,
+		                "No tienes permisos para acceder a esta funcionalidad.\n"
+		                + "Solo un administrador puede acceder.",
+		                "Acceso denegado",
+		                JOptionPane.WARNING_MESSAGE
+		        );
+		        return;
+		    }
+
+		    cd.admin.diego.informeactividad.InformeActividadController controller =
+		            new cd.admin.diego.informeactividad.InformeActividadController(
+		                    new cd.admin.diego.informeactividad.InformeActividadModel(),
+		                    new cd.admin.diego.informeactividad.InformeActividadView()
+		            );
+		    controller.initController();
+		});
+		panelCentro.add(btnInformeActividades);
 		
 		// =========================
 		// Panel inferior: Cambiar de usuario (abajo derecha)
