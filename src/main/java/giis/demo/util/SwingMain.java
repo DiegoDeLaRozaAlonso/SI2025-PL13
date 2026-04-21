@@ -11,7 +11,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+<<<<<<< feature/Alejandro-34392
+=======
 
+>>>>>>> main
 import cd.admin.Alejandro.InformeMorosos.InformeMorososController;
 import cd.admin.Alejandro.InformeMorosos.InformeMorososModel;
 import cd.admin.Alejandro.InformeMorosos.InformeMorososView;
@@ -52,6 +55,8 @@ import cd.admin.Alejandro.InformeOcupacion.InformeOcupacionController;
 import cd.admin.Alejandro.InformeOcupacion.InformeOcupacionModel;
 import cd.admin.Alejandro.InformeOcupacion.InformeOcupacionView;
 
+
+
 public class SwingMain {
 
 	private JFrame frame;
@@ -69,7 +74,6 @@ public class SwingMain {
 	}
 
 	public SwingMain() {
-
 		frame = new JFrame();
 		frame.setBounds(0, 0, 520, 420);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -566,6 +570,37 @@ public class SwingMain {
 		        return;
 		    }
 
+<<<<<<< feature/Alejandro-34392
+		    // aquí iría la lógica del informe de ocupación
+
+		}); // ← CIERRE DEL LAMBDA que faltaba
+		panelCentro.add(btnInformeOcupacion); // ← también faltaba añadirlo al panel
+
+		// =========================
+		// Informe de Morosos (Administracion)
+		// =========================
+		JButton btnInformeMorosos = new JButton("Informe de Morosos");
+		btnInformeMorosos.addActionListener(e -> {
+
+		    if (!sesion.isAdmin()) {
+		        JOptionPane.showMessageDialog(
+		                frame,
+		                "No tienes permisos para acceder a esta funcionalidad.\n"
+		                + "Solo un administrador puede acceder.",
+		                "Acceso denegado",
+		                JOptionPane.WARNING_MESSAGE
+		        );
+		        return;
+		    }
+
+		    InformeMorososController controller = new InformeMorososController(
+		            new InformeMorososModel(),
+		            new InformeMorososView()
+		    );
+		    controller.initController();
+		});
+		panelCentro.add(btnInformeMorosos);
+=======
 		    InformeOcupacionController controller = new InformeOcupacionController(
 		            new InformeOcupacionModel(),
 		            new InformeOcupacionView()
@@ -573,6 +608,7 @@ public class SwingMain {
 		    controller.initController();
 		});
 		panelCentro.add(btnInformeOcupacion);
+>>>>>>> main
 		
 		
 		// =========================
@@ -580,12 +616,16 @@ public class SwingMain {
 		// =========================
 		JPanel panelInferior = new JPanel(new BorderLayout());
 		JButton btnCambiarUsuario = new JButton("Cambiar de usuario");
-		btnCambiarUsuario.addActionListener(e -> {
-			frame.getContentPane().removeAll();
-			frame.revalidate();
-			frame.repaint();
-			login();
+		btnCambiarUsuario.addActionListener(e -> {   // ahora 'e' ya no tiene conflicto
+		    frame.getContentPane().removeAll();
+		    frame.revalidate();
+		    frame.repaint();
+		    login();
 		});
+<<<<<<< feature/Alejandro-34392
+		panelInferior.add(btnCambiarUsuario, BorderLayout.EAST);
+		frame.getContentPane().removeAll();
+=======
 panelInferior.add(btnCambiarUsuario, BorderLayout.EAST);
 
 JButton btnInformeMorosos = new JButton("Informe de Morosos");
@@ -612,6 +652,7 @@ panelCentro.add(btnInformeMorosos);
 
 		// Pintar
 		frame.getContentPane().removeAll(); 
+>>>>>>> main
 		frame.add(panelCentro, BorderLayout.CENTER);
 		frame.add(panelInferior, BorderLayout.SOUTH);
 
