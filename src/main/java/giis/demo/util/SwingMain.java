@@ -11,6 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import cd.admin.Alejandro.InformeMorosos.InformeMorososController;
+import cd.admin.Alejandro.InformeMorosos.InformeMorososModel;
+import cd.admin.Alejandro.InformeMorosos.InformeMorososView;
 import cd.Administracion.Alejandro.Contabilidad.ContabilidadMensualController;
 import cd.Administracion.Alejandro.Contabilidad.ContabilidadMensualModel;
 import cd.Administracion.Alejandro.Contabilidad.ContabilidadMensualView;
@@ -392,6 +395,32 @@ public class SwingMain {
 		}); // ← CIERRE DEL LAMBDA que faltaba
 		panelCentro.add(btnInformeOcupacion); // ← también faltaba añadirlo al panel
 
+		// =========================
+		// Informe de Morosos (Administracion)
+		// =========================
+		JButton btnInformeMorosos = new JButton("Informe de Morosos");
+		btnInformeMorosos.addActionListener(e -> {
+
+		    if (!sesion.isAdmin()) {
+		        JOptionPane.showMessageDialog(
+		                frame,
+		                "No tienes permisos para acceder a esta funcionalidad.\n"
+		                + "Solo un administrador puede acceder.",
+		                "Acceso denegado",
+		                JOptionPane.WARNING_MESSAGE
+		        );
+		        return;
+		    }
+
+		    InformeMorososController controller = new InformeMorososController(
+		            new InformeMorososModel(),
+		            new InformeMorososView()
+		    );
+		    controller.initController();
+		});
+		panelCentro.add(btnInformeMorosos);
+		
+		
 		// =========================
 		// Panel inferior: Cambiar de usuario (abajo derecha)
 		// =========================
