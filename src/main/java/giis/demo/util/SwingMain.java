@@ -518,29 +518,6 @@ public class SwingMain {
 		panelCentro.add(btnContabilidad);
 		
 		
-		// Informe actividades (Administracion)
-		JButton btnInformeActividades = new JButton("Informe Actividades (Admin)");
-		btnInformeActividades.addActionListener(e -> {
-
-		    if (!sesion.isAdmin()) {
-		        JOptionPane.showMessageDialog(
-		                frame,
-		                "No tienes permisos para acceder a esta funcionalidad.\n"
-		                + "Solo un administrador puede acceder.",
-		                "Acceso denegado",
-		                JOptionPane.WARNING_MESSAGE
-		        );
-		        return;
-		    }
-
-		    cd.admin.diego.informeactividad.InformeActividadController controller =
-		            new cd.admin.diego.informeactividad.InformeActividadController(
-		                    new cd.admin.diego.informeactividad.InformeActividadModel(),
-		                    new cd.admin.diego.informeactividad.InformeActividadView()
-		            );
-		    controller.initController();
-		});
-		panelCentro.add(btnInformeActividades);
 		
 		// =========================
 		// Panel inferior: Cambiar de usuario (abajo derecha)
