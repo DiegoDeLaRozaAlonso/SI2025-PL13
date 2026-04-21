@@ -1,5 +1,6 @@
 package cd.admin.pablo.inscripcionActividad;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -143,7 +144,11 @@ public class InscribirAdminController {
 		
 		ActividadDTO actividad = actividades.get(filaSeleccionada); //actividad seleccionada en la tabla
 		Date hoy = new Date();//coge la fecha de hoy
-		String fechaActual = Util.dateToIsoString(hoy); //convierte a String la fecha
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+		// 2. Le pasamos nuestra fecha para que la convierta a String
+		String fechaActual = sdf.format(hoy);
+		//String fechaActual = Util.dateToIsoString(hoy); //convierte a String la fecha
 		boolean estaPagado = false;
 		
 		//comprueba que esté dentro del plazo tanto socio como no socio

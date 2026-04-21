@@ -385,13 +385,13 @@ VALUES
 INSERT INTO PeriodosInscripcion 
 (id_periodo, nombre, descripcion, fecha_inicio_socio, fecha_fin_socio, fecha_fin_noSocio) 
 VALUES
-(7, 'Periodo Pruebas Abril', 'Inscripción abierta para pruebas de UI.', '2026-04-15', '2026-04-20', '2026-04-25');
+(7, 'Periodo Pruebas Abril', 'Inscripción abierta para pruebas de UI.', '2026-04-15', '2026-04-25', '2026-04-27');
 
 -- 2. Crear la actividad vinculada a ese periodo con AFORO = 2
 INSERT INTO Actividades 
 (id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo) 
 VALUES
-(103, 'Test Aforo JTable', 'Actividad para probar la lista de espera.', 7, 2, 10.00, 15.00, '2026-04-25', '2026-05-31', 7);
+(103, 'Test Aforo JTable', 'Actividad para probar la lista de espera.', 7, 2, 10.00, 15.00, '2026-04-28', '2026-05-31', 7);
 
 -- 3. Llenar el aforo (2 personas) para que la actividad ya figure como "llena" en tu sistema
 INSERT INTO Inscripciones 
@@ -407,3 +407,28 @@ VALUES
 (103, 3, NULL, 'Ana Gómez', '2026-04-16 11:00'),
 (103, 4, NULL, 'Miguel Ruiz', '2026-04-16 12:30'),
 (103, NULL, '11223344X', 'Visitante Prueba', '2026-04-16 17:45');
+
+------------------------------------------------------------
+-- NUEVAS PRUEBAS DE PABLO (AFORO GRANDE Y LISTA DE ESPERA)
+------------------------------------------------------------
+
+-- 1. Crear un nuevo periodo de inscripción abierto ESTA SEMANA (Para el 21 de abril en adelante)
+INSERT INTO PeriodosInscripcion 
+(id_periodo, nombre, descripcion, fecha_inicio_socio, fecha_fin_socio, fecha_fin_noSocio) 
+VALUES
+(8, 'Inscripciones Finales Abril', 'Abierto actualmente para pruebas.', '2026-04-20', '2026-04-26', '2026-04-28');
+
+-- 2. Crear la actividad con BASTANTE AFORO vinculada al nuevo periodo abierto
+INSERT INTO Actividades 
+(id_actividad, nombre, descripcion, id_instalacion, aforo, costo_socio, costo_no_socio, fecha_inicio, fecha_fin, id_periodo) 
+VALUES
+(106, 'Mega Maratón de Spinning', 'Actividad con mucho aforo para inscripciones sin lista de espera.', 7, 150, 5.00, 10.00, '2026-04-29', '2026-04-30', 8);
+
+-- 3. Añadir más gente a la Lista de Espera de la actividad 103 (la del aforo de 2)
+INSERT INTO ListaEspera 
+(id_actividad, id_socio, dni_no_socio, nombre, fecha_inscripcion) 
+VALUES
+(103, 5, NULL, 'Sofía López', '2026-04-17 09:15'),
+(103, 6, NULL, 'Javier Ortega', '2026-04-17 10:20'),
+(103, 7, NULL, 'Elena Navarro', '2026-04-17 11:45'),
+(103, NULL, '55667788W', 'Marta Visitante', '2026-04-18 16:30');
