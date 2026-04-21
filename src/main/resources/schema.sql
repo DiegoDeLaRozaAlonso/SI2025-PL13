@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS SesionesActividad;
 DROP TABLE IF EXISTS PeriodosInscripcion;
 DROP TABLE IF EXISTS Reservas;
 DROP TABLE IF EXISTS PlanificacionActividades;
+DROP TABLE IF EXISTS ListaEspera;
 
 DROP TABLE IF EXISTS Actividades;
 DROP TABLE IF EXISTS HorariosInstalacion;
@@ -36,6 +37,18 @@ CREATE TABLE Configuracion (
     clave TEXT UNIQUE NOT NULL,
     valor TEXT NOT NULL,
     descripcion TEXT
+);
+
+-- Tabla de Lista de Espera
+CREATE TABLE ListaEspera (
+    id_lista_espera INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_actividad INTEGER NOT NULL,
+    id_socio INTEGER,           
+    dni_no_socio TEXT,          
+    nombre TEXT NOT NULL,
+    fecha_inscripcion DATETIME NOT NULL,
+    FOREIGN KEY (id_actividad) REFERENCES Actividades(id_actividad),
+    FOREIGN KEY (id_socio) REFERENCES Socios(id_socio)
 );
 
 -- Tabla de periodos globales (trimestrales, no solapados)
@@ -153,8 +166,9 @@ CREATE TABLE Inscripciones (
     id_actividad INTEGER NOT NULL,
     id_socio INTEGER, 
     nombre_no_socio TEXT, 
+    dni TEXT,
     fecha_inscripcion DATETIME NOT NULL,
-    estado TEXT NOT NULL CHECK(estado IN ('admitido', 'lista_espera')),
+    estado TEXT NOT NULL CHECK(estado IN ('admitido', 'lista_espera', 'cancelada')),
     pagado BOOLEAN DEFAULT 0,
     tipo TEXT NOT NULL CHECK(tipo IN ('socio', 'no_socio')),
     FOREIGN KEY (id_actividad) REFERENCES Actividades(id_actividad),
