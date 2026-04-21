@@ -138,7 +138,6 @@ public class InscribirAdminController {
 		ActividadDTO actividad = actividades.get(filaSeleccionada); //actividad seleccionada en la tabla
 		Date hoy = new Date();//coge la fecha de hoy
 		String fechaActual = Util.dateToIsoString(hoy); //convierte a String la fecha
-		String estado = model.compruebaAforo(actividad);//comprueba que queda aforo disponible
 		boolean estaPagado = false;
 		
 		//comprueba que esté dentro del plazo tanto socio como no socio
@@ -184,9 +183,10 @@ public class InscribirAdminController {
 		if (esSocio) {
 			InscripcionDTO ins = new InscripcionDTO(
 					actividad.getId(), this.usuario.getId_socio(), fechaActual,
-					estado, estaPagado, "socio");
+					estaPagado, "socio");
 			
-			if(model.inscribirSocioActividad(usuario, actividad, ins) == 1) {
+			if(model.compruebaAforo(actividad) == 1) {
+				model.inscribirSocioActividad(usuario, actividad, ins);
 				JOptionPane.showMessageDialog(
 						vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
 			}
@@ -197,9 +197,10 @@ public class InscribirAdminController {
 		} else {
 			InscripcionDTO ins = new InscripcionDTO(
 					actividad.getId(), nombre, dni, fechaActual,
-					estado, estaPagado, "no_socio");
+					estaPagado, "no_socio");
 			
-			if(model.inscribirNoSocioActividad(nombre, dni, actividad, ins) == 1) {
+			if(model.compruebaAforo(actividad) == 1) {
+				model.inscribirNoSocioActividad(nombre, dni, actividad, ins);
 				JOptionPane.showMessageDialog(
 						vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
 			}
