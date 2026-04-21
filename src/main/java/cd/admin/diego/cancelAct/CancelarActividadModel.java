@@ -146,6 +146,18 @@ public class CancelarActividadModel {
 		db.executeUpdate(sql, idActividad);
 	}
 
+	// NUEVO: borrar planificación asociada a la actividad
+	public void borrarPlanificacionActividad(int idActividad) {
+		String sql = "DELETE FROM PlanificacionActividades WHERE id_actividad = ? ";
+		db.executeUpdate(sql, idActividad);
+	}
+
+	// NUEVO: borrar lista de espera asociada a la actividad
+	public void borrarListaEsperaActividad(int idActividad) {
+		String sql = "DELETE FROM ListaEspera WHERE id_actividad = ? ";
+		db.executeUpdate(sql, idActividad);
+	}
+
 	public void ejecutarCancelacionCompleta(int idActividad, String motivo) {
 		List<AfectadoActividadDTO> afectadosAntes = obtenerAfectados(idActividad);
 		ActividadCancelDTO actividad = obtenerActividadPorId(idActividad);
@@ -168,5 +180,9 @@ public class CancelarActividadModel {
 
 		cancelarInscripciones(idActividad);
 		borrarSesionesActividad(idActividad);
+
+		// NUEVO: no sustituye nada, solo añade estos borrados
+		borrarPlanificacionActividad(idActividad);
+		borrarListaEsperaActividad(idActividad);
 	}
 }
