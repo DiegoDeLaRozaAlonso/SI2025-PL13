@@ -1,0 +1,24 @@
+==========================================================================================
+  INFORME DE OCUPACION DE INSTALACIONES
+  Generado el  : 15/04/2026 12:34:18
+  Periodo      : 2026-01-01  ->  2026-04-15
+==========================================================================================
+
+RESUMEN
+  Instalaciones consultadas : 5
+  Reservas activas (total)  : 51
+  Plazas libres (total)     : 81
+  Ocupacion media actividad : 19,3%
+
+==========================================================================================
+
+INSTALACION            ACTIVIDAD             OC.ACT(%)  OC.SOC(%)   RESERVAS       PLAZAS ESTADO
+------------------------------------------------------------------------------------------
+Piscina Cubierta       Aquagym                     30%         0%          0      14 / 20   Baja
+Pista de Pádel 1       Cursillos Natación           0%         0%          0      14 / 14   Baja
+Pista de Pádel 1       Yoga                        13%         0%          0      19 / 22   Baja
+Pista de Pádel 2       Liga de Pádel               12%         0%          0      14 / 16   Baja
+Pista de Tenis 1       Escuela de Tenis            50%       100%         51        4 / 8  Media
+Zona Multiusos         Pilates                     11%         0%          0      16 / 18   Baja
+==========================================================================================
+Fin del informe.

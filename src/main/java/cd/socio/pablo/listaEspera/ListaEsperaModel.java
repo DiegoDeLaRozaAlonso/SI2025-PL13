@@ -5,6 +5,7 @@ import java.util.List;
 import cd.login.diego.UsuarioSesion;
 import cd.socio.pablo.inscripcionActividad.ActividadDTO;
 import cd.socio.pablo.inscripcionActividad.InscripcionDTO;
+import cd.socio.pablo.inscripcionActividad.SocioDTO;
 import giis.demo.util.Database;
 
 public class ListaEsperaModel {
@@ -43,7 +44,7 @@ public class ListaEsperaModel {
 	}
 	
 	/**
-	 * Añade al socio a la lista de espera
+	 * Añade al socio a la lista de espera (ModoSocio)
 	 * @return
 	 */
 	public void insertarEnListaEspera(UsuarioSesion socio, ActividadDTO actividad, InscripcionDTO inscripcion) {
@@ -52,6 +53,18 @@ public class ListaEsperaModel {
 				+ "(id_actividad, id_socio, nombre, fecha_inscripcion) "
 				+ "VALUES (?, ?, ?, ?)";
 		db.executeUpdate(sql, actividad.getId(), socio.getId(), socio.getNombre(), inscripcion.getFecha_inscripcion());
+	}
+	
+	/**
+	 * Añade al socio a la lista de espera (Modo Admin)
+	 * @return
+	 */
+	public void insertarEnListaEspera(SocioDTO socio, ActividadDTO actividad, InscripcionDTO inscripcion) {
+		
+		String sql = "INSERT INTO ListaEspera "
+				+ "(id_actividad, id_socio, nombre, fecha_inscripcion) "
+				+ "VALUES (?, ?, ?, ?)";
+		db.executeUpdate(sql, actividad.getId(), socio.getId_socio(), socio.getNombre(), inscripcion.getFecha_inscripcion());
 	}
  
 }

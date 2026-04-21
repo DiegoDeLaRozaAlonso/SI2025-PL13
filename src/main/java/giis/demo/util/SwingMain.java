@@ -10,7 +10,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
+import cd.admin.Alejandro.InformeMorosos.InformeMorososController;
+import cd.admin.Alejandro.InformeMorosos.InformeMorososModel;
+import cd.admin.Alejandro.InformeMorosos.InformeMorososView;
 import cd.Administracion.Alejandro.Contabilidad.ContabilidadMensualController;
 import cd.Administracion.Alejandro.Contabilidad.ContabilidadMensualModel;
 import cd.Administracion.Alejandro.Contabilidad.ContabilidadMensualView;
@@ -44,6 +46,15 @@ import cd.admin.diego.resact.ResActController;
 import cd.admin.diego.resact.ResActModel;
 import cd.admin.diego.resact.ResActView;
 
+import cd.admin.diego.cancelAct.CancelarActividadController;
+import cd.admin.diego.cancelAct.CancelarActividadModel;
+import cd.admin.diego.cancelAct.CancelarActividadView;
+import cd.admin.Alejandro.InformeOcupacion.InformeOcupacionController;
+import cd.admin.Alejandro.InformeOcupacion.InformeOcupacionModel;
+import cd.admin.Alejandro.InformeOcupacion.InformeOcupacionView;
+
+
+
 public class SwingMain {
 
 	private JFrame frame;
@@ -61,7 +72,6 @@ public class SwingMain {
 	}
 
 	public SwingMain() {
-
 		frame = new JFrame();
 		frame.setBounds(0, 0, 520, 420);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -158,7 +168,6 @@ public class SwingMain {
 				);
 				return;
 			}
-			
 			cd.admin.diego.planact.PlanActCrearActividadController controller =
 					new cd.admin.diego.planact.PlanActCrearActividadController(
 							new cd.admin.diego.planact.PlanActCrearActividadModel(),
@@ -198,7 +207,6 @@ public class SwingMain {
 		JButton btnListaActividades = new JButton("Ejecutar ListaActividades");
 		btnListaActividades.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
-				
 				if (!sesion.isAdmin()) {
 					JOptionPane.showMessageDialog(
 							frame,
@@ -209,7 +217,6 @@ public class SwingMain {
 					);
 					return;
 				}
-				
 				ListaPeriodoController controller=new ListaPeriodoController(new ListaPeriodoModel(), new ListaPeriodoView());
 				controller.initController();
 			}
@@ -255,7 +262,7 @@ public class SwingMain {
 					);
 					return;
 				}
-				InscribirAdminController controller = new InscribirAdminController(new InscribirAdminModel(), new InscribirAdminView());
+				InscribirAdminController controller = new InscribirAdminController(new InscribirAdminModel(), new InscribirAdminView(), new ListaEsperaModel());
 				controller.initController();
 			}
 		});
@@ -502,24 +509,11 @@ public class SwingMain {
 			vista.setLocationRelativeTo(frame);
 		});
 		panelCentro.add(btnDesinscribirseActividades);
-	
-		
-		JButton btnContabilidad = new JButton("Contabilidad Mensual");
-		btnContabilidad.addActionListener(e -> {
-		    if (!sesion.isAdmin()) {
-		        JOptionPane.showMessageDialog(frame, "Solo administradores.", "Acceso denegado", JOptionPane.WARNING_MESSAGE);
-		        return;
-		    }
-		    ContabilidadMensualController controller = new ContabilidadMensualController(
-		        new ContabilidadMensualModel(), new ContabilidadMensualView());
-		    controller.initController();
-		});
-		panelCentro.add(btnContabilidad);
-		
+		panelCentro.add(btnInformeActividades);
 		
 		// Informe actividades (Administracion)
-		JButton btnInformeActividades = new JButton("Informe Actividades (Admin)");
-		btnInformeActividades.addActionListener(e -> {
+		JButton btnInformeActividad = new JButton("Informe Actividades (Admin)");
+		btnInformeActividad.addActionListener(e -> {
 
 		    if (!sesion.isAdmin()) {
 		        JOptionPane.showMessageDialog(
@@ -539,20 +533,114 @@ public class SwingMain {
 		            );
 		    controller.initController();
 		});
-		panelCentro.add(btnInformeActividades);
+		panelCentro.add(btnInformeActividad);
+	
+		
+		JButton btnContabilidad = new JButton("Contabilidad Mensual");
+		btnContabilidad.addActionListener(e -> {
+		    if (!sesion.isAdmin()) {
+		        JOptionPane.showMessageDialog(frame, "Solo administradores.", "Acceso denegado", JOptionPane.WARNING_MESSAGE);
+		        return;
+		    }
+		    ContabilidadMensualController controller = new ContabilidadMensualController(
+		        new ContabilidadMensualModel(), new ContabilidadMensualView());
+		    controller.initController();
+		});
+		panelCentro.add(btnContabilidad);
+		
+		//Boton cancelarActividad
+		JButton btnCancelarActividad = new JButton("Cancelar actividad (Administracion)");
+		btnCancelarActividad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if (!sesion.isAdmin()) {
+					JOptionPane.showMessageDialog(
+							frame,
+							"No tienes permisos para acceder a esta funcionalidad.\n"
+							+ "Solo un administrador puede acceder.",
+							"Acceso denegado",
+							JOptionPane.WARNING_MESSAGE
+					);
+					return;
+				}
+
+				CancelarActividadController controller = new CancelarActividadController(
+						new CancelarActividadModel(),
+						new CancelarActividadView()
+				);
+			}
+		});
+		panelCentro.add(btnCancelarActividad);
+    
+		// =========================
+		// Informe de Ocupación (Administracion)
+		// =========================
+		JButton btnInformeOcupacion = new JButton("Informe de Ocupación");
+		btnInformeOcupacion.addActionListener(e -> {
+
+		    if (!sesion.isAdmin()) {
+		        JOptionPane.showMessageDialog(
+		                frame,
+		                "No tienes permisos para acceder a esta funcionalidad.\n"
+		                + "Solo un administrador puede acceder.",
+		                "Acceso denegado",
+		                JOptionPane.WARNING_MESSAGE
+		        );
+		        return;
+		    }
+
+		    // aquí iría la lógica del informe de ocupación
+		    InformeOcupacionController controller = new InformeOcupacionController(
+		            new InformeOcupacionModel(),
+		            new InformeOcupacionView()
+		    );
+		    controller.initController();
+		});
+		panelCentro.add(btnInformeOcupacion);
+
+		// =========================
+		// Informe de Morosos (Administracion)
+		// =========================
+		JButton btnInformeMorosos = new JButton("Informe de Morosos");
+		btnInformeMorosos.addActionListener(e -> {
+
+		    if (!sesion.isAdmin()) {
+		        JOptionPane.showMessageDialog(
+		                frame,
+		                "No tienes permisos para acceder a esta funcionalidad.\n"
+		                + "Solo un administrador puede acceder.",
+		                "Acceso denegado",
+		                JOptionPane.WARNING_MESSAGE
+		        );
+		        return;
+		    }
+
+		    InformeMorososController controller = new InformeMorososController(
+		            new InformeMorososModel(),
+		            new InformeMorososView()
+		    );
+		    controller.initController();
+		});
+		panelCentro.add(btnInformeMorosos);
+
+		    
+		
 		
 		// =========================
 		// Panel inferior: Cambiar de usuario (abajo derecha)
 		// =========================
 		JPanel panelInferior = new JPanel(new BorderLayout());
 		JButton btnCambiarUsuario = new JButton("Cambiar de usuario");
-		btnCambiarUsuario.addActionListener(e -> {
-			frame.getContentPane().removeAll();
-			frame.revalidate();
-			frame.repaint();
-			login();
+		btnCambiarUsuario.addActionListener(e -> {   // ahora 'e' ya no tiene conflicto
+		    frame.getContentPane().removeAll();
+		    frame.revalidate();
+		    frame.repaint();
+		    login();
 		});
 		panelInferior.add(btnCambiarUsuario, BorderLayout.EAST);
+		frame.getContentPane().removeAll();
+		panelInferior.add(btnCambiarUsuario, BorderLayout.EAST);
+		
 
 		// Pintar
 		frame.getContentPane().removeAll();

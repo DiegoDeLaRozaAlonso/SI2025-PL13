@@ -15,6 +15,11 @@ public class InscribirAdminModel {
 
 	private Database db = new Database();
 		
+	/**
+	 * Comprueba si queda aforo disponible en la actividad
+	 * @param actividad
+	 * @return 1 si queda 0 si está lleno
+	 */
 	public int compruebaAforo(ActividadDTO actividad) {
 		
 		String sql = "SELECT * FROM	INSCRIPCIONES WHERE id_actividad = ?";
