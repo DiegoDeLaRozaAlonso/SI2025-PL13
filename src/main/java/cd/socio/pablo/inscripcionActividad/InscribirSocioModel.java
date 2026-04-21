@@ -41,7 +41,7 @@ public class InscribirSocioModel {
 				
 		String sql = "INSERT INTO Inscripciones "
 				+ "(id_actividad, id_socio, nombre_no_socio, fecha_inscripcion, estado, pagado, tipo) "
-				+ "VALUES (?, ?, NULL, ?, ?, ?, 'socio')";
+				+ "VALUES (?, ?, NULL, ?, 'admitido', ?, 'socio')";
 		db.executeUpdate(sql, actividad.getId(), socio.getId(), 
 				ins.getFecha_inscripcion(), ins.isPagado());
 	}
