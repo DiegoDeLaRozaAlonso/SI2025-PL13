@@ -237,6 +237,10 @@ public class CancelarActividadController {
 			fw.write("---------\n");
 
 			for (AfectadoActividadDTO a : afectados) {
+				if (!"socio".equals(a.getTipo())) {
+					continue;
+				}
+
 				fw.write("Nombre: " + valorSeguro(a.getNombre()) + "\n");
 				fw.write("Tipo: " + ("socio".equals(a.getTipo()) ? "Socio" : "No socio") + "\n");
 
