@@ -2,13 +2,13 @@ package cd.socio.pablo.inscripcionActividad;
 
 public class SocioDTO {
 	
-	private int id;
+	private int id_socio;
 	private String nombre;
 	private boolean debe_dinero;
 	
 	public SocioDTO(int id, String nombre) {
 		super();
-		this.id = id;
+		this.id_socio = id;
 		this.nombre = nombre;
 	}
 	
@@ -16,12 +16,12 @@ public class SocioDTO {
 		
 	}
 
-	public int getId() {
-		return id;
+	public int getId_socio() {
+		return id_socio;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setId_socio(int id) {
+		this.id_socio = id;
 	}
 
 	public String getNombre() {

@@ -14,6 +14,7 @@ public class ActividadDTO {
 	private double precioNoSocio;
 	private String fecha_inicio_periodo;
 	private String fecha_fin_periodo;
+	private String fecha_fin_no_socio;
 	
 	//Necesario parque el DButil funcione
 	public ActividadDTO() {
@@ -25,6 +26,14 @@ public class ActividadDTO {
 	
 
 	public String getNombre() {return nombre;}
+
+	public String getFecha_fin_no_socio() {
+		return fecha_fin_no_socio;
+	}
+
+	public void setFecha_fin_no_socio(String fecha_fin_no_socio) {
+		this.fecha_fin_no_socio = fecha_fin_no_socio;
+	}
 
 	public String getFecha_inicio_periodo() {
 		return fecha_inicio_periodo;
