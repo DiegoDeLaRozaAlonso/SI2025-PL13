@@ -1,5 +1,7 @@
 package cd.socio.pablo.inscripcionActividad;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -91,7 +93,10 @@ public class InscribirSocioController {
 		
 		actividad = actividades.get(filaSeleccionada);
 		Date hoy = new Date();
-		String fechaActual = Util.dateToIsoString(hoy);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		
+		// 2. Le pasamos nuestra fecha para que la convierta a String
+		String fechaActual = sdf.format(hoy);
 		boolean estaPagado = false;
 		
 		model.enPlazo(actividad); //comprueba que no esté inscrito ya en la actividad

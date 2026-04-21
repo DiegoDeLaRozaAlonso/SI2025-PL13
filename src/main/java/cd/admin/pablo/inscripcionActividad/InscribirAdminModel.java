@@ -7,6 +7,7 @@ import cd.login.diego.UsuarioSesion;
 import cd.socio.pablo.inscripcionActividad.ActividadDTO;
 import cd.socio.pablo.inscripcionActividad.InscripcionDTO;
 import cd.socio.pablo.inscripcionActividad.SocioDTO;
+import cd.socio.pablo.listaEspera.ListaEsperaDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
 import giis.demo.util.Util;
@@ -43,7 +44,7 @@ public class InscribirAdminModel {
 				
 		String sql = "INSERT INTO Inscripciones "
 				+ "(id_actividad, id_socio, nombre_no_socio, fecha_inscripcion, estado, pagado, tipo) "
-				+ "VALUES (?, ?, NULL, ?, ?, ?, 'socio')";
+				+ "VALUES (?, ?, NULL, ?, 'admitido', ?, 'socio')";
 		db.executeUpdate(sql, actividad.getId(), socio.getId_socio(), 
 				ins.getFecha_inscripcion(), ins.isPagado());
 	}
@@ -61,7 +62,7 @@ public class InscribirAdminModel {
 				
 		String sql = "INSERT INTO Inscripciones "
 				+ "(id_actividad, id_socio, nombre_no_socio, dni, fecha_inscripcion, estado, pagado, tipo) "
-				+ "VALUES (?, NULL, ?, ?, ?, ?, ?, 'no_socio')";
+				+ "VALUES (?, NULL, ?, ?, ?, 'admitido', ?, 'no_socio')";
 		db.executeUpdate(sql, actividad.getId(), nombre, dni, ins.getFecha_inscripcion(), ins.isPagado());
 	}
 	
@@ -129,8 +130,11 @@ public class InscribirAdminModel {
 	public boolean inscripcionRepetida(SocioDTO socio, ActividadDTO actividad) {
 		String sql = "SELECT * FROM Inscripciones WHERE  id_actividad = ? AND id_socio = ?";
 		List<InscripcionDTO> inscripciones = db.executeQueryPojo(InscripcionDTO.class, sql, actividad.getId(), socio.getId_socio());
+		//Comprobamos que no esté en lista de espera
+		String sql2 = "SELECT * FROM ListaEspera WHERE  id_actividad = ? AND id_socio = ?";
+		List<ListaEsperaDTO> esperas = db.executeQueryPojo(ListaEsperaDTO.class, sql2, actividad.getId(), socio.getId_socio());
 		
-		return (inscripciones.size() == 0) ? false : true;
+		return ((inscripciones.size() == 0) && (esperas.size() == 0)) ? false : true;
 	}
 	
 	
@@ -144,8 +148,11 @@ public class InscribirAdminModel {
 	public boolean inscripcionRepetidaNS(String dni, ActividadDTO actividad) {
 		String sql = "SELECT * FROM Inscripciones WHERE  id_actividad = ? AND dni = ?";
 		List<InscripcionDTO> inscripciones = db.executeQueryPojo(InscripcionDTO.class, sql, actividad.getId(), dni);
+		//Comprobamos que no esté en lista de espera
+		String sql2 = "SELECT * FROM ListaEspera WHERE  id_actividad = ? AND dni = ?";
+		List<ListaEsperaDTO> esperas = db.executeQueryPojo(ListaEsperaDTO.class, sql2, actividad.getId(), dni);
 		
-		return (inscripciones.size() == 0) ? false : true;
+		return ((inscripciones.size() == 0) && (esperas.size() == 0)) ? false : true;
 	}
 	
 	
