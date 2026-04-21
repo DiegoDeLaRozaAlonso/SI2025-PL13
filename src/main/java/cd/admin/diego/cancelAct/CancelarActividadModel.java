@@ -148,21 +148,21 @@ public class CancelarActividadModel {
 
 	public void ejecutarCancelacionCompleta(int idActividad, String motivo) {
 		List<AfectadoActividadDTO> afectadosAntes = obtenerAfectados(idActividad);
+		ActividadCancelDTO actividad = obtenerActividadPorId(idActividad);
 
 		cancelarActividad(idActividad, motivo);
 
 		for (AfectadoActividadDTO a : afectadosAntes) {
-			if (a.getPagado() == 1) {
-				String descripcionBase = "Descuento por cancelación de actividad #" + idActividad;
+			if ("socio".equals(a.getTipo()) && a.getPagado() == 1) {
+				String descripcion = "Descuento por cancelación de actividad "
+						+ actividad.getNombre() + ". Motivo: " + motivo;
+
 				String sql = ""
 						+ "INSERT INTO Reduccion "
-						+ " (id_socio, nombre_no_socio, monto, fecha_generacion, fecha_aplicacion, descripcion) "
-						+ "VALUES (?, ?, ?, date('now'), NULL, ?) ";
+						+ "(id_socio, nombre_no_socio, monto, fecha_generacion, fecha_aplicacion, descripcion) "
+						+ "VALUES (?, NULL, ?, date('now'), date('now','start of month','+1 month','+24 days'), ?) ";
 
-				Object idSocio = "socio".equals(a.getTipo()) ? a.getIdSocio() : null;
-				Object nombreNoSocio = "no_socio".equals(a.getTipo()) ? a.getNombre() : null;
-
-				db.executeUpdate(sql, idSocio, nombreNoSocio, a.getMontoDescuento(), descripcionBase);
+				db.executeUpdate(sql, a.getIdSocio(), a.getMontoDescuento(), descripcion);
 			}
 		}
 
