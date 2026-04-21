@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 public class InscribirAdminView {
 
 	private JFrame frame;
-	private JButton bVolver, bInscribir, bListarActividades;
+	private JButton bVolver, bInscribir, bListarActividades, bListaEspera;
 	private JTable tablaActividades;
 	private JLabel lblNewLabel_1;
 	private JDateChooser dFechaInicio;
@@ -198,6 +198,11 @@ public class InscribirAdminView {
 		grupoRadio.add(radioPagoEfectivo);
 		radioPagoMensual.setSelected(true);
 		
+		bListaEspera = new JButton("Lista de Espera");
+		bListaEspera.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		bListaEspera.setBounds(313, 715, 156, 37);
+		frame.getContentPane().add(bListaEspera);
+		
 	}
 	
 	public JFrame getFrame() {return this.frame;}
@@ -207,6 +212,7 @@ public class InscribirAdminView {
 	public JButton getBotonVolver() {return this.bVolver ;}
 	public JButton getBotonInscribir() {return this.bInscribir ;}
 	public JButton getBotonListarActividades() {return this.bListarActividades ;}
+	public JButton getBotonListaEspera() {return this.bListaEspera ;}
 	//Date choosers
 	public JDateChooser getFechaInicio() {return this.dFechaInicio;}
 	public JDateChooser getFechaFin() {return this.dFechaFin;}

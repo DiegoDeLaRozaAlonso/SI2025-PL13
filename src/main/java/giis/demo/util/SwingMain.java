@@ -158,7 +158,6 @@ public class SwingMain {
 				);
 				return;
 			}
-			
 			cd.admin.diego.planact.PlanActCrearActividadController controller =
 					new cd.admin.diego.planact.PlanActCrearActividadController(
 							new cd.admin.diego.planact.PlanActCrearActividadModel(),
@@ -198,7 +197,6 @@ public class SwingMain {
 		JButton btnListaActividades = new JButton("Ejecutar ListaActividades");
 		btnListaActividades.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
-				
 				if (!sesion.isAdmin()) {
 					JOptionPane.showMessageDialog(
 							frame,
@@ -209,7 +207,6 @@ public class SwingMain {
 					);
 					return;
 				}
-				
 				ListaPeriodoController controller=new ListaPeriodoController(new ListaPeriodoModel(), new ListaPeriodoView());
 				controller.initController();
 			}

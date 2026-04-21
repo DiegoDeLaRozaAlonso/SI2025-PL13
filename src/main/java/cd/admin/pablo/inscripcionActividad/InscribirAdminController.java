@@ -5,11 +5,12 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import cd.login.diego.UsuarioSesion;
 import cd.socio.pablo.inscripcionActividad.ActividadDTO;
 import cd.socio.pablo.inscripcionActividad.InscripcionDTO;
 import cd.socio.pablo.inscripcionActividad.SocioDTO;
+import cd.socio.pablo.listaEspera.ListaEsperaController;
 import cd.socio.pablo.listaEspera.ListaEsperaModel;
+import cd.socio.pablo.listaEspera.ListaEsperaView;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
 
@@ -35,6 +36,7 @@ public class InscribirAdminController {
 		
 		vista.getBotonVolver().addActionListener(e -> SwingUtil.exceptionWrapper(() -> vista.getFrame().dispose()));
 		vista.getBotonListarActividades().addActionListener(e -> SwingUtil.exceptionWrapper(() -> listaActividades()));
+		vista.getBotonListaEspera().addActionListener(e -> SwingUtil.exceptionWrapper(() -> listaEspera()));
 		vista.getBotonInscribir().addActionListener(e -> SwingUtil.exceptionWrapper(() -> crearInscripcion()));
 		vista.getRadioNoSocio().addActionListener(e -> SwingUtil.exceptionWrapper(() -> alternarVistaSocio()));
 		vista.getRadioSocio().addActionListener(e -> SwingUtil.exceptionWrapper(() -> alternarVistaSocio()));
@@ -133,6 +135,7 @@ public class InscribirAdminController {
 		
 		int filaSeleccionada = vista.getTable().getSelectedRow();
 		
+		//comprueba que hay seleccionada una fila de la tabla de actividades
 		if (filaSeleccionada == -1) {
 	        JOptionPane.showMessageDialog(vista.getFrame(), "Por favor, selecciona una actividad de la tabla.");
 	        return;
@@ -252,6 +255,30 @@ public class InscribirAdminController {
 				}
 			}
 		}
+	}
+	
+	
+	public void listaEspera() {
+		
+		int filaSeleccionada = vista.getTable().getSelectedRow();
+		
+		//comprueba que hay seleccionada una fila de la tabla de actividades
+		if (filaSeleccionada == -1) {
+	        JOptionPane.showMessageDialog(vista.getFrame(), "Por favor, selecciona una actividad de la tabla.");
+	        return;
+	    }
+		
+		ActividadDTO actividad = actividades.get(filaSeleccionada); //actividad seleccionada en la tabla
+		
+		int aforo = model.compruebaAforo(actividad);
+		if (aforo == 1) {
+			JOptionPane.showMessageDialog(vista.getFrame(), "Esta actividad no tiene lista de espera");
+			return;
+		}
+		
+		ListaEsperaController controladorEspera = new ListaEsperaController(new ListaEsperaModel(), new ListaEsperaView(), actividad);	
+		controladorEspera.initView();
+		
 	}
 	
 	
