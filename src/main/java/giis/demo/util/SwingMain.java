@@ -487,28 +487,28 @@ public class SwingMain {
 		panelCentro.add(btnVisualizacionReservas);
 		
 		// =========================
-		// Informe Actividades (Administración)
+		// Desinscribirse de Actividades (Socio)
 		// =========================
-		JButton btnInformeActividades = new JButton("Informe de Actividades (Administración)");
-		btnInformeActividades.addActionListener(e -> {
-			if (!sesion.isAdmin()) {
+		JButton btnDesinscribirseActividades = new JButton("Desinscribirse de Actividades");
+		btnDesinscribirseActividades.addActionListener(e -> {
+			if (sesion.isAdmin()) {
 				JOptionPane.showMessageDialog(
 						frame,
 						"No tienes permisos para acceder a esta funcionalidad.\n"
-						+ "Solo un administrador puede acceder.",
+						+ "Solo un socio puede acceder.",
 						"Acceso denegado",
 						JOptionPane.WARNING_MESSAGE
 				);
 				return;
 			}
-			cd.admin.luismi.informeactividades.InformeActividadesVista vista = new cd.admin.luismi.informeactividades.InformeActividadesVista();
-			cd.admin.luismi.informeactividades.InformeActividadesModelo modelo = new cd.admin.luismi.informeactividades.InformeActividadesModelo();
-			cd.admin.luismi.informeactividades.InformeActividadesControlador controller = new cd.admin.luismi.informeactividades.InformeActividadesControlador(vista, modelo);
+			cd.socio.luismi.desinscribirseactividad.DesinscribirseVista vista = new cd.socio.luismi.desinscribirseactividad.DesinscribirseVista();
+			cd.socio.luismi.desinscribirseactividad.DesinscribirseModelo modelo = new cd.socio.luismi.desinscribirseactividad.DesinscribirseModelo();
+			cd.socio.luismi.desinscribirseactividad.DesinscribirseControlador controller = new cd.socio.luismi.desinscribirseactividad.DesinscribirseControlador(modelo, vista, sesion.getId());
 					
-			JFrame informeFrame = vista.getFrame();
-			informeFrame.setLocationRelativeTo(frame);
-			informeFrame.setVisible(true);
+			controller.initController();
+			vista.setLocationRelativeTo(frame);
 		});
+		panelCentro.add(btnDesinscribirseActividades);
 		panelCentro.add(btnInformeActividades);
 		
 		// Informe actividades (Administracion)
