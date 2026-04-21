@@ -503,6 +503,30 @@ public class SwingMain {
 			informeFrame.setVisible(true);
 		});
 		panelCentro.add(btnInformeActividades);
+		
+		// Informe actividades (Administracion)
+		JButton btnInformeActividad = new JButton("Informe Actividades (Admin)");
+		btnInformeActividad.addActionListener(e -> {
+
+		    if (!sesion.isAdmin()) {
+		        JOptionPane.showMessageDialog(
+		                frame,
+		                "No tienes permisos para acceder a esta funcionalidad.\n"
+		                + "Solo un administrador puede acceder.",
+		                "Acceso denegado",
+		                JOptionPane.WARNING_MESSAGE
+		        );
+		        return;
+		    }
+
+		    cd.admin.diego.informeactividad.InformeActividadController controller =
+		            new cd.admin.diego.informeactividad.InformeActividadController(
+		                    new cd.admin.diego.informeactividad.InformeActividadModel(),
+		                    new cd.admin.diego.informeactividad.InformeActividadView()
+		            );
+		    controller.initController();
+		});
+		panelCentro.add(btnInformeActividad);
 	
 		
 		JButton btnContabilidad = new JButton("Contabilidad Mensual");
