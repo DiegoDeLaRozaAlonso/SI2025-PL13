@@ -131,9 +131,8 @@ CREATE TABLE Actividades (
     fecha_inicio DATE NOT NULL,
     fecha_fin DATE NOT NULL,
     id_periodo INTEGER NOT NULL,
+    estado TEXT DEFAULT 'abierta',
     edicion INTEGER NOT NULL DEFAULT 1,
-    estado TEXT NOT NULL DEFAULT 'activa' CHECK(estado IN ('activa', 'cancelada')),
-    motivo_cancelacion TEXT,
     FOREIGN KEY (id_instalacion) REFERENCES Instalaciones(id_instalacion),
     FOREIGN KEY (id_periodo) REFERENCES PeriodosInscripcion(id_periodo)
 );
