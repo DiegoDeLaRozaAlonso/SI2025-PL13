@@ -533,7 +533,7 @@ public class SwingMain {
 		panelInferior.add(btnCambiarUsuario, BorderLayout.EAST);
 
 		// Pintar
-		frame.getContentPane().removeAll();
+		frame.getContentPane().removeAll(); 
 		frame.add(panelCentro, BorderLayout.CENTER);
 		frame.add(panelInferior, BorderLayout.SOUTH);
 
