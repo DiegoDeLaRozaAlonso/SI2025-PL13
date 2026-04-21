@@ -16,26 +16,25 @@ public class ListaEsperaController {
 	private ActividadDTO actividad;
 	private List<ListaEsperaDTO> listaEspera;
 	
-	public ListaEsperaController(ListaEsperaModel m, ListaEsperaView v) {
+	public ListaEsperaController(ListaEsperaModel m, ListaEsperaView v, ActividadDTO a) {
 		this.model = m;
 		this.vista = v;
-		//this.actividad = 
+		this.actividad = a;
 		this.initView();
 		this.initController();
 	}
 	
 	public void initController() {
 		vista.getBotonCerrar().addActionListener(e -> SwingUtil.exceptionWrapper(() -> vista.getFrame().dispose()));
-		
 	}
 	
 	private void listarListaEspera() {
-		
+		 
 		/*Lista de actividades de dicho periodo*/
 		listaEspera = model.getListaEspera(actividad);
 			
 		//Definimos las columnas de la tabla
-		String[] columnas = {"id_activdad", "id_socio", "dni_no_socio", "nombre", "fecha_inscripcion"};
+		String[] columnas = {"id_actividad", "id_socio", "dni_no_socio", "nombre", "fecha_inscripcion"};
 		
 		javax.swing.table.TableModel tmodel = SwingUtil.getTableModelFromPojos(listaEspera, columnas);
 		vista.getTablaListaEspera().setModel(tmodel);
@@ -51,7 +50,6 @@ public class ListaEsperaController {
 		
 		//limpiamos la lista por si acaso
 		vista.getTablaListaEspera().removeAll();
-		
 		
 		//Cargamos el primer periodo en la tabla para que no salga vacía
 		listarListaEspera();

@@ -6,7 +6,7 @@ public class ListaEsperaDTO {
 	private int id_socio;
 	private String dni_no_socio;
 	private String nombre;
-	private String fecha;
+	private String fecha_inscripcion;
 	
 	public ListaEsperaDTO() {}
 	
@@ -15,9 +15,10 @@ public class ListaEsperaDTO {
 		this.id_socio = idSocio;
 		this.dni_no_socio = dniNoSocio;
 		this.nombre = nombre;
-		this.fecha = fecha;
+		this.fecha_inscripcion = fecha;
 	}
 
+	
 	
 	public int getId_actividad() {
 		return id_actividad;
@@ -43,10 +44,10 @@ public class ListaEsperaDTO {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public String getFecha() {
-		return fecha;
+	public String getFecha_inscripcion() {
+		return fecha_inscripcion;
 	}
-	public void setFecha(String fecha) {
-		this.fecha = fecha;
+	public void setFecha_inscripcion(String fecha_inscripcion) {
+		this.fecha_inscripcion = fecha_inscripcion;
 	}
 }

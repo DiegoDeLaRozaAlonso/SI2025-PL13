@@ -1,14 +1,17 @@
 package cd.admin.pablo.inscripcionActividad;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import cd.login.diego.UsuarioSesion;
 import cd.socio.pablo.inscripcionActividad.ActividadDTO;
 import cd.socio.pablo.inscripcionActividad.InscripcionDTO;
 import cd.socio.pablo.inscripcionActividad.SocioDTO;
+import cd.socio.pablo.listaEspera.ListaEsperaController;
+import cd.socio.pablo.listaEspera.ListaEsperaModel;
+import cd.socio.pablo.listaEspera.ListaEsperaView;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
 
@@ -19,10 +22,12 @@ public class InscribirAdminController {
 	private List<ActividadDTO> actividades;
 	private List<SocioDTO> listaSocios;
 	private SocioDTO usuario;
+	private ListaEsperaModel modelEspera;
 	
-	public InscribirAdminController(InscribirAdminModel m, InscribirAdminView v) {
+	public InscribirAdminController(InscribirAdminModel m, InscribirAdminView v, ListaEsperaModel l) {
 		this.model = m;
 		this.vista = v;
+		this.modelEspera = l;
 		//no hay inicializacion especifica del modelo, solo de la vista
 		this.initView();
 	}
@@ -32,6 +37,7 @@ public class InscribirAdminController {
 		
 		vista.getBotonVolver().addActionListener(e -> SwingUtil.exceptionWrapper(() -> vista.getFrame().dispose()));
 		vista.getBotonListarActividades().addActionListener(e -> SwingUtil.exceptionWrapper(() -> listaActividades()));
+		vista.getBotonListaEspera().addActionListener(e -> SwingUtil.exceptionWrapper(() -> listaEspera()));
 		vista.getBotonInscribir().addActionListener(e -> SwingUtil.exceptionWrapper(() -> crearInscripcion()));
 		vista.getRadioNoSocio().addActionListener(e -> SwingUtil.exceptionWrapper(() -> alternarVistaSocio()));
 		vista.getRadioSocio().addActionListener(e -> SwingUtil.exceptionWrapper(() -> alternarVistaSocio()));
@@ -75,7 +81,7 @@ public class InscribirAdminController {
 		
 		/*Lista de actividades de dicho periodo*/
 		actividades = model.getListaActividades(fechaInicio, fechaFin);
-			
+		
 		//Definimos las columnas de la tabla
 		String[] columnas = {"nombre", "descripcion", "aforo", 
 				"fecha_inicio", "fecha_fin", "precioSocio", 
@@ -130,6 +136,7 @@ public class InscribirAdminController {
 		
 		int filaSeleccionada = vista.getTable().getSelectedRow();
 		
+		//comprueba que hay seleccionada una fila de la tabla de actividades
 		if (filaSeleccionada == -1) {
 	        JOptionPane.showMessageDialog(vista.getFrame(), "Por favor, selecciona una actividad de la tabla.");
 	        return;
@@ -137,7 +144,11 @@ public class InscribirAdminController {
 		
 		ActividadDTO actividad = actividades.get(filaSeleccionada); //actividad seleccionada en la tabla
 		Date hoy = new Date();//coge la fecha de hoy
-		String fechaActual = Util.dateToIsoString(hoy); //convierte a String la fecha
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+		// 2. Le pasamos nuestra fecha para que la convierta a String
+		String fechaActual = sdf.format(hoy);
+		//String fechaActual = Util.dateToIsoString(hoy); //convierte a String la fecha
 		boolean estaPagado = false;
 		
 		//comprueba que esté dentro del plazo tanto socio como no socio
@@ -159,58 +170,121 @@ public class InscribirAdminController {
 			}
 		}
 		
-		
-		
-		//Si se selecciona pago con tarjeta nos pide que la introduzcamos
-		if (vista.getRadioTarjeta().isSelected()) {
-			String tarjeta = JOptionPane.showInputDialog(
-					vista.getFrame(), "Introduzca una tarjeta de crédito", "Procesar pago", JOptionPane.QUESTION_MESSAGE);
-			
-			//Comprobamos que se ha introducido una tarjeta de crédito
-			if(tarjeta == null || tarjeta.trim().isEmpty()) {
-				return; //Si se ha dejado el campo vació se cancela la operación
-			}
-			//Si llegamos aqui es que se ha introducido una tarjeta
-			estaPagado = true;
-		}
-		
-		//Si se selecciona efectivo se da como pagado
-		if (vista.getRadioEfectivo().isSelected()) {
-			estaPagado = true;
-		}
-		
 		//Si es socio
 		if (esSocio) {
-			InscripcionDTO ins = new InscripcionDTO(
-					actividad.getId(), this.usuario.getId_socio(), fechaActual,
-					estaPagado, "socio");
-			
+			//Hay aforo disponible
 			if(model.compruebaAforo(actividad) == 1) {
+				//Si se selecciona pago con tarjeta nos pide que la introduzcamos
+				if (vista.getRadioTarjeta().isSelected()) {
+					String tarjeta = JOptionPane.showInputDialog(
+							vista.getFrame(), "Introduzca una tarjeta de crédito", "Procesar pago", JOptionPane.QUESTION_MESSAGE);
+					
+					//Comprobamos que se ha introducido una tarjeta de crédito
+					if(tarjeta == null || tarjeta.trim().isEmpty()) {
+						return; //Si se ha dejado el campo vació se cancela la operación
+					}
+					//Si llegamos aqui es que se ha introducido una tarjeta
+					estaPagado = true;
+				}
+				//Si se selecciona efectivo se da como pagado
+				if (vista.getRadioEfectivo().isSelected()) {
+					estaPagado = true;
+				}	
+				InscripcionDTO ins = new InscripcionDTO(
+						actividad.getId(), this.usuario.getId_socio(), fechaActual,
+						estaPagado, "socio");
 				model.inscribirSocioActividad(usuario, actividad, ins);
 				JOptionPane.showMessageDialog(
 						vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
 			}
+			//No hay aforo disponible
 			else {
-				JOptionPane.showMessageDialog(
-						vista.getFrame(), ""+actividad.getNombre() +" tiene aforo completo seras añadido a lista de espera");
+				int respuesta = JOptionPane.showConfirmDialog(
+						vista.getFrame(), 
+						""+actividad.getNombre() +" tiene aforo completo, hay " + modelEspera.numeroListaEspera(actividad) + " socios en lista de espera",
+						"Aforo Completo",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE
+						);
+				if (respuesta == JOptionPane.YES_OPTION) {
+					InscripcionDTO ins = new InscripcionDTO(
+							actividad.getId(), this.usuario.getId_socio(), fechaActual,
+							estaPagado, "socio");
+					modelEspera.insertarEnListaEspera(usuario, actividad, ins);
+					JOptionPane.showMessageDialog(vista.getFrame(), 
+							"Ha sido añadido a la lista de espera de " + actividad.getNombre());
+				}
 			}
+			//Si es un no socio
 		} else {
-			InscripcionDTO ins = new InscripcionDTO(
-					actividad.getId(), nombre, dni, fechaActual,
-					estaPagado, "no_socio");
-			
+			//Hay aforo
 			if(model.compruebaAforo(actividad) == 1) {
+				//Si se selecciona pago con tarjeta nos pide que la introduzcamos
+				if (vista.getRadioTarjeta().isSelected()) {
+					String tarjeta = JOptionPane.showInputDialog(
+							vista.getFrame(), "Introduzca una tarjeta de crédito", "Procesar pago", JOptionPane.QUESTION_MESSAGE);
+					
+					//Comprobamos que se ha introducido una tarjeta de crédito
+					if(tarjeta == null || tarjeta.trim().isEmpty()) {
+						return; //Si se ha dejado el campo vació se cancela la operación
+					}
+					//Si llegamos aqui es que se ha introducido una tarjeta
+					estaPagado = true;
+				}
+				//Si se selecciona efectivo se da como pagado
+				if (vista.getRadioEfectivo().isSelected()) {
+					estaPagado = true;
+				}	
+				InscripcionDTO ins = new InscripcionDTO(
+						actividad.getId(), nombre, dni, fechaActual,
+						estaPagado, "no_socio");
 				model.inscribirNoSocioActividad(nombre, dni, actividad, ins);
 				JOptionPane.showMessageDialog(
 						vista.getFrame(), "Inscripcion en "+ actividad.getNombre() +" realizada con exito");
 			}
+			//No hay aforo
 			else {
-				JOptionPane.showMessageDialog(
-						vista.getFrame(), ""+actividad.getNombre() +" tiene aforo completo seras añadido a lista de espera");
+				InscripcionDTO ins = new InscripcionDTO(
+						actividad.getId(), nombre, dni, fechaActual,
+						estaPagado, "no_socio");
+				int respuesta = JOptionPane.showConfirmDialog(
+						vista.getFrame(), 
+						""+actividad.getNombre() +" tiene aforo completo, hay " + modelEspera.numeroListaEspera(actividad) + " socios en lista de espera",
+						"Aforo Completo",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE);
+				if (respuesta == JOptionPane.YES_OPTION) {
+					modelEspera.insertarEnListaEspera(usuario, actividad, ins);
+					JOptionPane.showMessageDialog(vista.getFrame(), 
+							"Ha sido añadido a la lista de espera de " + actividad.getNombre());
+				}
 			}
 		}
 	}
 	
+	
+	public void listaEspera() {
+		
+		int filaSeleccionada = vista.getTable().getSelectedRow();
+		
+		//comprueba que hay seleccionada una fila de la tabla de actividades
+		if (filaSeleccionada == -1) {
+	        JOptionPane.showMessageDialog(vista.getFrame(), "Por favor, selecciona una actividad de la tabla.");
+	        return;
+	    }
+		
+		ActividadDTO actividad = actividades.get(filaSeleccionada); //actividad seleccionada en la tabla
+		
+		int aforo = model.compruebaAforo(actividad);
+		if (aforo == 1) {
+			JOptionPane.showMessageDialog(vista.getFrame(), "Esta actividad no tiene lista de espera");
+			return;
+		}
+		
+		ListaEsperaController controladorEspera = new ListaEsperaController(new ListaEsperaModel(), new ListaEsperaView(), actividad);	
+		controladorEspera.initView();
+		
+	}
 	
 	
 	/**
