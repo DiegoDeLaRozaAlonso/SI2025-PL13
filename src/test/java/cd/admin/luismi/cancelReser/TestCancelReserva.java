@@ -71,8 +71,11 @@ public class TestCancelReserva {
 
     @Test
     public void testCancelarReservaInexistenteOCancelada() {
+        // CE2: Reserva no existe
         ApplicationException e1 = assertThrows(ApplicationException.class, () -> modelo.cancelarReserva(999, "No existe"));
         assertEquals("Reserva no encontrada o ya cancelada.", e1.getMessage());
+
+        // CE2: Reserva existe pero ya está cancelada
         db.executeBatch(new String[] {
             "INSERT INTO Reservas(id_reserva, id_socio, id_instalacion, fecha_hora_inicio, duracion, costo, estado) " +
             "VALUES (101, 1, 1, '" + fechaFutura() + "', 60, 10.0, 'cancelada')"
@@ -83,6 +86,7 @@ public class TestCancelReserva {
 
     @Test
     public void testCancelarReservaPasadaOComenzada() {
+        // CE3: Reserva existe y activa pero en el pasado
         db.executeBatch(new String[] {
             "INSERT INTO Reservas(id_reserva, id_socio, id_instalacion, fecha_hora_inicio, duracion, costo, estado) " +
             "VALUES (102, 1, 1, '" + fechaPasada() + "', 60, 10.0, 'activa')"
@@ -92,4 +96,3 @@ public class TestCancelReserva {
         assertEquals("No se puede cancelar una reserva que ya ha comenzado o pertenece a una fecha/hora pasada.", e.getMessage());
     }
 }
-
