@@ -19,7 +19,7 @@ import java.util.List;
  *   Métodos: horaAMinutos, calcularDuracionHoras, detectarConflictos, crearSesionActividad
  *
  * Proceso 2 - Cálculo de ocupación de instalaciones (HU 34391)
- *   Métodos: getPorcentajeActividad, getPorcentajeSocio, getPlazasLibres
+ *   Métodos: getPoWrcentajeActividad, getPorcentajeSocio, getPlazasLibres
  */
 public class PA_pruebas_Tests {
 
